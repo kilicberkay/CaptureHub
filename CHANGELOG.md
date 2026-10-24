@@ -5,7 +5,7 @@ All notable changes to CaptureHub are documented here. The format follows
 
 ## [1.0.0] - 2026-10-24
 
-First public release. It includes everything below, plus the changes in this section.
+First public release. It also includes the features of the unpublished 0.1.0 and 0.2.0 versions listed in [CHANGELOG.md](https://github.com/kilicberkay/CaptureHub/blob/main/CHANGELOG.md): visible area, full page, region and element capture, the annotation editor, export as PNG, JPEG or WebP, local history, and 15 languages.
 
 ### Added
 - Support page in the settings (GitHub Sponsors, star, report an issue) and links to the privacy policy and source code.
