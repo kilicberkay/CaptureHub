@@ -1,4 +1,4 @@
-// README için tanıtım videosu: bölge seçimi, düzenleyicide işaretleme, indirme ve tam sayfa yakalama.
+// README için tanıtım videosu: bölge seçimi, leke iyileştirme, düzenleyicide işaretleme, indirme ve tam sayfa yakalama.
 // Kareler gerçek uzantıdan (Chromium, CDP) alınır; düzenleyici yeni sekmede açılınca kayıt o sekmeden sürer.
 // Çıktılar: docs/videos/demo-<dil>.mp4 (1280×800, 30 kare/sn) ve docs/images/[tr/]demo.gif (960 px, 12 kare/sn).
 // Gereksinim: Chromium (CHROME_BIN veya Playwright önbelleği) ve ffmpeg.
@@ -16,10 +16,10 @@ const gifFile = join(ROOT, 'docs', 'images', lang === 'tr' ? 'tr' : '', 'demo.gi
 const mp4File = join(ROOT, 'docs', 'videos', `demo-${lang}.mp4`);
 const SIZE = { width: 1280, height: 800 };
 const CAPTIONS = {
-    en: ['Alt+Shift+R · Select a region', 'Annotate: arrow, text, numbers, highlight, box',
-        'Download as PNG, JPEG or WebP', 'Alt+Shift+F · Full page, stitched automatically'],
-    tr: ['Alt+Shift+R · Bölge seç', 'İşaretle: ok, metin, numara, vurgu, kutu',
-        'PNG, JPEG ya da WebP olarak indir', 'Alt+Shift+F · Tam sayfa, otomatik birleştirilir']
+    en: ['Alt+Shift+R · Select a region', 'Spot healing: brush over what you want gone',
+        'Annotate: arrow, text, numbers, box', 'Download as PNG, JPEG or WebP', 'Alt+Shift+F · Full page, stitched automatically'],
+    tr: ['Alt+Shift+R · Bölge seç', 'Leke iyileştirme: silmek istediğinizin üstünden geçin',
+        'İşaretle: ok, metin, numara, kutu', 'PNG, JPEG ya da WebP olarak indir', 'Alt+Shift+F · Tam sayfa, otomatik birleştirilir']
 }[lang];
 const LABEL = lang === 'tr' ? 'Bülten zirvesi' : 'Newsletter peak';
 
@@ -168,7 +168,12 @@ async function main() {
         mouse = { x: 640, y: 500 };
         await wait(600);
         const right = bar.x + bar.w;
+        // Leke iyileştirme: kart başlığı tek darbede silinir
         await clickAt(await center('[data-size="l"]'));
+        await clickAt(await center('[data-tool="heal"]'));
+        await dragTo(at(chart.x + 14, chart.y + 32), at(chart.x + 150, chart.y + 32));
+        await wait(900);
+        await editor.eval(captionScript(CAPTIONS[2]));
         await clickAt(await center('[data-tool="arrow"]'));
         await dragTo(at(right + 62, bar.y + 14), at(right + 8, bar.y + 40));
         await clickAt(await center('[data-tool="text"]'));
@@ -180,8 +185,6 @@ async function main() {
         await clickAt(await center('[data-tool="number"]'));
         await clickAt(at(bar.x + bar.w / 2, bar.y + 34));
         await clickAt(at(chart.x + 60, chart.y + chart.h - 60));
-        await clickAt(await center('[data-tool="highlight"]'));
-        await dragTo(at(chart.x + 16, chart.y + 18), at(chart.x + 160, chart.y + 46));
         await clickAt(await center('[data-color="#f74a87"]'));
         await clickAt(await center('[data-tool="rect"]'));
         await dragTo(at(bar.x - 8, bar.y - 8), at(right + 8, chart.y + chart.h - 34));
@@ -189,20 +192,20 @@ async function main() {
         await wait(800);
 
         // 3. İndir
-        await editor.eval(captionScript(CAPTIONS[2]));
+        await editor.eval(captionScript(CAPTIONS[3]));
         await clickAt(await center('#download'));
         await wait(1800);
 
         // 4. Tam sayfa: sayfaya dönülür, kayıt kaydırmayı da gösterir
         stage.page = demo;
         await env.focus(demo);
-        await demo.eval(`window.__demoCursor(false); ${captionScript(CAPTIONS[3])}`);
+        await demo.eval(`window.__demoCursor(false); ${captionScript(CAPTIONS[4])}`);
         await wait(1200);
         await demo.eval(captionScript(''));
         await pressAltShift(env, demo, 'F');
         const full = await attachEditor(env, [editor.targetId]);
         await prepare(full);
-        await full.eval(captionScript(CAPTIONS[3]));
+        await full.eval(captionScript(CAPTIONS[4]));
         stage.page = full;
         await wait(900);
         for (let y = 0; y <= 700; y += 35) {

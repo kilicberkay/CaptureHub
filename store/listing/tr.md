@@ -20,8 +20,9 @@ işaretlemenizi sağlayan bir düzenleyici sunar.
 
 - Görünür alan, tam sayfa, bölge ve öğe yakalama. Tam sayfa yakalama sayfayı kaydırır ve parçaları birleştirir;
   sabit başlık ve alt bar yerinde kalır.
-- Kutu, ok, metin, piksel bulanıklaştırma, fosforlu kalem, numara ve kırpma araçları. Yedi hazır renk ve özel
-  renk, beş boyut (XS–XL). Her işareti seçip taşıyabilir, her değişikliği geri alabilir ve yineleyebilirsiniz.
+- Kutu, elips, ok, kalem, metin, piksel bulanıklaştırma, fosforlu kalem, numara ve kırpma araçları. Yedi hazır renk,
+  özel renk ve damlalık, beş boyut (XS–XL). Her işareti seçip taşıyabilir, her değişikliği geri alabilir ve yineleyebilirsiniz.
+- Leke iyileştirme fırçası ve içeriğe duyarlı doldurma ile ekran görüntüsünden yazı, simge ya da imleci silin. Döndürme ve boyutlandırma.
 - Panoya kopyalama ya da PNG, JPEG veya WebP olarak kaydetme.
 - Her mod için kısayol (Alt+Shift+V, F, R, E) ve araç çubuğu simgesinde sağ tık menüsü.
 - İsteğe bağlı gecikme; böylece yakalamadan önce menü ve ipuçlarını açabilirsiniz.

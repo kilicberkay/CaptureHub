@@ -24,6 +24,12 @@
                 <option value="jpeg">JPEG</option>
                 <option value="webp">WebP</option>
             </select>
+            <button id="rotate" type="button" class="chip icon" data-i18n-label="rotate" aria-label="Rotate 90°">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 9A6 6 0 1 0 14 14M15.5 4v5h-5"/></svg>
+            </button>
+            <button id="resize" type="button" class="chip icon" data-i18n-label="resize" aria-label="Resize">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 9V3h6M17 11v6h-6M3 3l6 6M17 17l-6-6"/></svg>
+            </button>
             <button id="zoom" type="button" class="chip" aria-pressed="false" data-i18n-title="zoomActual">1:1</button>
             <button id="undo" type="button" class="chip" data-i18n="undo">Undo</button>
             <button id="redo" type="button" class="chip" data-i18n="redo">Redo</button>
@@ -33,29 +39,41 @@
     </header>
 
     <nav class="tools" data-i18n-label="toolsLabel" aria-label="Tools">
-        <button type="button" class="chip" data-tool="select" aria-pressed="false">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3l11 6.5-5 1.2L8.5 17z"/></svg><span data-i18n="toolSelect">Seç</span>
+        <button type="button" class="chip tool" data-tool="select" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3l11 6.5-5 1.2L8.5 17z"/></svg><span class="tool-label" data-i18n="toolSelect">Select</span>
         </button>
-        <button type="button" class="chip" data-tool="rect" aria-pressed="true">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="14" height="12" rx="2"/></svg><span data-i18n="toolRect">Dikdörtgen</span>
+        <button type="button" class="chip tool" data-tool="rect" aria-pressed="true">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="14" height="12" rx="2"/></svg><span class="tool-label" data-i18n="toolRect">Box</span>
         </button>
-        <button type="button" class="chip" data-tool="arrow" aria-pressed="false">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 17L17 3M9 3h8v8"/></svg><span data-i18n="toolArrow">Ok</span>
+        <button type="button" class="chip tool" data-tool="ellipse" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><ellipse cx="10" cy="10" rx="7.5" ry="6"/></svg><span class="tool-label" data-i18n="toolEllipse">Ellipse</span>
         </button>
-        <button type="button" class="chip" data-tool="text" aria-pressed="false">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M10 5v12"/></svg><span data-i18n="toolText">Metin</span>
+        <button type="button" class="chip tool" data-tool="arrow" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 17L17 3M9 3h8v8"/></svg><span class="tool-label" data-i18n="toolArrow">Arrow</span>
         </button>
-        <button type="button" class="chip" data-tool="blur" aria-pressed="false">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6"/><rect x="11" y="3" width="6" height="6"/><rect x="3" y="11" width="6" height="6"/><rect x="11" y="11" width="6" height="6"/></svg><span data-i18n="toolBlur">Bulanıklaştır</span>
+        <button type="button" class="chip tool" data-tool="pen" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 15c2.5-5 4.5-5 6-2s3.5 3 8-6"/></svg><span class="tool-label" data-i18n="toolPen">Pen</span>
         </button>
-        <button type="button" class="chip" data-tool="number" aria-pressed="false">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M8.5 8l1.5-1v6"/></svg><span data-i18n="toolNumber">Numara</span>
+        <button type="button" class="chip tool" data-tool="text" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M10 5v12"/></svg><span class="tool-label" data-i18n="toolText">Text</span>
         </button>
-        <button type="button" class="chip" data-tool="highlight" aria-pressed="false">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16l4-1 9-9-3-3-9 9z"/></svg><span data-i18n="toolHighlight">Vurgu</span>
+        <button type="button" class="chip tool" data-tool="number" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M8.5 8l1.5-1v6"/></svg><span class="tool-label" data-i18n="toolNumber">Number</span>
         </button>
-        <button type="button" class="chip" data-tool="crop" aria-pressed="false">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 2v12h12M2 6h12v12"/></svg><span data-i18n="toolCrop">Kırp</span>
+        <button type="button" class="chip tool" data-tool="highlight" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16l4-1 9-9-3-3-9 9z"/></svg><span class="tool-label" data-i18n="toolHighlight">Highlight</span>
+        </button>
+        <button type="button" class="chip tool" data-tool="blur" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6"/><rect x="11" y="3" width="6" height="6"/><rect x="3" y="11" width="6" height="6"/><rect x="11" y="11" width="6" height="6"/></svg><span class="tool-label" data-i18n="toolBlur">Pixelate</span>
+        </button>
+        <button type="button" class="chip tool" data-tool="heal" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><g transform="rotate(-45 10 10)"><rect x="1.5" y="6.5" width="17" height="7" rx="3.5"/><rect x="7.5" y="6.5" width="5" height="7"/></g><circle cx="5.6" cy="14.4" r=".4"/><circle cx="14.4" cy="5.6" r=".4"/></svg><span class="tool-label" data-i18n="toolHeal">Spot healing</span>
+        </button>
+        <button type="button" class="chip tool" data-tool="fill" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="2" stroke-dasharray="3 2.5"/><path d="M10 6.5l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1z"/></svg><span class="tool-label" data-i18n="toolFill">Content-aware fill</span>
+        </button>
+        <button type="button" class="chip tool" data-tool="crop" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 2v12h12M2 6h12v12"/></svg><span class="tool-label" data-i18n="toolCrop">Crop</span>
         </button>
 
         <span class="divider" aria-hidden="true"></span>
@@ -71,6 +89,9 @@
             <label class="swatch custom" data-i18n-title="colorCustom" title="Custom color">
                 <input id="customColor" type="color" value="#f74a87" data-i18n-label="colorCustom" aria-label="Custom color">
             </label>
+            <button id="eyedropper" type="button" class="chip icon" data-i18n-label="eyedropper" aria-label="Pick a color from the image" hidden>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13 3.5l3.5 3.5-2 2-3.5-3.5zM11.5 6.5l-7 7-.5 3 3-.5 7-7"/></svg>
+            </button>
         </span>
 
         <span class="divider" aria-hidden="true"></span>
@@ -99,10 +120,32 @@
 
     <p id="status" class="status meta" role="status" aria-live="polite"></p>
 
+    <!-- Boyutlandırma: oran korunur; genişlik ya da yükseklik değişince diğeri hesaplanır -->
+    <dialog id="resizeDialog" class="dialog" aria-labelledby="resizeTitle">
+        <form id="resizeForm" method="dialog">
+            <h2 id="resizeTitle" class="dialog-title" data-i18n="resize">Resize</h2>
+            <div class="dialog-fields">
+                <label class="field-inline">
+                    <span data-i18n="resizeWidth">Width</span>
+                    <input id="resizeWidth" type="number" min="16" step="1" required>
+                </label>
+                <label class="field-inline">
+                    <span data-i18n="resizeHeight">Height</span>
+                    <input id="resizeHeight" type="number" min="16" step="1" required>
+                </label>
+            </div>
+            <div class="dialog-actions">
+                <button type="submit" value="cancel" class="chip" formnovalidate data-i18n="cropCancel">Cancel</button>
+                <button type="submit" value="apply" class="btn-brand" data-i18n="resizeApply">Apply</button>
+            </div>
+        </form>
+    </dialog>
+
     <script src="../shared/i18n.js"></script>
     <script src="../scripts/geometry.js"></script>
     <script src="../scripts/db.js"></script>
     <script src="tools.js"></script>
+    <script src="heal.js"></script>
     <script src="editor.js"></script>
 </body>
 

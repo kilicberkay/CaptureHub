@@ -140,7 +140,8 @@ canvas {
 }
 
 .tools .chip svg,
-.tools .chip-active svg {
+.tools .chip-active svg,
+.chip.icon svg {
     width: 14px;
     height: 14px;
     fill: none;
@@ -180,3 +181,74 @@ select#format {
 .stage.actual canvas {
     max-width: none;
 }
+
+/* Araçlar yalnız simgeyle gösterilir; ad ekran okuyucu için durur, ipucu (title) koddan gelir */
+.tool {
+    padding: 6px 9px;
+}
+
+.tool-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.chip.icon {
+    padding: 6px 8px;
+}
+
+.dialog {
+    width: min(320px, calc(100vw - 32px));
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--canvas);
+    color: var(--ink);
+    box-shadow: var(--shadow-card);
+}
+
+.dialog::backdrop { background: rgb(9 9 11 / 0.45); }
+
+.dialog-title {
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.dialog-fields {
+    display: flex;
+    gap: 12px;
+}
+
+.field-inline {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.field-inline input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.stage[data-active-tool="heal"] canvas { cursor: none; }

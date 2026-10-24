@@ -24,13 +24,13 @@
 </p>
 
 <p align="center">
-  <a href="docs/videos/demo-en.mp4"><img src="docs/images/demo.gif" alt="CaptureHub selects a region of a report, annotates it with an arrow, text, numbers and a box, downloads it, then captures the full page" width="90%"></a><br>
+  <a href="docs/videos/demo-en.mp4"><img src="docs/images/demo.gif" alt="CaptureHub selects a region of a report, removes its title with the spot healing brush, annotates it with an arrow, text, numbers and a box, downloads it, then captures the full page" width="90%"></a><br>
   <sub><a href="docs/videos/demo-en.mp4">▶ Watch the full-quality video (MP4, 1280×800)</a></sub>
 </p>
 
 | Capture | Editor | Shortcuts | Data |
 |---|---|---|---|
-| Visible area, full page, region, element | Box, arrow, text, pixelate, numbers, highlight, crop | `Alt+Shift+V` `F` `R` `E` | None collected, nothing uploaded |
+| Visible area, full page, region, element | Annotate, spot healing, content-aware fill, crop, rotate, resize | `Alt+Shift+V` `F` `R` `E` | None collected, nothing uploaded |
 
 ---
 
@@ -111,15 +111,24 @@ tooltip before a visible area or full page capture.
 |---|---|---|
 | Select | `V` | Select, move, and resize marks with their handles. Arrow keys nudge (Shift: 10 px), Delete removes. |
 | Box | `R` | Rectangle outline |
+| Ellipse | `E` | Ellipse outline; hold Shift for a circle |
 | Arrow | `A` | Arrow from the press point to the release point |
+| Pen | `P` | Freehand line |
 | Text | `T` | Click, type, press Enter. The text gets a contrasting outline so it reads on any background. |
-| Pixelate | `B` | Hides e-mail addresses, names, and numbers under coarse pixels |
 | Number | `N` | Numbered markers (1, 2, 3 …) for step-by-step guides |
 | Highlight | `H` | Marker-pen highlight that keeps the text under it readable |
+| Pixelate | `B` | Hides e-mail addresses, names, and numbers under coarse pixels |
+| Spot healing | `J` | Brush over text, an icon, or the cursor; when you release, the area is rebuilt from its surroundings |
+| Content-aware fill | `F` | Drag a rectangle; its content is replaced from its surroundings |
 | Crop | `C` | Drag an area, then **Apply crop** |
 
-- **Colors**: seven presets and a custom color picker. **Sizes**: XS, S, M, L, XL. Both apply to the selected mark
-  too, and the last choice is remembered.
+- **Spot healing and content-aware fill** rebuild the area from the pixels around it. They are made for screenshots:
+  flat backgrounds, gradients, and interface surfaces come out clean. On photographic texture the result is smooth
+  rather than textured. Each brush stroke is filled when you release it, so cover the whole spot in one stroke.
+- **Colors**: seven presets, a custom color picker, and an **eyedropper** (`I`) that picks a color from anywhere on
+  the screen. **Sizes**: XS, S, M, L, XL (also the brush size). Both apply to the selected mark too, and the last
+  choice is remembered.
+- **Rotate 90°** and **resize** (the aspect ratio is kept) are in the top bar. Marks rotate and scale with the image.
 - **Undo and redo** every change, including crop (`Ctrl+Z`, `Ctrl+Shift+Z`).
 - **1:1** shows the image at its real size.
 - **Copy** puts a PNG on the clipboard. **Download** (`Ctrl+S`) saves PNG, JPEG, or WebP with your file name template.

@@ -124,7 +124,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "Private",
             supportPrivateText: "Your data stays in your browser.",
             supportOpenTitle: "Open source",
-            supportOpenText: "MIT licensed. Read, change and share the code."
+            supportOpenText: "MIT licensed. Read, change and share the code.",
+            toolHeal: "Spot healing",
+            toolFill: "Content-aware fill",
+            toolPen: "Pen",
+            toolEllipse: "Ellipse",
+            eyedropper: "Pick a color from the image",
+            rotate: "Rotate 90°",
+            resize: "Resize",
+            resizeApply: "Apply",
+            resizeWidth: "Width",
+            resizeHeight: "Height",
+            healTooLarge: "This area is too large to fill. Select a smaller area."
         },
         tr: {
             popupEyebrow: "Ekran görüntüsü",
@@ -247,7 +258,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "Gizli",
             supportPrivateText: "Verileriniz tarayıcınızdan çıkmaz.",
             supportOpenTitle: "Açık kaynak",
-            supportOpenText: "MIT lisanslı. Kodu okuyun, değiştirin ve paylaşın."
+            supportOpenText: "MIT lisanslı. Kodu okuyun, değiştirin ve paylaşın.",
+            toolHeal: "Leke iyileştirme",
+            toolFill: "İçeriğe duyarlı doldurma",
+            toolPen: "Kalem",
+            toolEllipse: "Elips",
+            eyedropper: "Görüntüden renk seç",
+            rotate: "90° döndür",
+            resize: "Boyutlandır",
+            resizeApply: "Uygula",
+            resizeWidth: "Genişlik",
+            resizeHeight: "Yükseklik",
+            healTooLarge: "Bu alan doldurmak için çok büyük. Daha küçük bir alan seçin."
         },
         de: {
             popupEyebrow: "Screenshot",
@@ -370,7 +392,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "Privat",
             supportPrivateText: "Deine Daten bleiben in deinem Browser.",
             supportOpenTitle: "Open Source",
-            supportOpenText: "MIT-Lizenz. Code lesen, ändern und teilen."
+            supportOpenText: "MIT-Lizenz. Code lesen, ändern und teilen.",
+            toolHeal: "Bereichsreparatur",
+            toolFill: "Inhaltsbasiertes Füllen",
+            toolPen: "Stift",
+            toolEllipse: "Ellipse",
+            eyedropper: "Farbe aus dem Bild aufnehmen",
+            rotate: "90° drehen",
+            resize: "Größe ändern",
+            resizeApply: "Anwenden",
+            resizeWidth: "Breite",
+            resizeHeight: "Höhe",
+            healTooLarge: "Dieser Bereich ist zu groß zum Füllen. Wählen Sie einen kleineren Bereich."
         },
         es: {
             popupEyebrow: "Captura de pantalla",
@@ -493,7 +526,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "Privado",
             supportPrivateText: "Tus datos se quedan en tu navegador.",
             supportOpenTitle: "Código abierto",
-            supportOpenText: "Licencia MIT. Lee, cambia y comparte el código."
+            supportOpenText: "Licencia MIT. Lee, cambia y comparte el código.",
+            toolHeal: "Pincel corrector puntual",
+            toolFill: "Relleno según contenido",
+            toolPen: "Lápiz",
+            toolEllipse: "Elipse",
+            eyedropper: "Tomar un color de la imagen",
+            rotate: "Girar 90°",
+            resize: "Cambiar tamaño",
+            resizeApply: "Aplicar",
+            resizeWidth: "Ancho",
+            resizeHeight: "Alto",
+            healTooLarge: "Esta zona es demasiado grande para rellenar. Selecciona una zona más pequeña."
         },
         fr: {
             popupEyebrow: "Capture d'écran",
@@ -616,7 +660,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "Privé",
             supportPrivateText: "Vos données restent dans votre navigateur.",
             supportOpenTitle: "Open source",
-            supportOpenText: "Licence MIT. Lisez, modifiez et partagez le code."
+            supportOpenText: "Licence MIT. Lisez, modifiez et partagez le code.",
+            toolHeal: "Correcteur localisé",
+            toolFill: "Remplissage d’après le contenu",
+            toolPen: "Crayon",
+            toolEllipse: "Ellipse",
+            eyedropper: "Prélever une couleur dans l’image",
+            rotate: "Pivoter de 90°",
+            resize: "Redimensionner",
+            resizeApply: "Appliquer",
+            resizeWidth: "Largeur",
+            resizeHeight: "Hauteur",
+            healTooLarge: "Cette zone est trop grande pour être remplie. Sélectionnez une zone plus petite."
         },
         hi: {
             popupEyebrow: "स्क्रीनशॉट",
@@ -739,7 +794,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "निजी",
             supportPrivateText: "आपका डेटा आपके ब्राउज़र में ही रहता है।",
             supportOpenTitle: "ओपन सोर्स",
-            supportOpenText: "MIT लाइसेंस। कोड पढ़ें, बदलें और साझा करें।"
+            supportOpenText: "MIT लाइसेंस। कोड पढ़ें, बदलें और साझा करें।",
+            toolHeal: "स्पॉट हीलिंग",
+            toolFill: "सामग्री-आधारित भराई",
+            toolPen: "पेन",
+            toolEllipse: "दीर्घवृत्त",
+            eyedropper: "छवि से रंग चुनें",
+            rotate: "90° घुमाएँ",
+            resize: "आकार बदलें",
+            resizeApply: "लागू करें",
+            resizeWidth: "चौड़ाई",
+            resizeHeight: "ऊँचाई",
+            healTooLarge: "यह क्षेत्र भरने के लिए बहुत बड़ा है। छोटा क्षेत्र चुनें।"
         },
         id: {
             popupEyebrow: "Tangkapan layar",
@@ -862,7 +928,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "Privat",
             supportPrivateText: "Data Anda tetap di browser Anda.",
             supportOpenTitle: "Open source",
-            supportOpenText: "Lisensi MIT. Baca, ubah, dan bagikan kodenya."
+            supportOpenText: "Lisensi MIT. Baca, ubah, dan bagikan kodenya.",
+            toolHeal: "Pemulihan titik",
+            toolFill: "Isi sesuai konten",
+            toolPen: "Pena",
+            toolEllipse: "Elips",
+            eyedropper: "Ambil warna dari gambar",
+            rotate: "Putar 90°",
+            resize: "Ubah ukuran",
+            resizeApply: "Terapkan",
+            resizeWidth: "Lebar",
+            resizeHeight: "Tinggi",
+            healTooLarge: "Area ini terlalu besar untuk diisi. Pilih area yang lebih kecil."
         },
         ja: {
             popupEyebrow: "スクリーンショット",
@@ -985,7 +1062,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "プライバシー",
             supportPrivateText: "データはブラウザ内に留まります。",
             supportOpenTitle: "オープンソース",
-            supportOpenText: "MIT ライセンス。コードを読み、変更し、共有できます。"
+            supportOpenText: "MIT ライセンス。コードを読み、変更し、共有できます。",
+            toolHeal: "スポット修復",
+            toolFill: "コンテンツに応じた塗りつぶし",
+            toolPen: "ペン",
+            toolEllipse: "楕円",
+            eyedropper: "画像から色を取得",
+            rotate: "90° 回転",
+            resize: "サイズ変更",
+            resizeApply: "適用",
+            resizeWidth: "幅",
+            resizeHeight: "高さ",
+            healTooLarge: "この範囲は大きすぎて塗りつぶせません。もっと小さな範囲を選んでください。"
         },
         pt_BR: {
             popupEyebrow: "Captura de tela",
@@ -1108,7 +1196,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "Privado",
             supportPrivateText: "Seus dados ficam no seu navegador.",
             supportOpenTitle: "Código aberto",
-            supportOpenText: "Licença MIT. Leia, altere e compartilhe o código."
+            supportOpenText: "Licença MIT. Leia, altere e compartilhe o código.",
+            toolHeal: "Pincel de recuperação para manchas",
+            toolFill: "Preenchimento sensível ao conteúdo",
+            toolPen: "Caneta",
+            toolEllipse: "Elipse",
+            eyedropper: "Pegar uma cor da imagem",
+            rotate: "Girar 90°",
+            resize: "Redimensionar",
+            resizeApply: "Aplicar",
+            resizeWidth: "Largura",
+            resizeHeight: "Altura",
+            healTooLarge: "Esta área é grande demais para preencher. Selecione uma área menor."
         },
         ru: {
             popupEyebrow: "Скриншот",
@@ -1231,7 +1330,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "Приватно",
             supportPrivateText: "Ваши данные остаются в браузере.",
             supportOpenTitle: "Открытый код",
-            supportOpenText: "Лицензия MIT. Читайте, меняйте и делитесь кодом."
+            supportOpenText: "Лицензия MIT. Читайте, меняйте и делитесь кодом.",
+            toolHeal: "Точечное восстановление",
+            toolFill: "Заливка с учётом содержимого",
+            toolPen: "Карандаш",
+            toolEllipse: "Эллипс",
+            eyedropper: "Взять цвет с изображения",
+            rotate: "Повернуть на 90°",
+            resize: "Изменить размер",
+            resizeApply: "Применить",
+            resizeWidth: "Ширина",
+            resizeHeight: "Высота",
+            healTooLarge: "Эта область слишком велика для заливки. Выберите область поменьше."
         },
         ar: {
             popupEyebrow: "لقطة شاشة",
@@ -1354,7 +1464,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "خاص",
             supportPrivateText: "تبقى بياناتك داخل متصفحك.",
             supportOpenTitle: "مفتوح المصدر",
-            supportOpenText: "رخصة MIT. اقرأ الكود وعدّله وشاركه."
+            supportOpenText: "رخصة MIT. اقرأ الكود وعدّله وشاركه.",
+            toolHeal: "معالجة البقع",
+            toolFill: "تعبئة حسب المحتوى",
+            toolPen: "قلم",
+            toolEllipse: "شكل بيضاوي",
+            eyedropper: "التقاط لون من الصورة",
+            rotate: "تدوير 90°",
+            resize: "تغيير الحجم",
+            resizeApply: "تطبيق",
+            resizeWidth: "العرض",
+            resizeHeight: "الارتفاع",
+            healTooLarge: "هذه المنطقة كبيرة جدًا للتعبئة. اختر منطقة أصغر."
         },
         bn: {
             popupEyebrow: "স্ক্রিনশট",
@@ -1477,7 +1598,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "ব্যক্তিগত",
             supportPrivateText: "আপনার ডেটা আপনার ব্রাউজারেই থাকে।",
             supportOpenTitle: "ওপেন সোর্স",
-            supportOpenText: "MIT লাইসেন্স। কোড পড়ুন, বদলান ও ভাগ করুন।"
+            supportOpenText: "MIT লাইসেন্স। কোড পড়ুন, বদলান ও ভাগ করুন।",
+            toolHeal: "স্পট হিলিং",
+            toolFill: "কনটেন্ট-অ্যাওয়্যার ফিল",
+            toolPen: "কলম",
+            toolEllipse: "উপবৃত্ত",
+            eyedropper: "ছবি থেকে রং নিন",
+            rotate: "90° ঘোরান",
+            resize: "আকার বদলান",
+            resizeApply: "প্রয়োগ করুন",
+            resizeWidth: "প্রস্থ",
+            resizeHeight: "উচ্চতা",
+            healTooLarge: "এই এলাকা ভরাটের জন্য খুব বড়। ছোট এলাকা বেছে নিন।"
         },
         ur: {
             popupEyebrow: "اسکرین شاٹ",
@@ -1600,7 +1732,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "نجی",
             supportPrivateText: "آپ کا ڈیٹا آپ کے براؤزر میں رہتا ہے۔",
             supportOpenTitle: "اوپن سورس",
-            supportOpenText: "MIT لائسنس۔ کوڈ پڑھیں، بدلیں اور شیئر کریں۔"
+            supportOpenText: "MIT لائسنس۔ کوڈ پڑھیں، بدلیں اور شیئر کریں۔",
+            toolHeal: "اسپاٹ ہیلنگ",
+            toolFill: "مواد کے مطابق بھرائی",
+            toolPen: "قلم",
+            toolEllipse: "بیضوی شکل",
+            eyedropper: "تصویر سے رنگ چنیں",
+            rotate: "90° گھمائیں",
+            resize: "سائز بدلیں",
+            resizeApply: "لاگو کریں",
+            resizeWidth: "چوڑائی",
+            resizeHeight: "اونچائی",
+            healTooLarge: "یہ حصہ بھرنے کے لیے بہت بڑا ہے۔ چھوٹا حصہ منتخب کریں۔"
         },
         vi: {
             popupEyebrow: "Ảnh chụp màn hình",
@@ -1723,7 +1866,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "Riêng tư",
             supportPrivateText: "Dữ liệu của bạn ở lại trong trình duyệt.",
             supportOpenTitle: "Mã nguồn mở",
-            supportOpenText: "Giấy phép MIT. Đọc, sửa và chia sẻ mã nguồn."
+            supportOpenText: "Giấy phép MIT. Đọc, sửa và chia sẻ mã nguồn.",
+            toolHeal: "Chấm sửa vết",
+            toolFill: "Tô theo nội dung",
+            toolPen: "Bút",
+            toolEllipse: "Hình elip",
+            eyedropper: "Lấy màu từ ảnh",
+            rotate: "Xoay 90°",
+            resize: "Đổi kích thước",
+            resizeApply: "Áp dụng",
+            resizeWidth: "Chiều rộng",
+            resizeHeight: "Chiều cao",
+            healTooLarge: "Vùng này quá lớn để tô. Hãy chọn vùng nhỏ hơn."
         },
         zh_CN: {
             popupEyebrow: "屏幕截图",
@@ -1846,7 +2000,18 @@ var CaptureI18n = (() => {
             supportPrivateTitle: "隐私",
             supportPrivateText: "您的数据保留在浏览器中。",
             supportOpenTitle: "开源",
-            supportOpenText: "MIT 许可证。可阅读、修改和分享代码。"
+            supportOpenText: "MIT 许可证。可阅读、修改和分享代码。",
+            toolHeal: "污点修复",
+            toolFill: "内容识别填充",
+            toolPen: "画笔",
+            toolEllipse: "椭圆",
+            eyedropper: "从图像中取色",
+            rotate: "旋转 90°",
+            resize: "调整大小",
+            resizeApply: "应用",
+            resizeWidth: "宽度",
+            resizeHeight: "高度",
+            healTooLarge: "此区域太大，无法填充。请选择较小的区域。"
         }
     };
     const RTL_LANGUAGES = ['ar', 'ur'];

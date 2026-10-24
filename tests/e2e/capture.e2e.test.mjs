@@ -254,6 +254,93 @@ describe('CaptureHub uçtan uca', { skip: SKIP, timeout: 300000 }, () => {
         await env.swEval("chrome.storage.local.remove('editorSize')");
     });
 
+    // tall.html 1100 px kaydırılınca #box (#123456) mavi bandın (#0000ff) üstünde, görüntüde (100..300, 100..200)
+    async function boxEditor() {
+        await env.focus(page);
+        await page.eval('window.scrollTo(0, 1100)');
+        await wait(200);
+        await env.swEval('runCapture("visible")');
+        await page.eval('window.scrollTo(0, 0)');
+        const editor = await openEditor((await latest()).id);
+        return { editor, toCss: await canvasHelpers(editor) };
+    }
+    const isBlue = ([r, g, b]) => r < 30 && g < 30 && b > 225;
+
+    it('düzenleyici: iyileştirme fırçası kutuyu zemin rengiyle siler; Ctrl+Z geri getirir', async () => {
+        const { editor, toCss } = await boxEditor();
+        assert.deepEqual(await pixelAt(editor, 200, 150), [18, 52, 86], 'başta kutu rengi');
+        await pressKey(env, editor, { key: 'j', code: 'KeyJ', vk: 74 });
+        assert.equal(await editor.eval('state.tool'), 'heal');
+        await editor.eval('document.querySelector("[data-size=xl]").click()');
+        // Tek darbe (bırakılınca doldurulur): kutuyu zikzakla örter
+        const mouse = (type, point, buttons) => env.cdp.send('Input.dispatchMouseEvent',
+            { type, ...point, button: 'left', buttons, clickCount: 1 }, editor.sid);
+        const path = [[85, 110], [315, 110], [315, 150], [85, 150], [85, 190], [315, 190]].map(([x, y]) => toCss(x, y));
+        await mouse('mousePressed', path[0], 1);
+        for (const point of path.slice(1)) await mouse('mouseMoved', point, 1);
+        await mouse('mouseReleased', path.at(-1), 0);
+        await wait(800);
+        for (const [x, y] of [[200, 150], [110, 110], [290, 190]]) assert.ok(isBlue(await pixelAt(editor, x, y)), `${x},${y}: ${await pixelAt(editor, x, y)}`);
+        assert.equal(await editor.eval('state.items.length'), 0, 'işaret eklenmez, taban değişir');
+        await pressKey(env, editor, { key: 'z', code: 'KeyZ', vk: 90, modifiers: 2 });
+        assert.deepEqual(await pixelAt(editor, 200, 150), [18, 52, 86], 'geri alındı');
+        await editor.close();
+        await env.swEval("chrome.storage.local.remove('editorSize')");
+    });
+
+    it('düzenleyici: içeriğe duyarlı doldurma seçilen dikdörtgeni siler', async () => {
+        const { editor, toCss } = await boxEditor();
+        await pressKey(env, editor, { key: 'f', code: 'KeyF', vk: 70 });
+        assert.equal(await editor.eval('state.tool'), 'fill');
+        await drag(env, editor, toCss(94, 94), toCss(306, 206));
+        await wait(500);
+        for (const [x, y] of [[200, 150], [102, 102], [298, 198]]) assert.ok(isBlue(await pixelAt(editor, x, y)), `${x},${y}: ${await pixelAt(editor, x, y)}`);
+        await editor.close();
+    });
+
+    it('düzenleyici: kalem ve elips çizilir; kalem seçilip silinir; araç tuşları P ve E', async () => {
+        const { editor, toCss } = await boxEditor();
+        await pressKey(env, editor, { key: 'p', code: 'KeyP', vk: 80 });
+        await drag(env, editor, toCss(500, 300), toCss(700, 400));
+        await pressKey(env, editor, { key: 'e', code: 'KeyE', vk: 69 });
+        await drag(env, editor, toCss(800, 300), toCss(1000, 450));
+        assert.deepEqual(JSON.parse(await editor.eval('JSON.stringify(state.items.map((i) => i.type))')), ['pen', 'ellipse']);
+        assert.ok(await editor.eval('state.items[0].points.length') >= 2);
+        await editor.eval('document.querySelector("[data-tool=select]").click()');
+        await click(env, editor, toCss(600, 350));
+        assert.equal(await editor.eval('state.selected'), 0, 'kalem çizgisi seçilir');
+        await pressKey(env, editor, { key: 'Delete', code: 'Delete', vk: 46 });
+        assert.deepEqual(JSON.parse(await editor.eval('JSON.stringify(state.items.map((i) => i.type))')), ['ellipse']);
+        await editor.close();
+    });
+
+    it('düzenleyici: döndür boyutları değiştirir, işaret de döner; boyutlandır oranı korur; damlalık düğmesi API ile görünür', async () => {
+        const { editor } = await boxEditor();
+        const [w, h] = JSON.parse(await editor.eval('JSON.stringify([canvas.width, canvas.height])'));
+        await editor.eval(`state.items.push({ type: 'number', color: '#f74a87', size: 'm', x1: 100, y1: 20, r: 12, n: 1 }); render()`);
+        await editor.eval('document.getElementById("rotate").click()');
+        await editor.waitFor(`canvas.width === ${h}`, 3000);
+        assert.equal(await editor.eval('canvas.height'), w);
+        assert.deepEqual(JSON.parse(await editor.eval('JSON.stringify([state.items[0].x1, state.items[0].y1])')), [h - 20, 100]);
+        assert.deepEqual(await pixelAt(editor, h - 150, 200), [18, 52, 86], 'kutu da döndü');
+        await pressKey(env, editor, { key: 'z', code: 'KeyZ', vk: 90, modifiers: 2 });
+        assert.equal(await editor.eval('canvas.width'), w);
+
+        await editor.eval('document.getElementById("resize").click()');
+        assert.equal(await editor.eval('document.getElementById("resizeDialog").open'), true);
+        await editor.eval(`(() => {
+            const input = document.getElementById('resizeWidth');
+            input.value = '${w / 2}';
+            input.dispatchEvent(new Event('input'));
+            document.querySelector('#resizeForm [value=apply]').click();
+        })()`);
+        await editor.waitFor(`canvas.width === ${w / 2}`, 3000);
+        assert.equal(await editor.eval('canvas.height'), Math.round(h / 2));
+        assert.deepEqual(JSON.parse(await editor.eval('JSON.stringify([state.items[0].x1, state.items[0].r])')), [50, 6]);
+        assert.equal(await editor.eval('document.getElementById("eyedropper").hidden'), !(await editor.eval('"EyeDropper" in window')));
+        await editor.close();
+    });
+
     it('düzenleyici: İndir, indirme kimliğini geçmiş kaydına yazar; ayarlarda Klasörde göster görünür', async () => {
         await env.cdp.send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: env.downloadDir });
         await env.focus(page);

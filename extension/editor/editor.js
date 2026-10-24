@@ -1,12 +1,18 @@
-// Düzenleyici: yakalanan görüntüye işaret koyar, seçer, taşır, kırpar; kopyalar ve dışa aktarır.
+// Düzenleyici: yakalanan görüntüye işaret koyar, seçer, taşır, kırpar, iyileştirir, döndürür, boyutlandırır;
+// kopyalar ve dışa aktarır. Taban görüntüyü değiştiren her işlem (kırpma, iyileştirme, döndürme, boyutlandırma)
+// önce snapshot alır; geri alma taban görüntüyü de geri getirir.
 const MODE_KEYS = { visible: 'modeVisible', full: 'modeFull', region: 'modeRegion', element: 'modeElement' };
-const TOOL_KEYS = { v: 'select', r: 'rect', a: 'arrow', t: 'text', b: 'blur', n: 'number', h: 'highlight', c: 'crop' };
 // Araç adları ve kısayol harfleri: düğme ipuçları çeviriden ve harften üretilir
 const TOOL_NAMES = {
-    select: ['toolSelect', 'V'], rect: ['toolRect', 'R'], arrow: ['toolArrow', 'A'], text: ['toolText', 'T'],
-    blur: ['toolBlur', 'B'], number: ['toolNumber', 'N'], highlight: ['toolHighlight', 'H'], crop: ['toolCrop', 'C']
+    select: ['toolSelect', 'V'], rect: ['toolRect', 'R'], ellipse: ['toolEllipse', 'E'], arrow: ['toolArrow', 'A'],
+    pen: ['toolPen', 'P'], text: ['toolText', 'T'], number: ['toolNumber', 'N'], highlight: ['toolHighlight', 'H'],
+    blur: ['toolBlur', 'B'], heal: ['toolHeal', 'J'], fill: ['toolFill', 'F'], crop: ['toolCrop', 'C']
 };
-const SHAPE_TOOLS = ['rect', 'arrow', 'blur', 'highlight'];
+const TOOL_KEYS = Object.fromEntries(Object.entries(TOOL_NAMES).map(([tool, [, letter]]) => [letter.toLowerCase(), tool]));
+const SHAPE_TOOLS = ['rect', 'ellipse', 'arrow', 'blur', 'highlight'];
+// Kalemde bundan yakın noktalar atlanır (görüntü pikseli)
+const PEN_STEP = 2;
+const HEAL_PREVIEW = 'rgba(247, 74, 135, 0.4)';
 const FORMATS = { png: { mime: 'image/png', ext: 'png' }, jpeg: { mime: 'image/jpeg', ext: 'jpg' }, webp: { mime: 'image/webp', ext: 'webp' } };
 const HISTORY_LIMIT = 50;
 // Tutamaç ve kenar yakalama toleransı ekrandaki piksel cinsinden; görüntü ölçeğine çevrilir
@@ -20,12 +26,15 @@ const toolButtons = document.querySelectorAll('[data-tool]');
 const colorButtons = document.querySelectorAll('[data-color]');
 const sizeButtons = document.querySelectorAll('[data-size]');
 const customColor = document.getElementById('customColor');
+const resizeDialog = document.getElementById('resizeDialog');
+const resizeWidth = document.getElementById('resizeWidth');
+const resizeHeight = document.getElementById('resizeHeight');
 
 const state = {
     tool: 'rect', color: CaptureSettings.DEFAULTS.editorColor, size: CaptureSettings.DEFAULTS.editorSize,
     base: null, items: [], selected: -1,
-    drawing: null, cropRect: null,
-    past: [], future: [], id: null, mode: ''
+    drawing: null, cropRect: null, fillRect: null, hover: null,
+    past: [], future: [], id: null, mode: '', host: ''
 };
 let textAnchor = null;
 let settings = {};
@@ -35,6 +44,9 @@ function setToolTitles() {
     for (const [tool, [key, letter]] of Object.entries(TOOL_NAMES)) {
         document.querySelector(`[data-tool="${tool}"]`).title = `${CaptureI18n.t(key)} (${letter})`;
     }
+    document.getElementById('eyedropper').title = `${CaptureI18n.t('eyedropper')} (I)`;
+    document.getElementById('rotate').title = CaptureI18n.t('rotate');
+    document.getElementById('resize').title = CaptureI18n.t('resize');
     document.getElementById('undo').title = `${CaptureI18n.t('undo')} (Ctrl+Z)`;
     document.getElementById('redo').title = `${CaptureI18n.t('redo')} (Ctrl+Shift+Z)`;
     document.getElementById('download').title = `${CaptureI18n.t('download')} (Ctrl+S)`;
@@ -54,10 +66,13 @@ function markActive(buttons, active, activeClass = 'chip-active', idleClass = 'c
     }
 }
 
+// Taban görüntü değişince (kırpma, döndürme, boyutlandırma) bilgi satırındaki boyut da güncellenir
 function setBase(bitmap) {
     state.base = bitmap;
     canvas.width = bitmap.width;
     canvas.height = bitmap.height;
+    const info = document.getElementById('info');
+    info.textContent = [CaptureI18n.t(MODE_KEYS[state.mode] || 'captureTitle'), state.host, CaptureGeometry.dimensions(canvas.width, canvas.height)].filter(Boolean).join(' · ');
 }
 
 // Her değişiklikten önce çağrılır: geri alma yığınına o anki durum eklenir
@@ -108,6 +123,41 @@ function render(preview) {
         CaptureTools.paintSelection(ctx, selected, CaptureGeometry.handlesOf(selected), CaptureGeometry.itemBounds(selected));
     }
     if (state.tool === 'crop' && state.cropRect) paintCrop();
+    if (state.tool === 'fill' && state.fillRect) paintFillRect();
+    if (state.drawing && state.drawing.mode === 'heal') {
+        // İz opak çizilir, burada yarı saydam basılır: kendi üstüne binen yerler koyulaşmaz
+        ctx.save();
+        ctx.globalAlpha = 0.45;
+        ctx.drawImage(state.drawing.preview, 0, 0);
+        ctx.restore();
+    }
+    if (state.tool === 'heal' && state.hover) paintBrush(state.hover);
+}
+
+// İçeriğe duyarlı doldurma seçimi: doldurulacak alan yarı saydam pembe
+function paintFillRect() {
+    const r = state.fillRect;
+    ctx.save();
+    ctx.fillStyle = HEAL_PREVIEW;
+    ctx.fillRect(r.x, r.y, r.width, r.height);
+    ctx.strokeStyle = '#f74a87';
+    ctx.lineWidth = Math.max(2, Math.round(canvas.width / 600));
+    ctx.strokeRect(r.x, r.y, r.width, r.height);
+    ctx.restore();
+}
+
+// İyileştirme fırçasının imleci: fırça boyutunda çember (gerçek imleç gizlidir)
+function paintBrush(point) {
+    ctx.save();
+    ctx.lineWidth = Math.max(1.5, canvas.width / 900);
+    ctx.strokeStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, CaptureTools.brushFor(canvas.width, state.size), 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = '#18181b';
+    ctx.stroke();
+    ctx.restore();
 }
 
 function paintCrop() {
@@ -149,6 +199,8 @@ function hitTolerance() {
 function setTool(tool) {
     state.tool = tool;
     state.cropRect = null;
+    state.fillRect = null;
+    state.hover = null;
     if (tool !== 'select') state.selected = -1;
     stage.dataset.activeTool = tool;
     markActive(toolButtons, document.querySelector(`[data-tool="${tool}"]`), 'chip-active', 'chip');
@@ -234,10 +286,79 @@ function closeTextInput(commit) {
     render();
 }
 
+// İyileştirme maskesine iki nokta arasında fırça izi basılır; önizleme tuvaline de aynı iz çizilir
+function stampHeal(drawing, from, to) {
+    const r = drawing.radius;
+    const steps = Math.max(1, Math.ceil(Math.hypot(to.x - from.x, to.y - from.y) / (r / 3)));
+    const { mask } = drawing;
+    const W = canvas.width;
+    const H = canvas.height;
+    for (let s = 0; s <= steps; s++) {
+        const cx = from.x + ((to.x - from.x) * s) / steps;
+        const cy = from.y + ((to.y - from.y) * s) / steps;
+        for (let y = Math.max(0, Math.floor(cy - r)); y <= Math.min(H - 1, Math.ceil(cy + r)); y++) {
+            for (let x = Math.max(0, Math.floor(cx - r)); x <= Math.min(W - 1, Math.ceil(cx + r)); x++) {
+                if ((x - cx) ** 2 + (y - cy) ** 2 <= r * r) mask[y * W + x] = 1;
+            }
+        }
+    }
+    const p = drawing.preview.getContext('2d');
+    p.strokeStyle = 'rgb(247, 74, 135)';
+    p.lineWidth = r * 2;
+    p.lineCap = 'round';
+    p.lineJoin = 'round';
+    p.beginPath();
+    p.moveTo(from.x, from.y);
+    p.lineTo(to.x, to.y);
+    p.stroke();
+}
+
+// Maskelenen alan çevresinden yeniden üretilir ve yeni taban görüntü olur; işaretler etkilenmez
+async function applyHeal(mask) {
+    const work = document.createElement('canvas');
+    work.width = canvas.width;
+    work.height = canvas.height;
+    const wctx = work.getContext('2d', { willReadFrequently: true });
+    wctx.drawImage(state.base, 0, 0);
+    const image = wctx.getImageData(0, 0, work.width, work.height);
+    try {
+        if (CaptureHeal.inpaint(image, mask) === 0) return render();
+    } catch (error) {
+        setStatus(CaptureI18n.t(error.message === 'healTooLarge' ? 'healTooLarge' : 'imageFailed'));
+        return render();
+    }
+    wctx.putImageData(image, 0, 0);
+    const healed = await createImageBitmap(work);
+    snapshot();
+    setBase(healed);
+    render();
+}
+
+function rectMask(rect) {
+    const W = canvas.width;
+    const mask = new Uint8Array(W * canvas.height);
+    for (let y = Math.round(rect.y); y < Math.round(rect.y + rect.height); y++) {
+        mask.fill(1, y * W + Math.round(rect.x), y * W + Math.round(rect.x + rect.width));
+    }
+    return mask;
+}
+
 function endDrawing() {
     const drawing = state.drawing;
     state.drawing = null;
     if (!drawing) return;
+    if (drawing.mode === 'heal') return applyHeal(drawing.mask);
+    if (drawing.mode === 'fill') {
+        const r = state.fillRect;
+        state.fillRect = null;
+        if (r && r.width >= 2 && r.height >= 2) return applyHeal(rectMask(r));
+        return render();
+    }
+    if (drawing.mode === 'pen') {
+        snapshot();
+        state.items.push(drawing.item);
+        return render();
+    }
     if (drawing.mode === 'create') {
         const item = drawing.item;
         // Yanlışlıkla tıklamada çok küçük işaret oluşmasın
@@ -290,6 +411,26 @@ function onPointerDown(event) {
         state.drawing = { mode: 'crop', start: point };
         return;
     }
+    if (state.tool === 'fill') {
+        state.fillRect = { x: point.x, y: point.y, width: 0, height: 0 };
+        state.drawing = { mode: 'fill', start: point };
+        return;
+    }
+    if (state.tool === 'pen') {
+        state.drawing = { mode: 'pen', item: { type: 'pen', color: state.color, size: state.size, points: [point] } };
+        return render(state.drawing.item);
+    }
+    if (state.tool === 'heal') {
+        const preview = document.createElement('canvas');
+        preview.width = canvas.width;
+        preview.height = canvas.height;
+        state.drawing = {
+            mode: 'heal', last: point, radius: CaptureTools.brushFor(canvas.width, state.size),
+            mask: new Uint8Array(canvas.width * canvas.height), preview
+        };
+        stampHeal(state.drawing, point, point);
+        return render();
+    }
     if (SHAPE_TOOLS.includes(state.tool)) {
         state.drawing = {
             mode: 'create',
@@ -300,11 +441,37 @@ function onPointerDown(event) {
 
 function onPointerMove(event) {
     const drawing = state.drawing;
-    if (!drawing) return;
     const point = toImagePoint(event);
+    if (state.tool === 'heal') state.hover = point;
+    if (!drawing) {
+        if (state.tool === 'heal') render();
+        return;
+    }
     if (drawing.mode === 'create') {
-        Object.assign(drawing.item, { x2: point.x, y2: point.y });
+        let { x, y } = point;
+        // Shift ile elips tam daire olur
+        if (drawing.item.type === 'ellipse' && event.shiftKey) {
+            const d = Math.max(Math.abs(x - drawing.item.x1), Math.abs(y - drawing.item.y1));
+            x = drawing.item.x1 + Math.sign(x - drawing.item.x1 || 1) * d;
+            y = drawing.item.y1 + Math.sign(y - drawing.item.y1 || 1) * d;
+        }
+        Object.assign(drawing.item, { x2: x, y2: y });
         return render(drawing.item);
+    }
+    if (drawing.mode === 'pen') {
+        const last = drawing.item.points.at(-1);
+        if (Math.hypot(point.x - last.x, point.y - last.y) >= PEN_STEP) drawing.item.points.push(point);
+        return render(drawing.item);
+    }
+    if (drawing.mode === 'heal') {
+        stampHeal(drawing, drawing.last, point);
+        drawing.last = point;
+        return render();
+    }
+    if (drawing.mode === 'fill') {
+        const rect = CaptureGeometry.normalizeRect(drawing.start.x, drawing.start.y, point.x, point.y);
+        state.fillRect = CaptureGeometry.clampRect(rect, canvas.width, canvas.height);
+        return render();
     }
     if (drawing.mode === 'move') {
         if (!drawing.snapshotted) {
@@ -347,6 +514,62 @@ async function applyCrop() {
     state.cropRect = null;
     setTool('select');
     setStatus(CaptureI18n.t('cropped'));
+}
+
+// 90° saat yönünde: taban görüntü ve tüm işaretler döner
+async function rotate() {
+    if (!state.base) return;
+    const out = document.createElement('canvas');
+    out.width = canvas.height;
+    out.height = canvas.width;
+    const octx = out.getContext('2d');
+    octx.translate(out.width, 0);
+    octx.rotate(Math.PI / 2);
+    octx.drawImage(state.base, 0, 0);
+    const rotated = await createImageBitmap(out);
+    snapshot();
+    state.items = state.items.map((item) => CaptureGeometry.rotateItem(item, canvas.height));
+    state.selected = -1;
+    setBase(rotated);
+    render();
+}
+
+// Oran korunarak küçültülür; işaretlerin konumu ve saklanan ölçüleri aynı oranda ölçeklenir
+async function resizeTo(width) {
+    const k = width / canvas.width;
+    const out = document.createElement('canvas');
+    out.width = Math.round(width);
+    out.height = Math.max(1, Math.round(canvas.height * k));
+    const octx = out.getContext('2d');
+    octx.imageSmoothingQuality = 'high';
+    octx.drawImage(state.base, 0, 0, out.width, out.height);
+    const resized = await createImageBitmap(out);
+    snapshot();
+    state.items = state.items.map((item) => CaptureGeometry.scaleItem(item, k));
+    state.selected = -1;
+    setBase(resized);
+    render();
+}
+
+function openResize() {
+    if (!state.base) return;
+    for (const [input, value] of [[resizeWidth, canvas.width], [resizeHeight, canvas.height]]) {
+        input.max = String(value);
+        input.value = String(value);
+    }
+    resizeDialog.returnValue = '';
+    resizeDialog.showModal();
+}
+
+// Damlalık: Chrome'un yerleşik renk seçicisi; kullanıcı Esc ile vazgeçerse sessizce kapanır
+async function pickColor() {
+    if (!('EyeDropper' in window)) return;
+    try {
+        const { sRGBHex } = await new EyeDropper().open();
+        chooseColor(sRGBHex.toLowerCase());
+    } catch {
+        // Vazgeçildi
+    }
 }
 
 function cancelCrop() {
@@ -418,6 +641,10 @@ canvas.addEventListener('pointercancel', () => {
     state.drawing = null;
     render();
 });
+canvas.addEventListener('pointerleave', () => {
+    state.hover = null;
+    if (!state.drawing) render();
+});
 
 textInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
@@ -447,6 +674,8 @@ window.addEventListener('keydown', (event) => {
         download();
     } else if (!mod && TOOL_KEYS[key]) {
         setTool(TOOL_KEYS[key]);
+    } else if (!mod && key === 'i') {
+        pickColor();
     } else if (event.key === 'Delete' || event.key === 'Backspace') {
         event.preventDefault();
         deleteSelected();
@@ -475,6 +704,21 @@ document.getElementById('copy').addEventListener('click', copy);
 document.getElementById('download').addEventListener('click', download);
 document.getElementById('cropApply').addEventListener('click', applyCrop);
 document.getElementById('cropCancel').addEventListener('click', cancelCrop);
+document.getElementById('rotate').addEventListener('click', rotate);
+document.getElementById('resize').addEventListener('click', openResize);
+document.getElementById('eyedropper').addEventListener('click', pickColor);
+document.getElementById('eyedropper').hidden = !('EyeDropper' in window);
+// Oran kilitli: biri değişince diğeri hesaplanır
+resizeWidth.addEventListener('input', () => {
+    resizeHeight.value = String(Math.max(1, Math.round((Number(resizeWidth.value) * canvas.height) / canvas.width)));
+});
+resizeHeight.addEventListener('input', () => {
+    resizeWidth.value = String(Math.max(1, Math.round((Number(resizeHeight.value) * canvas.width) / canvas.height)));
+});
+resizeDialog.addEventListener('close', () => {
+    const width = Number(resizeWidth.value);
+    if (resizeDialog.returnValue === 'apply' && width >= 16 && width <= canvas.width && width !== canvas.width) resizeTo(width);
+});
 document.getElementById('zoom').addEventListener('click', (event) => {
     const actual = !stage.classList.contains('actual');
     stage.classList.toggle('actual', actual);
@@ -504,11 +748,10 @@ async function init() {
     const meta = (await CaptureStore.list()).find((row) => row.id === id);
     state.mode = meta ? meta.mode : '';
     const sourceUrl = meta && meta.url ? meta.url : '';
-    const host = CaptureGeometry.siteName(sourceUrl);
+    state.host = CaptureGeometry.siteName(sourceUrl);
     document.title = `CaptureHub | ${CaptureI18n.t(MODE_KEYS[state.mode] || 'captureTitle')}`;
-    const info = document.getElementById('info');
-    info.textContent = [CaptureI18n.t(MODE_KEYS[state.mode] || 'captureTitle'), host, CaptureGeometry.dimensions(canvas.width, canvas.height)].filter(Boolean).join(' · ');
-    info.title = meta && meta.title ? `${meta.title}\n${sourceUrl}` : sourceUrl;
+    setBase(state.base);
+    document.getElementById('info').title = meta && meta.title ? `${meta.title}\n${sourceUrl}` : sourceUrl;
     if (meta && meta.truncated) setStatus(CaptureI18n.t('truncated'));
     setTool(state.tool);
     updateHistoryButtons();

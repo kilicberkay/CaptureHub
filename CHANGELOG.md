@@ -3,6 +3,21 @@
 All notable changes to CaptureHub are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.0] - 2026-10-24
+
+### Added
+- Spot healing brush (`J`): brush over text, icons, or the cursor, and the area is rebuilt from its surroundings.
+- Content-aware fill (`F`): drag a rectangle and its content is replaced the same way. Both work best on the flat
+  backgrounds, gradients, and interface surfaces of screenshots; on photographic texture the result is smooth rather
+  than textured.
+- Pen (`P`) for freehand lines, and ellipse (`E`, hold Shift for a circle).
+- Eyedropper (`I`): pick the active color from anywhere on the screen.
+- Rotate 90° and resize (the aspect ratio is kept) in the editor's top bar. Marks rotate and scale with the image.
+- Every new action can be undone and redone.
+
+### Changed
+- Editor tools are shown as icons, with the name and shortcut in the tooltip, so all twelve fit in one row.
+
 ## [1.0.0] - 2026-10-24
 
 First public release. It also includes the features of the unpublished 0.1.0 and 0.2.0 versions listed in [CHANGELOG.md](https://github.com/kilicberkay/CaptureHub/blob/main/CHANGELOG.md): visible area, full page, region and element capture, the annotation editor, export as PNG, JPEG or WebP, local history, and 15 languages.

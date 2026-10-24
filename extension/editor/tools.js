@@ -32,6 +32,11 @@ var CaptureTools = (() => {
         return Math.max(12, Math.round(fontFor(width, size) * 0.8));
     }
 
+    // İyileştirme fırçasının yarıçapı (görüntü pikseli); boyut düğmeleriyle büyür
+    function brushFor(width, size) {
+        return Math.max(6, Math.round((width / 90) * SIZE_FACTOR[size]));
+    }
+
     // Metin öğesinin kutusu: tıklama ve seçim için ölçülür, öğede saklanır
     function measureText(ctx, text, size) {
         ctx.font = `600 ${size}px ${FONT}`;
@@ -66,7 +71,7 @@ var CaptureTools = (() => {
     function paintItem(ctx, item) {
         const width = ctx.canvas.width;
         const stroke = strokeFor(width, item.size);
-        const rect = CaptureGeometry.normalizeRect(item.x1, item.y1, item.x2, item.y2);
+        const rect = item.type === 'pen' ? null : CaptureGeometry.normalizeRect(item.x1, item.y1, item.x2, item.y2);
         ctx.save();
         ctx.strokeStyle = item.color;
         ctx.fillStyle = item.color;
@@ -74,6 +79,18 @@ var CaptureTools = (() => {
         ctx.lineJoin = 'round';
         if (item.type === 'rect') {
             ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+        } else if (item.type === 'ellipse') {
+            ctx.beginPath();
+            ctx.ellipse(rect.x + rect.width / 2, rect.y + rect.height / 2, rect.width / 2, rect.height / 2, 0, 0, Math.PI * 2);
+            ctx.stroke();
+        } else if (item.type === 'pen') {
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(item.points[0].x, item.points[0].y);
+            for (const p of item.points.slice(1)) ctx.lineTo(p.x, p.y);
+            // Tek noktalı çizgi (tıklama) yuvarlak uçla nokta olarak görünsün
+            if (item.points.length === 1) ctx.lineTo(item.points[0].x + 0.01, item.points[0].y);
+            ctx.stroke();
         } else if (item.type === 'arrow') {
             drawArrow(ctx, item, stroke);
         } else if (item.type === 'blur') {
@@ -126,7 +143,7 @@ var CaptureTools = (() => {
         ctx.restore();
     }
 
-    return { SIZE_FACTOR, luminance, isLightColor, strokeFor, fontFor, radiusFor, measureText, paintItem, paintSelection };
+    return { SIZE_FACTOR, luminance, isLightColor, strokeFor, fontFor, radiusFor, brushFor, measureText, paintItem, paintSelection };
 })();
 
 if (typeof module !== 'undefined') module.exports = CaptureTools;

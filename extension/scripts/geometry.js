@@ -45,6 +45,11 @@ var CaptureGeometry = (() => {
     // Düzenleyici öğeleri: kutu, bulanık, vurgu ve ok iki noktayla (x1,y1 ve x2,y2); metin ve numara bir noktayla
     // (x1,y1) tanımlanır, metin w/h ve numara r ile boyutlanır. Her fonksiyon yeni nesne döndürür veya saf okur.
     function itemBounds(item) {
+        if (item.type === 'pen') {
+            const xs = item.points.map((p) => p.x);
+            const ys = item.points.map((p) => p.y);
+            return normalizeRect(Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys));
+        }
         if (item.type === 'text') return { x: item.x1, y: item.y1, width: item.w, height: item.h };
         if (item.type === 'number') return { x: item.x1 - item.r, y: item.y1 - item.r, width: item.r * 2, height: item.r * 2 };
         return normalizeRect(item.x1, item.y1, item.x2, item.y2);
@@ -67,6 +72,15 @@ var CaptureGeometry = (() => {
                 if (distanceToSegment(point.x, point.y, item.x1, item.y1, item.x2, item.y2) <= tolerance) return i;
                 continue;
             }
+            // Kalem: çizginin kendisine yakınlık; sınır kutusunun boş içi seçmez
+            if (item.type === 'pen') {
+                const p = item.points;
+                for (let k = 0; k < p.length; k++) {
+                    const q = p[Math.min(k + 1, p.length - 1)];
+                    if (distanceToSegment(point.x, point.y, p[k].x, p[k].y, q.x, q.y) <= tolerance) return i;
+                }
+                continue;
+            }
             const b = itemBounds(item);
             if (point.x >= b.x - tolerance && point.x <= b.x + b.width + tolerance
                 && point.y >= b.y - tolerance && point.y <= b.y + b.height + tolerance) return i;
@@ -74,13 +88,14 @@ var CaptureGeometry = (() => {
         return -1;
     }
 
-    // Seçili öğede sürüklenebilen uç noktalar: kutu/ok/vurgu/bulanık için iki uç, metin ve numara için yok
+    // Seçili öğede sürüklenebilen uç noktalar: kutu/elips/ok/vurgu/bulanık için iki uç; metin, numara ve kalem için yok
     function handlesOf(item) {
-        if (item.type === 'text' || item.type === 'number') return [];
+        if (item.type === 'text' || item.type === 'number' || item.type === 'pen') return [];
         return [{ key: 'a', x: item.x1, y: item.y1 }, { key: 'b', x: item.x2, y: item.y2 }];
     }
 
     function translateItem(item, dx, dy) {
+        if (item.type === 'pen') return { ...item, points: item.points.map((p) => ({ x: p.x + dx, y: p.y + dy })) };
         const moved = { ...item, x1: item.x1 + dx, y1: item.y1 + dy };
         if (item.x2 !== undefined) {
             moved.x2 = item.x2 + dx;
@@ -91,6 +106,35 @@ var CaptureGeometry = (() => {
 
     function moveHandle(item, key, point) {
         return key === 'a' ? { ...item, x1: point.x, y1: point.y } : { ...item, x2: point.x, y2: point.y };
+    }
+
+    // Görüntü 90° saat yönünde dönünce öğe de döner: (x, y) → (yükseklik − y, x). Metin ve numara yatay kalır;
+    // yalnız merkezleri döner.
+    function rotateItem(item, height) {
+        const turn = (x, y) => ({ x: height - y, y: x });
+        if (item.type === 'pen') return { ...item, points: item.points.map((p) => turn(p.x, p.y)) };
+        if (item.type === 'text') {
+            const c = turn(item.x1 + item.w / 2, item.y1 + item.h / 2);
+            return { ...item, x1: c.x - item.w / 2, y1: c.y - item.h / 2 };
+        }
+        const a = turn(item.x1, item.y1);
+        const rotated = { ...item, x1: a.x, y1: a.y };
+        if (item.x2 !== undefined) {
+            const b = turn(item.x2, item.y2);
+            rotated.x2 = b.x;
+            rotated.y2 = b.y;
+        }
+        return rotated;
+    }
+
+    // Görüntü k katına ölçeklenince öğenin konumu ve saklanan boyutları (numara yarıçapı, metin ölçüleri) da ölçeklenir
+    function scaleItem(item, k) {
+        const scaled = { ...item };
+        for (const key of ['x1', 'y1', 'x2', 'y2', 'r', 'px', 'w', 'h']) {
+            if (item[key] !== undefined) scaled[key] = item[key] * k;
+        }
+        if (item.points) scaled.points = item.points.map((p) => ({ x: p.x * k, y: p.y * k }));
+        return scaled;
     }
 
     // Bir sonraki numara: mevcut en büyük numaranın bir fazlası (silinen numaralar yeniden kullanılmaz)
@@ -127,7 +171,7 @@ var CaptureGeometry = (() => {
 
     return {
         normalizeRect, clampRect, scaleRect, planSlices, fixedShown,
-        itemBounds, hitItem, handlesOf, translateItem, moveHandle, nextNumber, fileName, siteName, dimensions
+        itemBounds, hitItem, handlesOf, translateItem, moveHandle, rotateItem, scaleItem, nextNumber, fileName, siteName, dimensions
     };
 })();
 

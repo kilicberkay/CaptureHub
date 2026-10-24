@@ -73,3 +73,42 @@ test('siteName: yalnız http(s) adresinden alan adı; diğer şemalar ve bozuk a
 test('dimensions: boyut soldan sağa yalıtılır (Arapça/Urduca arayüzde ters dönmez)', () => {
     assert.equal(G.dimensions(1280, 713), '⁦1280×713⁩');
 });
+
+const pen = { type: 'pen', points: [{ x: 10, y: 10 }, { x: 50, y: 10 }, { x: 50, y: 40 }] };
+
+test('kalem: sınır kutusu, çizgiye yakın isabet, boş iç seçilmez, taşıma tüm noktaları kaydırır', () => {
+    assert.deepEqual(G.itemBounds(pen), { x: 10, y: 10, width: 40, height: 30 });
+    assert.equal(G.hitItem([pen], { x: 30, y: 12 }, 4), 0);
+    assert.equal(G.hitItem([pen], { x: 20, y: 30 }, 4), -1);
+    assert.deepEqual(G.translateItem(pen, 5, -5).points, [{ x: 15, y: 5 }, { x: 55, y: 5 }, { x: 55, y: 35 }]);
+    assert.deepEqual(G.handlesOf(pen), []);
+});
+
+test('elips: kutu gibi sınır kutusu ve iki uç tutamacı', () => {
+    const ellipse = { type: 'ellipse', x1: 100, y1: 50, x2: 20, y2: 10 };
+    assert.deepEqual(G.itemBounds(ellipse), { x: 20, y: 10, width: 80, height: 40 });
+    assert.equal(G.hitItem([ellipse], { x: 60, y: 30 }, 2), 0);
+    assert.equal(G.handlesOf(ellipse).length, 2);
+});
+
+test('rotateItem: (x, y) → (H − y, x); dört kez döndürmek özgün konumu verir; metin yatay kalır', () => {
+    const W = 200;
+    const H = 100;
+    const box = { type: 'rect', x1: 10, y1: 20, x2: 60, y2: 70 };
+    assert.deepEqual(G.rotateItem(box, H), { type: 'rect', x1: 80, y1: 10, x2: 30, y2: 60 });
+    const text = { type: 'text', x1: 10, y1: 20, w: 40, h: 10 };
+    const turned = G.rotateItem(text, H);
+    assert.deepEqual([turned.w, turned.h], [40, 10]);
+    assert.deepEqual([turned.x1 + 20, turned.y1 + 5], [H - 25, 30], 'merkez döner');
+    // Her turda yükseklik genişlikle yer değiştirir
+    const dims = [H, W, H, W];
+    let item = { ...pen };
+    for (const h of dims) item = G.rotateItem(item, h);
+    assert.deepEqual(item.points, pen.points);
+});
+
+test('scaleItem: koordinatlar ve saklanan ölçüler ölçeklenir', () => {
+    assert.deepEqual(G.scaleItem({ type: 'number', x1: 10, y1: 20, r: 8, n: 3 }, 0.5), { type: 'number', x1: 5, y1: 10, r: 4, n: 3 });
+    assert.deepEqual(G.scaleItem(pen, 2).points[1], { x: 100, y: 20 });
+    assert.deepEqual(G.scaleItem({ type: 'text', x1: 4, y1: 4, px: 20, w: 40, h: 25, text: 'a' }, 0.5), { type: 'text', x1: 2, y1: 2, px: 10, w: 20, h: 12.5, text: 'a' });
+});

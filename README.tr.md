@@ -24,13 +24,13 @@
 </p>
 
 <p align="center">
-  <a href="docs/videos/demo-tr.mp4"><img src="docs/images/tr/demo.gif" alt="CaptureHub bir raporun bölgesini seçer, ok, metin, numara ve kutuyla işaretler, indirir, ardından tam sayfayı yakalar" width="90%"></a><br>
+  <a href="docs/videos/demo-tr.mp4"><img src="docs/images/tr/demo.gif" alt="CaptureHub bir raporun bölgesini seçer, başlığını leke iyileştirme fırçasıyla siler, ok, metin, numara ve kutuyla işaretler, indirir, ardından tam sayfayı yakalar" width="90%"></a><br>
   <sub><a href="docs/videos/demo-tr.mp4">▶ Tam kalite videoyu izleyin (MP4, 1280×800)</a></sub>
 </p>
 
 | Yakalama | Düzenleyici | Kısayollar | Veri |
 |---|---|---|---|
-| Görünür alan, tam sayfa, bölge, öğe | Kutu, ok, metin, bulanıklaştırma, numara, vurgu, kırpma | `Alt+Shift+V` `F` `R` `E` | Toplanmaz, hiçbir şey yüklenmez |
+| Görünür alan, tam sayfa, bölge, öğe | İşaretleme, leke iyileştirme, içeriğe duyarlı doldurma, kırpma, döndürme, boyutlandırma | `Alt+Shift+V` `F` `R` `E` | Toplanmaz, hiçbir şey yüklenmez |
 
 ---
 
@@ -111,15 +111,23 @@ yakalamasından önce bir menüyü ya da ipucunu açmanız için zaman tanır.
 |---|---|---|
 | Seç | `V` | İşaretleri seçer, taşır ve tutamaçlarıyla boyutlandırır. Ok tuşları kaydırır (Shift: 10 px), Delete siler. |
 | Kutu | `R` | Dikdörtgen çerçeve |
+| Elips | `E` | Elips çerçeve; Shift ile tam daire |
 | Ok | `A` | Basılan noktadan bırakılan noktaya ok |
+| Kalem | `P` | Serbest çizgi |
 | Metin | `T` | Tıklayın, yazın, Enter'a basın. Metnin karşıt renkli kenarlığı her zeminde okunmasını sağlar. |
-| Bulanıklaştır | `B` | E-posta, ad ve numaraları iri piksellerin altına gizler |
 | Numara | `N` | Adım adım anlatımlar için numaralı işaretler (1, 2, 3 …) |
 | Vurgu | `H` | Altındaki metni okunur bırakan fosforlu kalem |
+| Bulanıklaştır | `B` | E-posta, ad ve numaraları iri piksellerin altına gizler |
+| Leke iyileştirme | `J` | Yazının, simgenin ya da imlecin üstünden fırçayla geçin; bırakınca alan çevresinden yeniden oluşturulur |
+| İçeriğe duyarlı doldurma | `F` | Bir dikdörtgen sürükleyin; içi çevresinden doldurulur |
 | Kırp | `C` | Bir alan sürükleyin, ardından **Kırpmayı uygula** |
 
-- **Renkler**: yedi hazır renk ve özel renk seçici. **Boyutlar**: XS, S, M, L, XL. İkisi de seçili işarete de
-  uygulanır; son seçim hatırlanır.
+- **Leke iyileştirme ve içeriğe duyarlı doldurma** alanı çevresindeki piksellerden yeniden oluşturur. Ekran
+  görüntüleri için yapılmıştır: düz zemin, degrade ve arayüz yüzeyleri temiz çıkar. Fotoğraf dokusunda sonuç dokulu
+  değil yumuşak olur. Her fırça darbesi bırakılınca doldurulur; lekenin tamamını tek darbede örtün.
+- **Renkler**: yedi hazır renk, özel renk seçici ve ekranın herhangi bir yerinden renk alan **damlalık** (`I`).
+  **Boyutlar**: XS, S, M, L, XL (fırça boyutu da). İkisi de seçili işarete de uygulanır; son seçim hatırlanır.
+- Üst çubukta **90° döndür** ve **boyutlandır** (oran korunur). İşaretler görüntüyle birlikte döner ve ölçeklenir.
 - Kırpma dahil her değişiklik **geri alınır ve yinelenir** (`Ctrl+Z`, `Ctrl+Shift+Z`).
 - **1:1** görüntüyü gerçek boyutunda gösterir.
 - **Kopyala** panoya PNG koyar. **İndir** (`Ctrl+S`) dosya adı şablonunuzla PNG, JPEG ya da WebP kaydeder.

@@ -20,8 +20,9 @@ Highlights
 
 - Visible area, full page, region, and element capture. Full page capture scrolls the page and stitches the
   pieces together, keeping fixed headers and footers in their place.
-- Editor with boxes, arrows, text, pixelation, highlighter, numbered markers and crop. Seven preset colors and a
-  custom color, five sizes (XS to XL). Select and move any mark, undo and redo every change.
+- Editor with boxes, ellipses, arrows, pen, text, pixelation, highlighter, numbered markers and crop. Seven preset
+  colors, a custom color and an eyedropper, five sizes (XS to XL). Select and move any mark, undo and redo every change.
+- Spot healing brush and content-aware fill remove text, icons or the cursor from a screenshot. Rotate and resize.
 - Copy to the clipboard or save as PNG, JPEG or WebP.
 - Shortcuts for every mode (Alt+Shift+V, F, R, E) and a right-click menu on the toolbar icon.
 - Optional delay before a capture, so menus and tooltips can be opened first.

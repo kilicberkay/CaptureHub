@@ -15,7 +15,8 @@ folder is loaded as it is. npm is used only for tests, packaging, and the image 
 | Settings model | `extension/shared/settings.js` (`CaptureSettings`) | The single list of defaults, allowed values, creating and validating the settings backup |
 | Theme | `extension/shared/theme.js` (`CaptureTheme`) | Light, dark, or system; applied in `<head>` from a cached value so pages open in the right theme, kept in sync with `storage.onChanged` |
 | Popup | `extension/popup/` | Capture modes, delay, recent captures, theme toggle |
-| Editor | `extension/editor/` | Drawing (`tools.js`) and interaction (`editor.js`): select, move, handles, undo/redo, crop, colors (presets and custom), sizes XS–XL, copy, export through `chrome.downloads` |
+| Editor | `extension/editor/` | Drawing (`tools.js`) and interaction (`editor.js`): select, move, handles, undo/redo, crop, rotate, resize, pen, ellipse, colors (presets, custom, eyedropper), sizes XS–XL, copy, export through `chrome.downloads` |
+| Fill engine | `extension/editor/heal.js` (`CaptureHeal`) | `inpaint(imageData, mask)`: rebuilds masked pixels from their surroundings (layered weighted average, then SOR Laplace smoothing). Used by spot healing (brush mask) and content-aware fill (rectangle mask) |
 | Settings page | `extension/options/` | Preferences, backup, reset, history (search, source site, show in folder), current shortcuts, about, support |
 | Translations | `extension/shared/i18n.js` (`CaptureI18n`), `extension/_locales/` | 15 languages with the same keys; manifest, shortcut, and menu texts |
 | Styles | `extension/shared/ui.css` | Design tokens shared with FillHub, dark theme, common classes |
@@ -52,6 +53,10 @@ flowchart LR
 - Full page slices are cropped to `clientWidth`, so the page's scrollbar is not repeated down the image.
 - Editor items are stored in image pixels; the screen and the export use the same drawing functions. The selection
   frame and handles are drawn only on screen.
+- Operations that change the base image (crop, spot healing, content-aware fill, rotate, resize) take a snapshot
+  first, so undo restores the image too. They never touch the marks drawn on top, except that rotate and resize
+  transform them with the image (`rotateItem`, `scaleItem`).
+- The fill engine works on the mask's bounding box only, and refuses masks larger than 2 million pixels.
 - Functions that run in the page (`measurePage`, `applyFixedVisibility`, `scrollPageTo`, `restorePage`,
   `setSelectMode`) are serialized and injected, so they cannot use variables from the service worker. Shared logic
   comes from `CaptureGeometry`, and `geometry.js` is injected first.
