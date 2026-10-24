@@ -1,0 +1,182 @@
+body {
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+.bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--line);
+    background: rgb(244 244 245 / 0.85);
+    backdrop-filter: blur(12px);
+}
+
+.dark .bar { background: rgb(8 8 10 / 0.75); }
+
+.bar .meta { min-width: 0; }
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+}
+
+.divider {
+    width: 1px;
+    height: 20px;
+    margin: 0 4px;
+    background: var(--line);
+}
+
+.group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Renk yuvarlağı chip sınıfı taşımaz; .dark .chip arka planı rengi ezmesin diye kendi kuralları vardır */
+.swatch {
+    position: relative;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid rgb(24 24 27 / 0.25);
+    border-radius: 999px;
+    background: var(--swatch);
+    cursor: pointer;
+}
+
+.dark .swatch { border-color: rgb(255 255 255 / 0.3); }
+
+.swatch[aria-pressed="true"],
+.swatch.active {
+    box-shadow: 0 0 0 2px var(--canvas), 0 0 0 4px var(--brand-500);
+}
+
+.swatch.custom {
+    display: inline-block;
+    box-sizing: border-box;
+    background: conic-gradient(#ef4444, #f59e0b, #10b981, #3b82f6, #a855f7, #f74a87, #ef4444);
+}
+
+/* Yerel renk seçici görünmez ama yuvarlağın tamamını kaplar: tıklama ve klavye odağı ona gider */
+.swatch.custom input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.swatch.custom:focus-within {
+    outline: 2px solid rgb(247 74 135 / 0.6);
+    outline-offset: 2px;
+}
+
+.size {
+    min-width: 36px;
+    justify-content: center;
+    padding: 6px 8px;
+}
+
+.stage {
+    display: flex;
+    justify-content: center;
+    padding: 8px 16px 24px;
+}
+
+.frame {
+    position: relative;
+    max-width: 100%;
+}
+
+canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    cursor: crosshair;
+    touch-action: none;
+    background: #ffffff;
+}
+
+.text-input {
+    position: absolute;
+    min-width: 120px;
+    padding: 0 4px;
+    border: 1px dashed var(--brand-500);
+    background: transparent;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: inherit;
+    outline: none;
+}
+
+.status {
+    margin: 0;
+    padding: 0 16px 16px;
+    min-height: 16px;
+}
+
+.tools .chip svg,
+.tools .chip-active svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.crop-group {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.chip:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+select#format {
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-size: 12px;
+}
+
+.stage {
+    overflow: auto;
+}
+
+.stage[data-active-tool="select"] canvas { cursor: default; }
+.stage[data-active-tool="text"] canvas { cursor: text; }
+
+.stage.actual canvas {
+    max-width: none;
+}

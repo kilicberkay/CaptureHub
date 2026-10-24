@@ -1,0 +1,120 @@
+/* Uzun listede dikey kaydırma çubuğu yatay taşma yaratmasın */
+html { overflow-x: hidden; }
+
+body {
+    width: 340px;
+    padding: 0 0 12px;
+}
+
+.head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 52px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    line-height: 1;
+}
+
+.ml-auto { margin-left: auto; }
+
+.block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+}
+
+.block .eyebrow { margin: 0 0 2px; }
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 14px;
+    font: inherit;
+    text-align: start;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s var(--ease-smooth);
+}
+
+.row:hover {
+    border-color: rgb(247 74 135 / 0.35);
+    transform: translateY(-1px);
+}
+
+.row-title {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.row .meta { text-align: end; }
+
+.status {
+    margin: 0;
+    min-height: 16px;
+    font-size: 12px;
+    color: var(--brand-600);
+}
+
+.dark .status { color: var(--brand-400); }
+
+.recent {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.recent button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 12px;
+    text-align: start;
+    cursor: pointer;
+}
+
+.recent button:hover { background: rgb(127 127 140 / 0.1); }
+
+.recent button > span:first-child { white-space: nowrap; }
+
+.recent .meta { text-align: end; }
+
+.foot {
+    padding: 0 14px;
+}
+
+.foot a { color: var(--link); }
+
+.delay {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.delay .meta { margin-right: 4px; }
+
+.delay .chip,
+.delay .chip-active { padding: 4px 10px; }

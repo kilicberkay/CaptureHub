@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "表示領域・ページ全体・範囲をキャプチャし、矢印・枠・文字・モザイクで注釈を付けられます。"
+  },
+  "actionTitle": {
+    "message": "CaptureHub: スクリーンショットを撮る"
+  },
+  "cmdRegion": {
+    "message": "選択範囲をキャプチャ"
+  },
+  "cmdVisible": {
+    "message": "表示領域をキャプチャ"
+  },
+  "cmdFull": {
+    "message": "ページ全体をキャプチャ"
+  },
+  "cmdElement": {
+    "message": "選択した要素をキャプチャ"
+  },
+  "menuHistory": {
+    "message": "履歴"
+  },
+  "menuSettings": {
+    "message": "設定"
+  }
+}

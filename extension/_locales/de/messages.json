@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "Sichtbaren Bereich, ganze Seite oder Bereich aufnehmen und mit Pfeilen, Rahmen, Text und Verpixelung markieren."
+  },
+  "actionTitle": {
+    "message": "CaptureHub: Screenshot aufnehmen"
+  },
+  "cmdRegion": {
+    "message": "Ausgewählten Bereich aufnehmen"
+  },
+  "cmdVisible": {
+    "message": "Sichtbaren Bereich aufnehmen"
+  },
+  "cmdFull": {
+    "message": "Ganze Seite aufnehmen"
+  },
+  "cmdElement": {
+    "message": "Ausgewähltes Element aufnehmen"
+  },
+  "menuHistory": {
+    "message": "Verlauf"
+  },
+  "menuSettings": {
+    "message": "Einstellungen"
+  }
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaptureHub</title>
+    <link rel="icon" type="image/png" href="../icons/logo48.png">
+    <link rel="stylesheet" href="../shared/ui.css">
+    <link rel="stylesheet" href="editor.css">
+    <script src="../shared/settings.js"></script>
+    <script src="../shared/theme.js"></script>
+</head>
+
+<body class="bg-grid">
+    <header class="bar">
+        <img src="../icons/logo.svg" alt="" width="26" height="26">
+        <span class="text-strong">CaptureHub</span>
+        <span id="info" class="meta"></span>
+        <div class="actions">
+            <label class="meta" for="format" data-i18n="formatLabel">Format</label>
+            <select id="format" data-i18n-label="formatLabel" aria-label="Format">
+                <option value="png">PNG</option>
+                <option value="jpeg">JPEG</option>
+                <option value="webp">WebP</option>
+            </select>
+            <button id="zoom" type="button" class="chip" aria-pressed="false" data-i18n-title="zoomActual">1:1</button>
+            <button id="undo" type="button" class="chip" data-i18n="undo">Undo</button>
+            <button id="redo" type="button" class="chip" data-i18n="redo">Redo</button>
+            <button id="copy" type="button" class="chip" data-i18n="copy">Copy</button>
+            <button id="download" type="button" class="btn-brand" data-i18n="download">Download</button>
+        </div>
+    </header>
+
+    <nav class="tools" data-i18n-label="toolsLabel" aria-label="Tools">
+        <button type="button" class="chip" data-tool="select" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3l11 6.5-5 1.2L8.5 17z"/></svg><span data-i18n="toolSelect">Seç</span>
+        </button>
+        <button type="button" class="chip" data-tool="rect" aria-pressed="true">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="14" height="12" rx="2"/></svg><span data-i18n="toolRect">Dikdörtgen</span>
+        </button>
+        <button type="button" class="chip" data-tool="arrow" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 17L17 3M9 3h8v8"/></svg><span data-i18n="toolArrow">Ok</span>
+        </button>
+        <button type="button" class="chip" data-tool="text" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M10 5v12"/></svg><span data-i18n="toolText">Metin</span>
+        </button>
+        <button type="button" class="chip" data-tool="blur" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6"/><rect x="11" y="3" width="6" height="6"/><rect x="3" y="11" width="6" height="6"/><rect x="11" y="11" width="6" height="6"/></svg><span data-i18n="toolBlur">Bulanıklaştır</span>
+        </button>
+        <button type="button" class="chip" data-tool="number" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M8.5 8l1.5-1v6"/></svg><span data-i18n="toolNumber">Numara</span>
+        </button>
+        <button type="button" class="chip" data-tool="highlight" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16l4-1 9-9-3-3-9 9z"/></svg><span data-i18n="toolHighlight">Vurgu</span>
+        </button>
+        <button type="button" class="chip" data-tool="crop" aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 2v12h12M2 6h12v12"/></svg><span data-i18n="toolCrop">Kırp</span>
+        </button>
+
+        <span class="divider" aria-hidden="true"></span>
+
+        <span class="group" role="group" data-i18n-label="colorLabel" aria-label="Color">
+            <button type="button" class="swatch" data-color="#f74a87" data-i18n-label="colorPink" aria-label="Pink" aria-pressed="false" style="--swatch: #f74a87"></button>
+            <button type="button" class="swatch" data-color="#ef4444" data-i18n-label="colorRed" aria-label="Red" aria-pressed="false" style="--swatch: #ef4444"></button>
+            <button type="button" class="swatch" data-color="#f59e0b" data-i18n-label="colorYellow" aria-label="Yellow" aria-pressed="false" style="--swatch: #f59e0b"></button>
+            <button type="button" class="swatch" data-color="#10b981" data-i18n-label="colorGreen" aria-label="Green" aria-pressed="false" style="--swatch: #10b981"></button>
+            <button type="button" class="swatch" data-color="#3b82f6" data-i18n-label="colorBlue" aria-label="Blue" aria-pressed="false" style="--swatch: #3b82f6"></button>
+            <button type="button" class="swatch" data-color="#18181b" data-i18n-label="colorBlack" aria-label="Black" aria-pressed="false" style="--swatch: #18181b"></button>
+            <button type="button" class="swatch" data-color="#ffffff" data-i18n-label="colorWhite" aria-label="White" aria-pressed="false" style="--swatch: #ffffff"></button>
+            <label class="swatch custom" data-i18n-title="colorCustom" title="Custom color">
+                <input id="customColor" type="color" value="#f74a87" data-i18n-label="colorCustom" aria-label="Custom color">
+            </label>
+        </span>
+
+        <span class="divider" aria-hidden="true"></span>
+
+        <span class="group" role="group" data-i18n-label="sizeLabel" aria-label="Size">
+            <button type="button" class="chip size" data-size="xs" aria-pressed="false">XS</button>
+            <button type="button" class="chip size" data-size="s" aria-pressed="false">S</button>
+            <button type="button" class="chip size" data-size="m" aria-pressed="false">M</button>
+            <button type="button" class="chip size" data-size="l" aria-pressed="false">L</button>
+            <button type="button" class="chip size" data-size="xl" aria-pressed="false">XL</button>
+        </span>
+
+        <span id="cropGroup" class="crop-group" hidden>
+            <button id="cropApply" type="button" class="btn-brand" data-i18n="cropApply">Apply crop</button>
+            <button id="cropCancel" type="button" class="chip" data-i18n="cropCancel">Cancel</button>
+        </span>
+
+    </nav>
+
+    <main id="stage" class="stage" data-active-tool="rect">
+        <div id="frame" class="frame">
+            <canvas id="canvas" class="card" role="img" data-i18n-label="canvasLabel" aria-label="Captured screenshot"></canvas>
+            <input id="textInput" class="text-input" type="text" data-i18n-label="textInputLabel" aria-label="Text" hidden>
+        </div>
+    </main>
+
+    <p id="status" class="status meta" role="status" aria-live="polite"></p>
+
+    <script src="../shared/i18n.js"></script>
+    <script src="../scripts/geometry.js"></script>
+    <script src="../scripts/db.js"></script>
+    <script src="tools.js"></script>
+    <script src="editor.js"></script>
+</body>
+
+</html>

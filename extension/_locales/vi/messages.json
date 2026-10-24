@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "Chụp vùng hiển thị, toàn trang hoặc một vùng, rồi chú thích bằng mũi tên, khung, chữ và làm mờ."
+  },
+  "actionTitle": {
+    "message": "CaptureHub: chụp ảnh màn hình"
+  },
+  "cmdRegion": {
+    "message": "Chụp vùng đã chọn"
+  },
+  "cmdVisible": {
+    "message": "Chụp vùng hiển thị"
+  },
+  "cmdFull": {
+    "message": "Chụp toàn trang"
+  },
+  "cmdElement": {
+    "message": "Chụp phần tử đã chọn"
+  },
+  "menuHistory": {
+    "message": "Lịch sử"
+  },
+  "menuSettings": {
+    "message": "Cài đặt"
+  }
+}

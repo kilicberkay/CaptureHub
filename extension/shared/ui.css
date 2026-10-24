@@ -1,0 +1,162 @@
+/*
+ * CaptureHub ortak arayüz. FillHub ayar sayfasıyla aynı tokenlar ve sınıf sözleşmesi
+ * (chip, chip-active, meta, eyebrow, text-muted, bg-grid, focus-ring); Tailwind üretimi yerine elle yazıldı.
+ * Koyu tema <html class="dark"> ile seçilir.
+ */
+@font-face { font-family: 'Geist'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/geist-400-normal-B40WzpMT.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-style: normal; font-weight: 500; font-display: swap; src: url('../fonts/geist-500-normal-CTWBw9NS.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-style: normal; font-weight: 600; font-display: swap; src: url('../fonts/geist-600-normal-CSETrqM2.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-style: normal; font-weight: 700; font-display: swap; src: url('../fonts/geist-700-normal-CFi8mLqe.woff2') format('woff2'); }
+@font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/geist-mono-400-normal-DTRLJnHl.woff2') format('woff2'); }
+@font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url('../fonts/geist-mono-500-normal-YINYabwD.woff2') format('woff2'); }
+@font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 600; font-display: swap; src: url('../fonts/geist-mono-600-normal-V-KvD_pi.woff2') format('woff2'); }
+
+:root {
+    --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --brand-50: #fff1f6;
+    --brand-300: #fda4c0;
+    --brand-400: #fb7aa8;
+    --brand-500: #f74a87;
+    --brand-600: #c2185b;
+    --brand-700: #a81a4c;
+    --canvas: #f4f4f5;
+    --surface: #ffffff;
+    --line: rgb(228 228 231 / 0.7);
+    --ink: #18181b;
+    --muted: #52525b;
+    --soft: #52525b;
+    --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.7) inset, 0 1px 2px rgb(24 24 27 / 0.04), 0 18px 40px -28px rgb(24 24 27 / 0.28);
+    --ease-smooth: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --link: var(--brand-600);
+    color-scheme: light;
+    /* Kaydırıcı, onay kutusu gibi yerel denetimler tarayıcı mavisi yerine marka rengini alır */
+    accent-color: var(--brand-600);
+}
+
+:root.dark {
+    --canvas: #08080a;
+    --surface: rgb(24 24 27 / 0.5);
+    --line: rgb(255 255 255 / 0.06);
+    --ink: #f4f4f5;
+    --muted: #d4d4d8;
+    --soft: #a1a1aa;
+    --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 24px 48px -32px rgb(0 0 0 / 0.9);
+    --link: var(--brand-400);
+    color-scheme: dark;
+    accent-color: var(--brand-500);
+}
+
+/* hidden niteliği, görünümü flex/inline-flex olan öğelerde de gizlemeli */
+[hidden] {
+    display: none !important;
+}
+
+html body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    background: var(--canvas);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background-color: rgb(161 161 170 / 0.35); border: 3px solid transparent; background-clip: content-box; border-radius: 999px; }
+
+:focus-visible {
+    outline: 2px solid rgb(247 74 135 / 0.6);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+::selection { background-color: rgb(247 74 135 / 0.22); }
+
+.text-muted { color: var(--muted); }
+.text-soft { color: var(--soft); }
+.text-strong { color: var(--ink); font-weight: 600; }
+.meta { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.meta-xs { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+.eyebrow { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); }
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+}
+
+.chip,
+.chip-active {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 1px solid;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+}
+
+.chip {
+    border-color: rgb(228 228 231 / 0.8);
+    background: #ffffff;
+    color: #52525b;
+}
+
+.chip:hover { border-color: #d4d4d8; color: #18181b; }
+
+.chip-active {
+    border-color: rgb(194 24 91 / 0.3);
+    background: var(--brand-50);
+    color: var(--brand-700);
+}
+
+.dark .chip {
+    border-color: rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.03);
+    color: #d4d4d8;
+}
+
+.dark .chip:hover { border-color: rgb(255 255 255 / 0.2); color: #ffffff; }
+
+.dark .chip-active {
+    border-color: rgb(247 74 135 / 0.3);
+    background: rgb(247 74 135 / 0.1);
+    color: var(--brand-400);
+}
+
+/* Birincil eylem: beyaz metinle AA kontrastı için 600 tonu */
+.btn-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--brand-600);
+    color: #ffffff;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-brand:hover { background: var(--brand-700); }
+
+.bg-grid {
+    background-image:
+        linear-gradient(to right, rgb(24 24 27 / 0.055) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(24 24 27 / 0.055) 1px, transparent 1px);
+    background-size: 56px 56px;
+}
+
+.dark .bg-grid {
+    background-image:
+        linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+}

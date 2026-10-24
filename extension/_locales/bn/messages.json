@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "দৃশ্যমান অংশ, পুরো পেজ বা একটি অঞ্চল ক্যাপচার করুন, তারপর তীর, বক্স, লেখা ও ঝাপসা দিয়ে চিহ্নিত করুন।"
+  },
+  "actionTitle": {
+    "message": "CaptureHub: স্ক্রিনশট নিন"
+  },
+  "cmdRegion": {
+    "message": "নির্বাচিত অঞ্চল ক্যাপচার করুন"
+  },
+  "cmdVisible": {
+    "message": "দৃশ্যমান অংশ ক্যাপচার করুন"
+  },
+  "cmdFull": {
+    "message": "পুরো পেজ ক্যাপচার করুন"
+  },
+  "cmdElement": {
+    "message": "নির্বাচিত উপাদান ক্যাপচার করুন"
+  },
+  "menuHistory": {
+    "message": "ইতিহাস"
+  },
+  "menuSettings": {
+    "message": "সেটিংস"
+  }
+}

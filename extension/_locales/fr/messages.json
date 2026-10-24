@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "Capturez la zone visible, la page entière ou une zone, puis annotez avec flèches, cadres, texte et pixelisation."
+  },
+  "actionTitle": {
+    "message": "CaptureHub : faire une capture"
+  },
+  "cmdRegion": {
+    "message": "Capturer une zone sélectionnée"
+  },
+  "cmdVisible": {
+    "message": "Capturer la zone visible"
+  },
+  "cmdFull": {
+    "message": "Capturer la page entière"
+  },
+  "cmdElement": {
+    "message": "Capturer un élément sélectionné"
+  },
+  "menuHistory": {
+    "message": "Historique"
+  },
+  "menuSettings": {
+    "message": "Réglages"
+  }
+}

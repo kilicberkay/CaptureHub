@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "التقط المنطقة المرئية أو الصفحة كاملة أو منطقة محددة، ثم علّق عليها بالأسهم والمربعات والنص والتمويه."
+  },
+  "actionTitle": {
+    "message": "CaptureHub: التقاط لقطة شاشة"
+  },
+  "cmdRegion": {
+    "message": "التقاط منطقة محددة"
+  },
+  "cmdVisible": {
+    "message": "التقاط المنطقة المرئية"
+  },
+  "cmdFull": {
+    "message": "التقاط الصفحة كاملة"
+  },
+  "cmdElement": {
+    "message": "التقاط عنصر محدد"
+  },
+  "menuHistory": {
+    "message": "السجل"
+  },
+  "menuSettings": {
+    "message": "الإعدادات"
+  }
+}

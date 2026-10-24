@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      e2e:
+        description: "Run the browser end-to-end tests"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm run check
+      - run: node --test tests/unit/*.test.js
+      - run: npm run build
+      - name: Store archive contents
+        run: python3 -m zipfile -t dist/capturehub-*.zip
+      - uses: actions/upload-artifact@v4
+        if: matrix.node == 22
+        with:
+          name: capturehub-zip
+          path: dist/capturehub-*.zip
+
+  # Runs on every push and pull request; a manual run can skip it by setting e2e to false
+  e2e:
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.e2e == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run build
+      - name: Install Chromium for Playwright
+        # Playwright 1.56.1 bundles Chromium 141, the build the browser tests are run against locally.
+        run: |
+          npx --yes playwright@1.56.1 install --with-deps chromium
+          CHROME=$(find "${PLAYWRIGHT_BROWSERS_PATH:-$HOME/.cache/ms-playwright}" -type f -path '*chrome-linux*' -name chrome | head -n 1)
+          test -n "$CHROME"
+          echo "CHROME_BIN=$CHROME" >> "$GITHUB_ENV"
+      - name: Unpack the store archive
+        run: |
+          rm -rf dist/unpacked
+          mkdir -p dist/unpacked
+          python3 -m zipfile -e dist/capturehub-*.zip dist/unpacked
+      - name: Browser tests (packaged archive)
+        env:
+          CAPTUREHUB_EXT_DIR: ${{ github.workspace }}/dist/unpacked
+        run: node --test --test-timeout=400000 tests/e2e/*.test.mjs

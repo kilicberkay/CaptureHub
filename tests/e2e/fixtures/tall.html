@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tall fixture</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+        .band { height: 500px; }
+        .band:nth-child(1) { background: #ff0000; }
+        .band:nth-child(2) { background: #00ff00; }
+        .band:nth-child(3) { background: #0000ff; }
+        .band:nth-child(4) { background: #ffff00; }
+        .band:nth-child(5) { background: #00ffff; }
+        .band:nth-child(6) { background: #ff00ff; }
+        #header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: #111111; }
+        #footer { position: fixed; bottom: 0; left: 0; right: 0; height: 40px; background: #222222; }
+        #box { position: absolute; left: 100px; top: 1200px; width: 200px; height: 100px; background: #123456; }
+    </style>
+</head>
+<body>
+    <!-- Bantlar body'nin ilk altı çocuğu olmalı (nth-child); sabit başlık ve alt bar sonradan gelir -->
+    <div class="band"></div>
+    <div class="band"></div>
+    <div class="band"></div>
+    <div class="band"></div>
+    <div class="band"></div>
+    <div class="band"></div>
+    <div id="header"></div>
+    <div id="footer"></div>
+    <div id="box"></div>
+</body>
+</html>

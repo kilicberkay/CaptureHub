@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "Снимайте видимую область, всю страницу или участок и отмечайте стрелками, рамками, текстом и пикселизацией."
+  },
+  "actionTitle": {
+    "message": "CaptureHub: сделать снимок экрана"
+  },
+  "cmdRegion": {
+    "message": "Снять выбранную область"
+  },
+  "cmdVisible": {
+    "message": "Снять видимую область"
+  },
+  "cmdFull": {
+    "message": "Снимок всей страницы"
+  },
+  "cmdElement": {
+    "message": "Снимок выбранного элемента"
+  },
+  "menuHistory": {
+    "message": "История"
+  },
+  "menuSettings": {
+    "message": "Настройки"
+  }
+}

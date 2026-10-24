@@ -1,0 +1,53 @@
+name: Bug report
+description: A capture, the editor, or the settings did not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please remove personal data from screenshots and page addresses before you post them.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you expected, and what happened instead.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Visible area capture
+        - Full page capture
+        - Region capture
+        - Element capture
+        - Editor
+        - Settings or history
+        - Toolbar popup or right-click menu
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open https://example.com
+        2. Press Alt+Shift+F
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: CaptureHub version
+      description: Settings → About
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and operating system
+      placeholder: Chrome 131 on Windows 11
+    validations:
+      required: true

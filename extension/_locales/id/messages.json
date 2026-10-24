@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "Tangkap area terlihat, seluruh halaman, atau area tertentu, lalu beri anotasi dengan panah, kotak, teks, dan blur."
+  },
+  "actionTitle": {
+    "message": "CaptureHub: ambil tangkapan layar"
+  },
+  "cmdRegion": {
+    "message": "Tangkap area yang dipilih"
+  },
+  "cmdVisible": {
+    "message": "Tangkap area terlihat"
+  },
+  "cmdFull": {
+    "message": "Tangkap seluruh halaman"
+  },
+  "cmdElement": {
+    "message": "Tangkap elemen yang dipilih"
+  },
+  "menuHistory": {
+    "message": "Riwayat"
+  },
+  "menuSettings": {
+    "message": "Pengaturan"
+  }
+}

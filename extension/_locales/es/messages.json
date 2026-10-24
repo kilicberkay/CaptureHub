@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "Captura el área visible, la página completa o una región y anótala con flechas, recuadros, texto y pixelado."
+  },
+  "actionTitle": {
+    "message": "CaptureHub: hacer una captura"
+  },
+  "cmdRegion": {
+    "message": "Capturar una región seleccionada"
+  },
+  "cmdVisible": {
+    "message": "Capturar el área visible"
+  },
+  "cmdFull": {
+    "message": "Capturar la página completa"
+  },
+  "cmdElement": {
+    "message": "Capturar un elemento seleccionado"
+  },
+  "menuHistory": {
+    "message": "Historial"
+  },
+  "menuSettings": {
+    "message": "Ajustes"
+  }
+}

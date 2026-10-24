@@ -1,0 +1,70 @@
+name: Release
+
+# Tag gönderilince (v1.3.0 gibi) paketi derler ve GitHub Release'i oluşturur. Release zaten varsa dosyaları
+# günceller (yeniden çalıştırmak güvenlidir). Elle çalıştırmak için tag'i girin; tag'in önceden var olması gerekir.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Yayımlanacak etiket (ör. v1.3.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check
+      - run: node --test tests/unit/*.test.js
+      - run: npm run build
+
+      - name: Install Chromium for Playwright
+        run: |
+          npx --yes playwright@1.56.1 install --with-deps chromium
+          CHROME=$(find "${PLAYWRIGHT_BROWSERS_PATH:-$HOME/.cache/ms-playwright}" -type f -path '*chrome-linux*' -name chrome | head -n 1)
+          test -n "$CHROME"
+          echo "CHROME_BIN=$CHROME" >> "$GITHUB_ENV"
+      - name: Browser tests (packaged archive)
+        run: |
+          rm -rf dist/unpacked && mkdir -p dist/unpacked
+          python3 -m zipfile -e dist/capturehub-*.zip dist/unpacked
+          CAPTUREHUB_EXT_DIR="$PWD/dist/unpacked" node --test --test-timeout=400000 tests/e2e/*.test.mjs
+
+      - name: Etiket ile manifest sürümünün eşleştiğini doğrula
+        env:
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          TAG="${INPUT_TAG:-$REF_NAME}"
+          VERSION=$(node -p "require('./extension/manifest.json').version")
+          if [ "v$VERSION" != "$TAG" ]; then
+            echo "Etiket $TAG, manifest sürümü $VERSION ile eşleşmiyor"; exit 1
+          fi
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Sağlama toplamları ve yayın notu
+        run: |
+          cd dist && sha256sum capturehub-*.zip > SHA256SUMS && cd ..
+          node tools/changelog-section.js "$VERSION" > notes.md
+
+      - name: Release oluştur veya güncelle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/capturehub-*.zip dist/SHA256SUMS --clobber
+            gh release edit "$TAG" --notes-file notes.md
+          else
+            gh release create "$TAG" dist/capturehub-*.zip dist/SHA256SUMS \
+              --title "CaptureHub $TAG" --notes-file notes.md --verify-tag --latest
+          fi

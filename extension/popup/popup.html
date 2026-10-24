@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaptureHub</title>
+    <link rel="stylesheet" href="../shared/ui.css">
+    <link rel="stylesheet" href="popup.css">
+    <script src="../shared/settings.js"></script>
+    <script src="../shared/theme.js"></script>
+</head>
+
+<body>
+    <header class="head">
+        <img src="../icons/logo.svg" alt="" width="28" height="28">
+        <span class="brand">
+            <span class="text-strong">CaptureHub</span>
+            <span class="eyebrow" data-i18n="popupEyebrow">Screenshot</span>
+        </span>
+        <button id="themeToggle" type="button" class="chip ml-auto"></button>
+    </header>
+
+    <section class="block">
+        <p class="eyebrow" data-i18n="captureTitle">Capture</p>
+        <button type="button" class="card row" data-mode="visible">
+            <span class="row-title" data-i18n="modeVisible">Visible area</span>
+            <span class="meta" data-i18n="modeVisibleHint">What is on screen now</span>
+        </button>
+        <button type="button" class="card row" data-mode="full">
+            <span class="row-title" data-i18n="modeFull">Full page</span>
+            <span class="meta" data-i18n="modeFullHint">Scrolls and stitches the page</span>
+        </button>
+        <button type="button" class="card row" data-mode="region">
+            <span class="row-title" data-i18n="modeRegion">Select region</span>
+            <span class="meta" data-i18n="modeRegionHint">Drag to choose an area</span>
+        </button>
+        <button type="button" class="card row" data-mode="element">
+            <span class="row-title" data-i18n="modeElement">Select element</span>
+            <span class="meta" data-i18n="modeElementHint">Click an element on the page</span>
+        </button>
+        <div class="delay" role="group" data-i18n-label="delayLabel" aria-label="Delay">
+            <span class="meta" data-i18n="delayLabel">Delay</span>
+            <button type="button" class="chip" data-delay="0" data-i18n="delayNone">None</button>
+            <button type="button" class="chip" data-delay="3"></button>
+            <button type="button" class="chip" data-delay="5"></button>
+            <button type="button" class="chip" data-delay="10"></button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="block">
+        <p class="eyebrow" data-i18n="recentTitle">Recent captures</p>
+        <ul id="recent" class="recent"></ul>
+        <p id="empty" class="meta" data-i18n="recentEmpty">No captures yet.</p>
+    </section>
+
+    <footer class="foot meta-xs">
+        <span data-i18n="footerVersion">CaptureHub 0.2.0</span>
+        <a href="../options/options.html" target="_blank" data-i18n="settingsLink">Settings</a>
+    </footer>
+
+    <script src="../shared/i18n.js"></script>
+    <script src="../scripts/geometry.js"></script>
+    <script src="../scripts/db.js"></script>
+    <script src="popup.js"></script>
+</body>
+
+</html>

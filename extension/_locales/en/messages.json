@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "Capture the visible area, full page or a region, then annotate with arrows, boxes, text and blur."
+  },
+  "actionTitle": {
+    "message": "CaptureHub: take a screenshot"
+  },
+  "cmdRegion": {
+    "message": "Capture a selected region"
+  },
+  "cmdVisible": {
+    "message": "Capture the visible area"
+  },
+  "cmdFull": {
+    "message": "Capture the full page"
+  },
+  "cmdElement": {
+    "message": "Capture a selected element"
+  },
+  "menuHistory": {
+    "message": "History"
+  },
+  "menuSettings": {
+    "message": "Settings"
+  }
+}

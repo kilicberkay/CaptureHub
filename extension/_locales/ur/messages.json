@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "نظر آنے والا حصہ، پوری صفحہ یا کوئی علاقہ کیپچر کریں، پھر تیر، ڈبے، متن اور دھندلاہٹ سے نشان لگائیں۔"
+  },
+  "actionTitle": {
+    "message": "CaptureHub: اسکرین شاٹ لیں"
+  },
+  "cmdRegion": {
+    "message": "منتخب علاقہ کیپچر کریں"
+  },
+  "cmdVisible": {
+    "message": "نظر آنے والا حصہ کیپچر کریں"
+  },
+  "cmdFull": {
+    "message": "پورا صفحہ کیپچر کریں"
+  },
+  "cmdElement": {
+    "message": "منتخب عنصر کیپچر کریں"
+  },
+  "menuHistory": {
+    "message": "تاریخچہ"
+  },
+  "menuSettings": {
+    "message": "ترتیبات"
+  }
+}

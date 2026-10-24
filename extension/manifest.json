@@ -1,0 +1,63 @@
+{
+    "manifest_version": 3,
+    "name": "__MSG_extName__",
+    "version": "1.0.0",
+    "description": "__MSG_extDescription__",
+    "default_locale": "en",
+    "minimum_chrome_version": "116",
+    "permissions": [
+        "activeTab",
+        "contextMenus",
+        "downloads",
+        "scripting",
+        "storage"
+    ],
+    "action": {
+        "default_title": "__MSG_actionTitle__",
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "icons/logo16.png",
+            "48": "icons/logo48.png",
+            "128": "icons/logo128.png"
+        }
+    },
+    "icons": {
+        "16": "icons/logo16.png",
+        "48": "icons/logo48.png",
+        "128": "icons/logo128.png"
+    },
+    "background": {
+        "service_worker": "scripts/background.js"
+    },
+    "options_page": "options/options.html",
+    "commands": {
+        "capture_visible": {
+            "suggested_key": {
+                "default": "Alt+Shift+V",
+                "mac": "Alt+Shift+V"
+            },
+            "description": "__MSG_cmdVisible__"
+        },
+        "capture_full": {
+            "suggested_key": {
+                "default": "Alt+Shift+F",
+                "mac": "Alt+Shift+F"
+            },
+            "description": "__MSG_cmdFull__"
+        },
+        "capture_region": {
+            "suggested_key": {
+                "default": "Alt+Shift+R",
+                "mac": "Alt+Shift+R"
+            },
+            "description": "__MSG_cmdRegion__"
+        },
+        "capture_element": {
+            "suggested_key": {
+                "default": "Alt+Shift+E",
+                "mac": "Alt+Shift+E"
+            },
+            "description": "__MSG_cmdElement__"
+        }
+    }
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Northwind Analytics: Weekly report</title>
+    <!-- README görselleri ve tanıtım videosu için örnek sayfa (tools/make-*.mjs). Veriler uydurmadır. -->
+    <style>
+        @font-face { font-family: 'Geist'; font-weight: 400; src: url('/fonts/geist-400-normal-B40WzpMT.woff2') format('woff2'); }
+        @font-face { font-family: 'Geist'; font-weight: 600; src: url('/fonts/geist-600-normal-CSETrqM2.woff2') format('woff2'); }
+        @font-face { font-family: 'Geist'; font-weight: 700; src: url('/fonts/geist-700-normal-CFi8mLqe.woff2') format('woff2'); }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Geist, system-ui, sans-serif; color: #0f172a; background: #f8fafc; }
+        header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 28px; padding: 16px 48px; background: #0f172a; color: #e2e8f0; }
+        header b { color: #ffffff; font-size: 18px; }
+        header nav { display: flex; gap: 22px; font-size: 14px; }
+        header .user { margin-left: auto; font-size: 13px; color: #94a3b8; }
+        main { max-width: 1120px; margin: 0 auto; padding: 36px 48px 64px; }
+        h1 { margin: 0 0 6px; font-size: 30px; letter-spacing: -0.5px; }
+        .sub { margin: 0 0 28px; color: #64748b; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .card { padding: 20px; border: 1px solid #e2e8f0; border-radius: 14px; background: #ffffff; box-shadow: 0 1px 2px rgb(15 23 42 / 0.04); }
+        .label { font-size: 13px; color: #64748b; }
+        .value { margin-top: 6px; font-size: 28px; font-weight: 700; }
+        .up { color: #059669; font-size: 13px; font-weight: 600; }
+        .down { color: #dc2626; font-size: 13px; font-weight: 600; }
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+        .chart { display: flex; align-items: flex-end; gap: 14px; height: 220px; margin-top: 18px; }
+        .bar { flex: 1; border-radius: 8px 8px 0 0; background: linear-gradient(#6366f1, #818cf8); }
+        .bar.hi { background: linear-gradient(#ec4899, #f472b6); }
+        .days { display: flex; gap: 14px; margin-top: 8px; font-size: 12px; color: #94a3b8; }
+        .days span { flex: 1; text-align: center; }
+        h2 { margin: 0; font-size: 17px; }
+        ul.list { margin: 14px 0 0; padding: 0; list-style: none; }
+        ul.list li { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        table { width: 100%; margin-top: 14px; border-collapse: collapse; font-size: 14px; }
+        th { padding: 10px 0; text-align: left; color: #64748b; font-weight: 600; border-bottom: 1px solid #e2e8f0; }
+        td { padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+        .pill { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+        .paid { background: #dcfce7; color: #166534; }
+        .open { background: #fef3c7; color: #92400e; }
+        .notes p { color: #475569; line-height: 1.7; }
+    </style>
+</head>
+<body>
+    <header>
+        <b>Northwind</b>
+        <nav><span>Overview</span><span>Customers</span><span>Invoices</span><span>Reports</span></nav>
+        <span class="user">jane.cooper@northwind.example</span>
+    </header>
+    <main>
+        <h1>Weekly report</h1>
+        <p class="sub">October 14 – 20 · All regions</p>
+
+        <section class="stats">
+            <div class="card"><div class="label">Revenue</div><div class="value">$48,920</div><span class="up">▲ 12.4%</span></div>
+            <div class="card"><div class="label">New customers</div><div class="value">312</div><span class="up">▲ 8.1%</span></div>
+            <div class="card"><div class="label">Refunds</div><div class="value">$1,204</div><span class="down">▼ 2.3%</span></div>
+            <div class="card"><div class="label">Avg. order</div><div class="value">$156.80</div><span class="up">▲ 4.0%</span></div>
+        </section>
+
+        <section class="grid">
+            <div class="card" id="chart">
+                <h2>Orders per day</h2>
+                <div class="chart">
+                    <div class="bar" style="height: 46%"></div><div class="bar" style="height: 58%"></div>
+                    <div class="bar" style="height: 52%"></div><div class="bar hi" style="height: 92%"></div>
+                    <div class="bar" style="height: 64%"></div><div class="bar" style="height: 38%"></div>
+                    <div class="bar" style="height: 44%"></div>
+                </div>
+                <div class="days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+            </div>
+            <div class="card">
+                <h2>Top products</h2>
+                <ul class="list">
+                    <li><span>Desk lamp</span><b>1,204</b></li>
+                    <li><span>Notebook set</span><b>986</b></li>
+                    <li><span>Wireless mouse</span><b>842</b></li>
+                    <li><span>Coffee mug</span><b>611</b></li>
+                    <li><span>Plant stand</span><b>430</b></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="card" id="invoices">
+            <h2>Recent invoices</h2>
+            <table>
+                <thead><tr><th>Invoice</th><th>Customer</th><th>E-mail</th><th>Amount</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>INV-2041</td><td>Acme Corp.</td><td>billing@acme.example</td><td>$4,200.00</td><td><span class="pill paid">Paid</span></td></tr>
+                    <tr><td>INV-2040</td><td>Globex</td><td>ap@globex.example</td><td>$1,860.50</td><td><span class="pill open">Open</span></td></tr>
+                    <tr><td>INV-2039</td><td>Initech</td><td>finance@initech.example</td><td>$920.00</td><td><span class="pill paid">Paid</span></td></tr>
+                    <tr><td>INV-2038</td><td>Umbrella</td><td>pay@umbrella.example</td><td>$3,075.25</td><td><span class="pill open">Open</span></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card notes" style="margin-top: 24px">
+            <h2>Notes</h2>
+            <p>Thursday's peak follows the newsletter that went out on Wednesday evening. Refunds dropped after the new
+                packaging reached the warehouses. Next week the team will test a second send on Monday morning.</p>
+            <p>Regional numbers are in the attached spreadsheet. Ask the finance team before sharing this report outside
+                the company.</p>
+        </section>
+    </main>
+</body>
+</html>

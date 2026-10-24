@@ -1,0 +1,317 @@
+body {
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 20px;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+}
+
+.side {
+    align-self: start;
+    position: sticky;
+    top: 20px;
+    padding: 14px 10px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 6px 12px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 8px;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.nav-link {
+    padding: 7px 10px;
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.nav-link:hover { background: rgb(127 127 140 / 0.1); color: var(--ink); }
+.nav-link.active { background: var(--brand-50); color: var(--brand-700); }
+.dark .nav-link.active { background: rgb(247 74 135 / 0.1); color: var(--brand-400); }
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px;
+}
+
+.panel-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.field input[type="text"],
+.field select,
+.search {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+    max-width: 360px;
+}
+
+.range-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.meta-text {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Durum iletisi akışı itmez: sayfa kaydırılmış olsa da görünen köşede belirir */
+.status {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 20;
+    max-width: calc(100% - 32px);
+    margin: 0;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+    color: var(--ink);
+    backdrop-filter: blur(12px);
+}
+
+.status:empty { display: none; }
+
+/* Panel sütun düzeninde tek düğmeler tam genişliğe yayılmaz */
+.panel > .chip,
+.panel > .btn-brand { align-self: flex-start; }
+
+.history {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.history-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.history-info {
+    display: flex;
+    flex: 1 1 240px;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.history-title {
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.history-site {
+    align-self: flex-start;
+    max-width: 100%;
+    overflow: hidden;
+    color: var(--link);
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+}
+
+.block-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.search {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.shortcut-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 16px;
+    align-items: center;
+    margin: 0;
+    font-size: 13px;
+}
+
+.shortcut-list dd { margin: 0; }
+
+kbd {
+    padding: 2px 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: rgb(127 127 140 / 0.1);
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+.about-links {
+    display: flex;
+    gap: 14px;
+    margin: 0;
+}
+
+.about-links a { color: var(--link); }
+
+/* Destek: FillHub'daki marka degradeli kart ve üç kısa bilgi kutusu */
+.support-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--brand-500), var(--brand-600) 55%, var(--brand-700));
+    color: #ffffff;
+}
+
+.support-thanks {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.support-thanks p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.support-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.15);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+}
+
+.support-icon svg { width: 24px; height: 24px; }
+
+.support-primary,
+.support-secondary {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.support-primary { background: #ffffff; color: var(--brand-700); }
+.support-primary:hover { background: var(--brand-50); }
+.support-secondary { background: rgb(255 255 255 / 0.1); color: #ffffff; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3); }
+.support-secondary:hover { background: rgb(255 255 255 / 0.2); }
+.support-hero a:focus-visible { outline-color: #ffffff; }
+
+.support-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.fact {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.fact-title {
+    margin: 0 0 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media (max-width: 720px) {
+    .support-facts { grid-template-columns: 1fr; }
+
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .side {
+        position: static;
+    }
+
+    .nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}

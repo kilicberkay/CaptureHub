@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "CaptureHub"
+  },
+  "extDescription": {
+    "message": "Görünür alan, tam sayfa veya bölge yakalayın; ok, kutu, metin ve bulanıklaştırma ile işaretleyin."
+  },
+  "actionTitle": {
+    "message": "CaptureHub: ekran görüntüsü al"
+  },
+  "cmdRegion": {
+    "message": "Seçilen bölgeyi yakala"
+  },
+  "cmdVisible": {
+    "message": "Görünür alanı yakala"
+  },
+  "cmdFull": {
+    "message": "Tam sayfayı yakala"
+  },
+  "cmdElement": {
+    "message": "Seçilen öğeyi yakala"
+  },
+  "menuHistory": {
+    "message": "Geçmiş"
+  },
+  "menuSettings": {
+    "message": "Ayarlar"
+  }
+}

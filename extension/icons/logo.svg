@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="CaptureHub">
+  <defs>
+    <linearGradient id="ch-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fb7aa8"/>
+      <stop offset="0.5" stop-color="#f74a87"/>
+      <stop offset="1" stop-color="#c2185b"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#ch-grad)"/>
+  <g fill="#ffffff">
+    <rect x="26" y="26" width="34" height="10" rx="5"/>
+    <rect x="26" y="26" width="10" height="34" rx="5"/>
+    <rect x="68" y="26" width="34" height="10" rx="5"/>
+    <rect x="92" y="26" width="10" height="34" rx="5"/>
+    <rect x="26" y="92" width="34" height="10" rx="5"/>
+    <rect x="26" y="68" width="10" height="34" rx="5"/>
+    <rect x="68" y="92" width="34" height="10" rx="5"/>
+    <rect x="92" y="68" width="10" height="34" rx="5"/>
+    <circle cx="64" cy="64" r="13"/>
+  </g>
+</svg>

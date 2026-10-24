@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaptureHub</title>
+    <link rel="icon" type="image/png" href="../icons/logo48.png">
+    <link rel="stylesheet" href="../shared/ui.css">
+    <link rel="stylesheet" href="options.css">
+    <script src="../shared/settings.js"></script>
+    <script src="../shared/theme.js"></script>
+</head>
+
+<body class="bg-grid">
+    <div class="layout">
+        <aside class="side card">
+            <div class="brand">
+                <img src="../icons/logo.svg" alt="" width="28" height="28">
+                <span class="text-strong">CaptureHub</span>
+            </div>
+            <nav class="nav" aria-label="Settings">
+                <a href="#general" class="nav-link" data-section="general" data-i18n="navGeneral">General</a>
+                <a href="#history" class="nav-link" data-section="history" data-i18n="navHistory">History</a>
+                <a href="#shortcuts" class="nav-link" data-section="shortcuts" data-i18n="navShortcuts">Shortcuts</a>
+                <a href="#about" class="nav-link" data-section="about" data-i18n="navAbout">About</a>
+                <a href="#support" class="nav-link" data-section="support" data-i18n="navSupport">Support</a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <p id="status" class="status meta" role="status" aria-live="polite"></p>
+
+            <section id="general" class="panel card" hidden>
+                <h1 class="panel-title" data-i18n="generalTitle">General</h1>
+
+                <label class="field">
+                    <span data-i18n="themeLabel">Theme</span>
+                    <select id="theme">
+                        <option value="system" data-i18n="themeSystem">System</option>
+                        <option value="dark" data-i18n="themeDark">Dark</option>
+                        <option value="light" data-i18n="themeLight">Light</option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span data-i18n="languageLabel">Language</span>
+                    <select id="uiLang"></select>
+                </label>
+
+                <label class="field">
+                    <span data-i18n="formatLabel">Format</span>
+                    <select id="format">
+                        <option value="png">PNG</option>
+                        <option value="jpeg">JPEG</option>
+                        <option value="webp">WebP</option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span data-i18n="qualityLabel">JPEG and WebP quality</span>
+                    <span class="range-row">
+                        <input id="quality" type="range" min="50" max="100" step="1">
+                        <span id="qualityValue" class="meta"></span>
+                    </span>
+                </label>
+
+                <label class="field">
+                    <span data-i18n="nameLabel">File name</span>
+                    <input id="nameTemplate" type="text" maxlength="120" placeholder="capturehub-{date}-{mode}" spellcheck="false">
+                    <span class="meta" data-i18n="nameHint">{date} is replaced by the date and time, {mode} by the capture mode.</span>
+                </label>
+
+                <label class="field">
+                    <span data-i18n="delayLabel">Delay</span>
+                    <select id="delay"></select>
+                    <span class="meta" data-i18n="delayHint">Used for visible area and full page captures.</span>
+                </label>
+
+                <label class="field">
+                    <span data-i18n="historyLimitLabel">Keep this many captures</span>
+                    <select id="historyLimit">
+                        <option value="10">10</option>
+                        <option value="30">30</option>
+                        <option value="100">100</option>
+                    </select>
+                </label>
+
+                <div class="block">
+                    <h2 class="block-title" data-i18n="backupTitle">Backup</h2>
+                    <p class="meta-text" data-i18n="backupHint">Save your settings to a file or restore them. Captures are not included.</p>
+                    <div class="buttons">
+                        <button id="backupExport" type="button" class="chip" data-i18n="backupExport">Export</button>
+                        <button id="backupImport" type="button" class="chip" data-i18n="backupImport">Import</button>
+                        <input id="backupFile" type="file" accept="application/json,.json" hidden>
+                    </div>
+                </div>
+
+                <div class="block">
+                    <h2 class="block-title" data-i18n="resetTitle">Reset</h2>
+                    <p class="meta-text" data-i18n="resetHint">Return all settings to their defaults. History is kept.</p>
+                    <div class="buttons">
+                        <button id="reset" type="button" class="chip" data-i18n="resetButton">Reset settings</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="history" class="panel card" hidden>
+                <h1 class="panel-title" data-i18n="historyTitle">History</h1>
+                <input id="historySearch" class="search" type="search" maxlength="200" spellcheck="false"
+                    data-i18n-label="historySearch" aria-label="Search" aria-controls="historyList">
+                <ul id="historyList" class="history"></ul>
+                <p id="historyEmpty" class="meta" data-i18n="historyEmpty">No captures yet.</p>
+                <button id="historyClear" type="button" class="chip" data-i18n="historyClear">Delete all</button>
+            </section>
+
+            <section id="shortcuts" class="panel card" hidden>
+                <h1 class="panel-title" data-i18n="shortcutsTitle">Shortcuts</h1>
+                <p class="meta-text" data-i18n="shortcutsHint">Chrome sets shortcuts. You can change them on the shortcuts page.</p>
+                <dl id="shortcutList" class="shortcut-list"></dl>
+                <button id="openShortcuts" type="button" class="btn-brand" data-i18n="shortcutsOpen">Open shortcut settings</button>
+            </section>
+
+            <section id="support" class="panel card" hidden>
+                <div>
+                    <h1 class="panel-title" data-i18n="supportTitle">Support CaptureHub</h1>
+                    <p class="meta-text" data-i18n="supportSub">CaptureHub is free and open source. Your support keeps development going.</p>
+                </div>
+
+                <div class="support-hero">
+                    <div class="support-thanks">
+                        <span class="support-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.1C1 8.6 3 5 6.6 5c2 0 3.6 1.2 4.4 2.6C11.8 6.2 13.4 5 15.4 5 19 5 21 8.6 21.6 11.9 19.5 16.4 12 21 12 21z"/></svg>
+                        </span>
+                        <p data-i18n="supportThanks">Thank you! Every bit of support means new features and fixes.</p>
+                    </div>
+                    <div class="buttons">
+                        <a class="support-primary" href="https://github.com/sponsors/kilicberkay" target="_blank" rel="noopener noreferrer" data-i18n="supportCta">Sponsor on GitHub</a>
+                        <a class="support-secondary" href="https://github.com/kilicberkay/CaptureHub" target="_blank" rel="noopener noreferrer" data-i18n="supportStar">Star on GitHub</a>
+                        <a class="support-secondary" href="https://github.com/kilicberkay/CaptureHub/issues" target="_blank" rel="noopener noreferrer" data-i18n="supportIssue">Report an issue</a>
+                    </div>
+                </div>
+
+                <div class="support-facts">
+                    <div class="fact">
+                        <p class="fact-title" data-i18n="supportFreeTitle">Free</p>
+                        <p class="meta-text" data-i18n="supportFreeText">No fees, subscriptions or ads.</p>
+                    </div>
+                    <div class="fact">
+                        <p class="fact-title" data-i18n="supportPrivateTitle">Private</p>
+                        <p class="meta-text" data-i18n="supportPrivateText">Your data stays in your browser.</p>
+                    </div>
+                    <div class="fact">
+                        <p class="fact-title" data-i18n="supportOpenTitle">Open source</p>
+                        <p class="meta-text" data-i18n="supportOpenText">MIT licensed. Read, change and share the code.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="panel card" hidden>
+                <h1 class="panel-title" data-i18n="aboutTitle">About</h1>
+                <p class="meta-text" data-i18n="aboutText">CaptureHub makes screenshots on your device. Nothing is uploaded and no analytics are collected.</p>
+                <p class="meta" id="aboutVersion"></p>
+                <p id="aboutLinks" class="about-links" hidden></p>
+            </section>
+        </main>
+    </div>
+
+    <script src="../shared/i18n.js"></script>
+    <script src="../scripts/geometry.js"></script>
+    <script src="../scripts/db.js"></script>
+    <script src="options.js"></script>
+</body>
+
+</html>
