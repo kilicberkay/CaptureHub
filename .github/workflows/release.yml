@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,6 +27,7 @@ jobs:
       - run: node --test tests/unit/*.test.js
       - run: npm run build
 
+      # Runner sürümü sabit: ubuntu-latest 26.04'e geçti ve Playwright 1.56.1 orada Chromium kuramıyor
       - name: Install Chromium for Playwright
         run: |
           npx --yes playwright@1.56.1 install --with-deps chromium

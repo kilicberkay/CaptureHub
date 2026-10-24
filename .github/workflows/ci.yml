@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   checks:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         node: [20, 22]
@@ -38,7 +38,7 @@ jobs:
   # Runs on every push and pull request; a manual run can skip it by setting e2e to false
   e2e:
     if: github.event_name != 'workflow_dispatch' || github.event.inputs.e2e == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -46,6 +46,7 @@ jobs:
         with:
           node-version: 22
       - run: npm run build
+      # The runner is pinned: ubuntu-latest moved to 26.04, where Playwright 1.56.1 cannot install Chromium
       - name: Install Chromium for Playwright
         # Playwright 1.56.1 bundles Chromium 141, the build the browser tests are run against locally.
         run: |
