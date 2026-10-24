@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "सेटिंग्स"
+  },
+  "errRestricted": {
+    "message": "इस पेज का कैप्चर नहीं लिया जा सकता।"
+  },
+  "errTabChanged": {
+    "message": "सक्रिय टैब बदल गया, कैप्चर रद्द।"
+  },
+  "captureFailed": {
+    "message": "कैप्चर शुरू नहीं हो सका।"
   }
 }

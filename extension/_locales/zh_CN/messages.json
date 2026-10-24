@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "设置"
+  },
+  "errRestricted": {
+    "message": "无法截取此页面。"
+  },
+  "errTabChanged": {
+    "message": "活动标签页已更改，已取消截图。"
+  },
+  "captureFailed": {
+    "message": "无法开始截图。"
   }
 }

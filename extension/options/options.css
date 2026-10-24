@@ -146,6 +146,17 @@ body {
     font-size: 13px;
 }
 
+.history-thumb {
+    flex-shrink: 0;
+    width: 96px;
+    height: 60px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgb(127 127 140 / 0.12);
+    object-fit: cover;
+    object-position: top;
+}
+
 .history-info {
     display: flex;
     flex: 1 1 240px;

@@ -32,13 +32,17 @@ async function findServiceWorker(cdp) {
 }
 
 export async function startEnv() {
-    const srv = createServer((req, res) => {
-        const name = new URL(req.url, 'http://127.0.0.1').pathname.replace(/^\//, '');
+    // ?delay=ms yanıtı geciktirir (tembel görsel testi); içerik türü uzantıdan gelir
+    const TYPES = { html: 'text/html; charset=utf-8', svg: 'image/svg+xml', woff2: 'font/woff2' };
+    const srv = createServer(async (req, res) => {
+        const url = new URL(req.url, 'http://127.0.0.1');
+        const name = url.pathname.replace(/^\//, '');
+        await wait(Number(url.searchParams.get('delay')) || 0);
         // fonts/ uzantının yazı tiplerinden sunulur (demo.html Geist kullanır); diğer adlar fikstür klasöründen
         const font = /^fonts\/[\w-]+\.woff2$/.test(name);
         try {
             const body = readFileSync(font ? join(EXT, name) : join(FIXTURE_DIR, name.replace(/[^\w.-]/g, '')));
-            res.writeHead(200, { 'content-type': font ? 'font/woff2' : 'text/html; charset=utf-8' });
+            res.writeHead(200, { 'content-type': TYPES[name.split('.').pop()] || 'application/octet-stream' });
             res.end(body);
         } catch {
             res.writeHead(404);

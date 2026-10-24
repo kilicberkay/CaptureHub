@@ -15,7 +15,8 @@ get the defaults (Alt+Shift+V, Alt+Shift+F, Alt+Shift+R, Alt+Shift+E).
 
 ## Why is a full page capture cut off at the bottom?
 
-Very long pages are cut at 16,000 pixels, because larger images are slow to edit and some browsers cannot draw them.
+Very long pages are cut at 32,000 pixels (less for very wide images), because larger images are slow to edit and
+browsers cannot draw them. WebP files can be at most 16,383 pixels on a side, so choose PNG or JPEG for longer captures.
 The editor tells you when this happened. Capture the rest with a second full page capture after scrolling, or with
 region capture.
 

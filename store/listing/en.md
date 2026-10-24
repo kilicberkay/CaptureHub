@@ -18,7 +18,7 @@ or save them.
 
 Highlights
 
-- Visible area, full page, region, and element capture. Full page capture scrolls the page and stitches the
+- Visible area, full page, region, and element capture; elements and regions taller than the screen are captured in full. Full page capture scrolls the page and stitches the
   pieces together, keeping fixed headers and footers in their place.
 - Editor with boxes, ellipses, arrows, pen, text, pixelation, highlighter, numbered markers and crop. Seven preset
   colors, a custom color and an eyedropper, five sizes (XS to XL). Select and move any mark, undo and redo every change.

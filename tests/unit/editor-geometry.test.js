@@ -112,3 +112,23 @@ test('scaleItem: koordinatlar ve saklanan ölçüler ölçeklenir', () => {
     assert.deepEqual(G.scaleItem(pen, 2).points[1], { x: 100, y: 20 });
     assert.deepEqual(G.scaleItem({ type: 'text', x1: 4, y1: 4, px: 20, w: 40, h: 25, text: 'a' }, 0.5), { type: 'text', x1: 2, y1: 2, px: 10, w: 20, h: 12.5, text: 'a' });
 });
+
+test('fileName: {site} ve {title}; geçersiz karakter, boş parça ve uzun başlık temizlenir', () => {
+    const date = new Date(2026, 9, 24, 14, 30, 5);
+    const source = { site: 'www.example.com', title: 'Rapor: Q3 / "Satış" <özet>' };
+    assert.equal(G.fileName('{site}-{title}', 'full', date, 'png', source), 'www.example.com-Rapor- Q3 - -Satış- -özet.png');
+    assert.equal(G.fileName('{site}-{mode}', 'visible', date, 'png', {}), 'visible.png', 'boş site tireyi bırakmaz');
+    assert.equal(G.fileName('{title}', 'visible', date, 'png', { title: 'x'.repeat(100) }), `${'x'.repeat(60)}.png`);
+    assert.equal(G.fileName('{title}', 'visible', date, 'png', {}), 'capturehub.png', 'tamamen boşsa varsayılan ad');
+});
+
+test('planRange: aralığı kaplayan ofsetler; sayfa sonunu aşmaz', () => {
+    assert.deepEqual(G.planRange(1000, 1500, 700, 3000), [1000, 1700, 1800]);
+    assert.deepEqual(G.planRange(0, 500, 700, 3000), [0]);
+    assert.deepEqual(G.planRange(2600, 1000, 700, 3000), [2300], 'sayfa sonunda tek dilim');
+});
+
+test('maxCanvasHeight: dar sayfada 32000, geniş görüntüde alan sınırı', () => {
+    assert.equal(G.maxCanvasHeight(1280), 32000);
+    assert.equal(G.maxCanvasHeight(10000), 20000);
+});

@@ -98,9 +98,12 @@ birlikte yerel geçmişte tutulur; aradığınızı kolayca bulursunuz.
 - **Görünür alan**: ekranda şu an görünen.
 - **Tam sayfa**: sayfayı kaydırır ve parçaları birleştirir. Sabit ve yapışkan başlıklar yalnız en üstte, alt barlar
   yalnız en altta görünür; her ekranda tekrar etmez. Tek bir kapsayıcı içinde kayan sayfalar (birçok web uygulaması)
-  da yakalanır. Çok uzun sayfalar 16.000 pikselde kesilir; düzenleyici bunu bildirir.
-- **Bölge**: bir dikdörtgen sürükleyin; boyutu sürüklerken görünür. Esc iptal eder.
-- **Öğe**: fareyi sayfada gezdirin, vurgulanan öğeye tıklayın; tam olarak o öğenin kutusu yakalanır.
+  da yakalanır. Tembel yüklenen görseller yakalamadan önce yüklenir. Çok uzun sayfalar 32.000 pikselde (çok geniş görüntülerde daha
+  az) kesilir; düzenleyici bunu bildirir.
+- **Bölge**: bir dikdörtgen sürükleyin; boyutu sürüklerken görünür. İmleci üst ya da alt kenarda tutarsanız sayfa kayar
+  ve bölge ekrandan uzun olabilir. Esc iptal eder.
+- **Öğe**: fareyi sayfada gezdirin, vurgulanan öğeye tıklayın; tam olarak o öğenin kutusu yakalanır. ↑ üst öğeyi seçer,
+  ↓ geri iner, Enter yakalar. Ekrandan uzun öğeler de tamamıyla yakalanır.
 
 İsteğe bağlı **gecikme** (3, 5 ya da 10 saniye, araç çubuğu simgesinde geri sayılır), görünür alan ve tam sayfa
 yakalamasından önce bir menüyü ya da ipucunu açmanız için zaman tanır.
@@ -122,26 +125,29 @@ yakalamasından önce bir menüyü ya da ipucunu açmanız için zaman tanır.
 | İçeriğe duyarlı doldurma | `F` | Bir dikdörtgen sürükleyin; içi çevresinden doldurulur |
 | Kırp | `C` | Bir alan sürükleyin, ardından **Kırpmayı uygula** |
 
-- **Leke iyileştirme ve içeriğe duyarlı doldurma** alanı çevresindeki piksellerden yeniden oluşturur. Ekran
-  görüntüleri için yapılmıştır: düz zemin, degrade ve arayüz yüzeyleri temiz çıkar. Fotoğraf dokusunda sonuç dokulu
-  değil yumuşak olur. Her fırça darbesi bırakılınca doldurulur; lekenin tamamını tek darbede örtün.
+- **Leke iyileştirme ve içeriğe duyarlı doldurma** alanı çevresinden yeniden oluşturur. Düz zemin, degrade ve arayüz
+  yüzeylerinde alan yumuşak biçimde doldurulur; fotoğraf ve desenlerde çevreden uygun yamalar kopyalanır, doku sürer.
+  Her fırça darbesi bırakılınca doldurulur; lekenin tamamını tek darbede örtün.
 - **Renkler**: yedi hazır renk, özel renk seçici ve ekranın herhangi bir yerinden renk alan **damlalık** (`I`).
   **Boyutlar**: XS, S, M, L, XL (fırça boyutu da). İkisi de seçili işarete de uygulanır; son seçim hatırlanır.
 - Üst çubukta **90° döndür** ve **boyutlandır** (oran korunur). İşaretler görüntüyle birlikte döner ve ölçeklenir.
 - Kırpma dahil her değişiklik **geri alınır ve yinelenir** (`Ctrl+Z`, `Ctrl+Shift+Z`).
-- **1:1** görüntüyü gerçek boyutunda gösterir.
-- **Kopyala** panoya PNG koyar. **İndir** (`Ctrl+S`) dosya adı şablonunuzla PNG, JPEG ya da WebP kaydeder.
+- **Metin** sonradan düzenlenebilir: üstüne çift tıklayın ya da Metin aracıyla tıklayın. Shift+Enter yeni satır açar.
+- **Yakınlaştırma** %25–%400: Ctrl+tekerlek, + ve −, 0 sığdırır, 1 %100. Yakınlaştırma düğmesi oranı gösterir.
+- **Kopyala** (`Ctrl+C`) panoya PNG koyar. **İndir** (`Ctrl+S`) dosya adı şablonunuzla PNG, JPEG ya da WebP kaydeder.
+- **Düzenlemeler otomatik kaydedilir.** Geçmişten açtığınız yakalama bıraktığınız gibi gelir; **Orijinale dön**
+  düzenlemeleri kaldırır. Özgün yakalama her zaman saklanır.
 
 ### Geçmiş
 
-Son 10, 30 ya da 100 yakalama (seçiminize göre) cihazınızda tutulur. Ayarlar sayfası bunları sayfa başlığı, site,
-mod, boyut ve zamanla listeler; arayabilir, düzenleyicide yeniden açabilir, indirilen dosyayı klasöründe
+Son 10, 30 ya da 100 yakalama (seçiminize göre) cihazınızda tutulur. Ayarlar sayfası bunları küçük resim, sayfa
+başlığı, site, mod, boyut ve zamanla listeler; arayabilir, düzenleyicide yeniden açabilir, indirilen dosyayı klasöründe
 gösterebilir ya da silebilirsiniz. Araç çubuğu penceresi en yenilerini gösterir.
 
 ### Ayarlar
 
 - **Genel**: tema (açık, koyu ya da sistemi izle), arayüz dili, varsayılan biçim ve JPEG/WebP kalitesi, dosya adı
-  şablonu (`{date}`, `{mode}`), gecikme, geçmiş boyutu, ayar yedeği (JSON dosyasına dışa aktarma ve içe aktarma) ve
+  şablonu (`{date}`, `{mode}`, `{site}`, `{title}`), gecikme, geçmiş boyutu, ayar yedeği (JSON dosyasına dışa aktarma ve içe aktarma) ve
   varsayılanlara sıfırlama.
 - **Geçmiş**: yukarıya bakın.
 - **Kısayollar**: Chrome'un şu an atadığı kısayollar ve değiştirme düğmesi.

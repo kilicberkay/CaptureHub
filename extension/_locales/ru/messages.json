@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "Настройки"
+  },
+  "errRestricted": {
+    "message": "Эту страницу нельзя снять."
+  },
+  "errTabChanged": {
+    "message": "Активная вкладка изменилась, снимок отменён."
+  },
+  "captureFailed": {
+    "message": "Не удалось начать снимок."
   }
 }

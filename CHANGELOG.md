@@ -3,6 +3,36 @@
 All notable changes to CaptureHub are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.0] - 2026-10-24
+
+Improvements to existing features; no new tools.
+
+### Capture
+- Elements and regions taller than the screen are captured in full: the page is scrolled and stitched, as in a full
+  page capture. While dragging a region, holding the pointer at the top or bottom edge scrolls the page.
+- Element capture: ↑ selects the parent element, ↓ goes back, Enter captures the highlighted one.
+- Full page capture scrolls through the page once before capturing, so lazy-loaded images are not left blank.
+- Long pages are cut at up to 32,000 px instead of 16,000 px (less for very wide images).
+- The reason for a failed shortcut or menu capture is shown in the toolbar icon's tooltip, next to the "!" badge.
+
+### Editor
+- Edits are saved automatically and come back when the capture is opened again from the history. **Revert to
+  original** removes them (and can be undone); the original capture is always kept.
+- Text can be edited after it is placed (double-click it, or click it with the Text tool) and can span several lines
+  (Shift+Enter). Clearing a text removes it.
+- Zoom from 25% to 400%: Ctrl+wheel (around the pointer), + and −, 0 to fit, 1 for 100%. The zoom button shows the
+  current scale.
+- Drawing stays smooth on long full page captures: the image and marks are cached, and only the preview is redrawn
+  while the pointer moves.
+- Ctrl+C copies the image.
+- Spot healing and content-aware fill keep the texture of photos and patterns: when the surroundings are textured,
+  matching patches are copied from them; flat backgrounds and gradients still use the smooth fill.
+- WebP downloads larger than 16,383 px on a side are refused with a clear message (PNG and JPEG work).
+
+### History
+- Thumbnails in the history and the toolbar popup (they show the edited version).
+- File name template: `{site}` (site name) and `{title}` (page title, up to 60 characters).
+
 ## [1.1.0] - 2026-10-24
 
 ### Added

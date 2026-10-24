@@ -44,8 +44,29 @@ function formatTime(timestamp) {
     return new Date(timestamp).toLocaleString(document.documentElement.lang || undefined, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
 
+// Küçük resim önce boş yer tutucu olarak eklenir, depodan gelince dolar; eski adresler yeniden çizimde bırakılır
+const thumbUrls = [];
+function thumbImage(id, className) {
+    const img = document.createElement('img');
+    img.className = className;
+    img.alt = '';
+    img.decoding = 'async';
+    CaptureStore.getThumb(id).then((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        thumbUrls.push(url);
+        img.src = url;
+    }).catch(() => {});
+    return img;
+}
+
+function releaseThumbs() {
+    for (const url of thumbUrls.splice(0)) URL.revokeObjectURL(url);
+}
+
 async function renderRecent() {
     const rows = (await CaptureStore.list()).slice(0, RECENT_LIMIT);
+    releaseThumbs();
     const items = rows.map((row) => {
         const item = document.createElement('li');
         const button = document.createElement('button');
@@ -57,7 +78,10 @@ async function renderRecent() {
         const site = CaptureGeometry.siteName(row.url);
         detail.textContent = [CaptureI18n.t(MODE_KEYS[row.mode] || row.mode), site, CaptureGeometry.dimensions(row.width, row.height)].filter(Boolean).join(' · ');
         if (row.title) button.title = row.title;
-        button.append(time, detail);
+        const text = document.createElement('span');
+        text.className = 'recent-text';
+        text.append(time, detail);
+        button.append(thumbImage(row.id, 'thumb'), text);
         button.addEventListener('click', () => {
             chrome.tabs.create({ url: chrome.runtime.getURL(`editor/editor.html?id=${row.id}`) });
             window.close();

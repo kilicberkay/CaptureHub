@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "ترتیبات"
+  },
+  "errRestricted": {
+    "message": "اس صفحے کا کیپچر ممکن نہیں۔"
+  },
+  "errTabChanged": {
+    "message": "فعال ٹیب بدل گیا، کیپچر منسوخ۔"
+  },
+  "captureFailed": {
+    "message": "کیپچر شروع نہیں ہو سکا۔"
   }
 }

@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "Cài đặt"
+  },
+  "errRestricted": {
+    "message": "Không thể chụp trang này."
+  },
+  "errTabChanged": {
+    "message": "Tab đang hoạt động đã thay đổi, đã hủy chụp."
+  },
+  "captureFailed": {
+    "message": "Không thể bắt đầu chụp."
   }
 }

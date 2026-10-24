@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "Ayarlar"
+  },
+  "errRestricted": {
+    "message": "Bu sayfada ekran görüntüsü alınamaz."
+  },
+  "errTabChanged": {
+    "message": "Aktif sekme değişti, yakalama iptal edildi."
+  },
+  "captureFailed": {
+    "message": "Yakalama başlatılamadı."
   }
 }

@@ -18,7 +18,7 @@ işaretlemenizi sağlayan bir düzenleyici sunar.
 
 Öne çıkanlar
 
-- Görünür alan, tam sayfa, bölge ve öğe yakalama. Tam sayfa yakalama sayfayı kaydırır ve parçaları birleştirir;
+- Görünür alan, tam sayfa, bölge ve öğe yakalama; ekrandan uzun öğe ve bölgeler de tamamıyla alınır. Tam sayfa yakalama sayfayı kaydırır ve parçaları birleştirir;
   sabit başlık ve alt bar yerinde kalır.
 - Kutu, elips, ok, kalem, metin, piksel bulanıklaştırma, fosforlu kalem, numara ve kırpma araçları. Yedi hazır renk,
   özel renk ve damlalık, beş boyut (XS–XL). Her işareti seçip taşıyabilir, her değişikliği geri alabilir ve yineleyebilirsiniz.

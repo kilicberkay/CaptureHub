@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "Pengaturan"
+  },
+  "errRestricted": {
+    "message": "Halaman ini tidak bisa ditangkap."
+  },
+  "errTabChanged": {
+    "message": "Tab aktif berubah, tangkapan dibatalkan."
+  },
+  "captureFailed": {
+    "message": "Tangkapan gagal dimulai."
   }
 }

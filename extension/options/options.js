@@ -119,6 +119,26 @@ async function showInFolder(downloadId) {
     flashStatus(CaptureI18n.t('folderMissing'));
 }
 
+// Küçük resim önce boş yer tutucu olarak eklenir, depodan gelince dolar; eski adresler yeniden çizimde bırakılır
+const thumbUrls = [];
+function thumbImage(id, className) {
+    const img = document.createElement('img');
+    img.className = className;
+    img.alt = '';
+    img.decoding = 'async';
+    CaptureStore.getThumb(id).then((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        thumbUrls.push(url);
+        img.src = url;
+    }).catch(() => {});
+    return img;
+}
+
+function releaseThumbs() {
+    for (const url of thumbUrls.splice(0)) URL.revokeObjectURL(url);
+}
+
 function historyRow(row) {
     const item = document.createElement('li');
     item.className = 'history-row';
@@ -147,7 +167,7 @@ function historyRow(row) {
         await CaptureStore.remove(row.id);
         renderHistory();
     }));
-    item.append(info, actions);
+    item.append(thumbImage(row.id, 'history-thumb'), info, actions);
     return item;
 }
 
@@ -161,6 +181,7 @@ async function renderHistory() {
     const rows = await CaptureStore.list();
     const query = $('historySearch').value.trim().toLowerCase();
     const shown = rows.filter((row) => matches(row, query));
+    releaseThumbs();
     $('historyList').replaceChildren(...shown.map(historyRow));
     $('historyEmpty').textContent = CaptureI18n.t(rows.length === 0 ? 'historyEmpty' : 'historyNoMatch');
     $('historyEmpty').hidden = shown.length > 0;

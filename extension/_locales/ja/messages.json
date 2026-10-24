@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "設定"
+  },
+  "errRestricted": {
+    "message": "このページはキャプチャできません。"
+  },
+  "errTabChanged": {
+    "message": "アクティブなタブが変わったため、キャプチャを中止しました。"
+  },
+  "captureFailed": {
+    "message": "キャプチャを開始できませんでした。"
   }
 }

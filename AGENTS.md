@@ -7,7 +7,7 @@ metin, bulanıklaştırma, numara, vurgu, kırpma, geri al/yinele; hazır + öze
 ayar yedeği ve sıfırlama, açık/koyu/sistem tema.
 Çalışma zamanında bağımlılık yok; `extension/` olduğu gibi yüklenir. npm yalnızca testler ve paketleme için.
 Görsel tema FillHub ile aynıdır (`extension/shared/ui.css`: tokenlar, Geist, `chip`/`chip-active`/`meta`/`eyebrow`).
-15 dil: `extension/shared/i18n.js` (her dilde aynı 132 anahtar) ve `extension/_locales/` (manifest, komut, menü metinleri).
+15 dil: `extension/shared/i18n.js` (her dilde aynı 137 anahtar) ve `extension/_locales/` (manifest, komut, menü metinleri).
 
 ## Dosya Yapısı
 - `extension/manifest.json`: MV3; izinler `activeTab`, `contextMenus`, `downloads`, `scripting`, `storage`; host izni yok;
@@ -20,7 +20,8 @@ Görsel tema FillHub ile aynıdır (`extension/shared/ui.css`: tokenlar, Geist, 
 - `extension/scripts/select.js`: sayfaya enjekte seçici (bölge: sürükle; öğe: tıkla). Mod `window.__capturehubMode` ile gelir.
 - `extension/scripts/geometry.js` (`CaptureGeometry`): dikdörtgen, ölçek, kaydırma dilimleri, sabit öğe kuralı, öğe
   isabet testi, tutamaç, numara, dosya adı şablonu. Tarayıcıda global, Node'da `module.exports`.
-- `extension/scripts/db.js` (`CaptureStore`): IndexedDB; meta ve görüntü ayrı mağazalarda; sınır `historyLimit` ayarından;
+- `extension/scripts/db.js` (`CaptureStore`): IndexedDB sürüm 2; mağazalar `meta`, `blobs` (özgün görüntü, hiç
+  değişmez), `thumbs`, `edits`; silme ve sınır dört mağazayı birlikte temizler; küçük resim hatası kaydı düşürmez.
   `update` indirme kimliğini (`downloadId`) yazar.
 - `extension/shared/settings.js` (`CaptureSettings`): tek `DEFAULTS`, izinli değerler, `createBackup`/`parseBackup`.
   Yeni ayar eklenirse buraya (varsayılan + doğrulayıcı) eklenir; yedek ve sıfırlama otomatik kapsar.
@@ -53,7 +54,7 @@ Görsel tema FillHub ile aynıdır (`extension/shared/ui.css`: tokenlar, Geist, 
 4. `npm run build` → `python3 -m zipfile -t dist/capturehub-<sürüm>.zip`.
 5. Elle: `chrome://extensions` → Paketlenmemiş yükle → `extension/`.
 
-Durum (1.1.0): `npm test` bu makinede tam geçiyor (41 birim, 25 e2e). Chromium: Playwright `chromium-1194`
+Durum (1.2.0): `npm test` bu makinede tam geçiyor (46 birim, 35 e2e; e2e yaklaşık 1,5 dk). Chromium: Playwright `chromium-1194`
 (`~/.cache/ms-playwright`); Arch'ta çalışması için `nss nspr at-spi2-core libcups libxkbcommon libxcomposite libxdamage
 libxfixes libxrandr mesa cairo pango alsa-lib` gerekir. E2E'de simge sağ tık menüsü görsel olarak açılamaz
 (`handleMenuClick` doğrudan çağrılır); `downloads.show` dosya yöneticisini açtığı için tıklanmaz.
@@ -69,6 +70,8 @@ libxfixes libxrandr mesa cairo pango alsa-lib` gerekir. E2E'de simge sağ tık m
   gelir; `geometry.js` bu işlevlerden önce enjekte edilir.
 - Seçici katmanı yakalamadan önce kaldırılır; karartma ekran görüntüsüne girmez.
 - Düzenleyici öğeleri görüntü pikselleriyle saklanır; seçim çerçevesi ve tutamaçlar yalnız ekranda çizilir, dışa aktarılmaz.
+- Düzenleyicide öğe ya da taban değişince `render()` (önbelleği yeniden kurar, otomatik kaydı tetikler); fare
+  hareketindeki önizlemeler `renderOverlay()` kullanır. Her değişiklik `snapshot()` ile `state.version` artırır.
 - Taban görüntüyü değiştiren her işlem (kırpma, iyileştirme, doldurma, döndürme, boyutlandırma) önce `snapshot()` alır.
   Yeni öğe türü eklenirse `CaptureGeometry` içindeki `itemBounds`, `hitItem`, `handlesOf`, `translateItem`,
   `rotateItem`, `scaleItem` ve `CaptureTools.paintItem` birlikte güncellenir.

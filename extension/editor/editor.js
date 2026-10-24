@@ -17,6 +17,13 @@ const FORMATS = { png: { mime: 'image/png', ext: 'png' }, jpeg: { mime: 'image/j
 const HISTORY_LIMIT = 50;
 // Tutamaç ve kenar yakalama toleransı ekrandaki piksel cinsinden; görüntü ölçeğine çevrilir
 const HIT_CSS_PIXELS = 8;
+// WebP kodlayıcısının kenar sınırı
+const WEBP_MAX = 16383;
+const ZOOM_MIN = 0.25;
+const ZOOM_MAX = 4;
+const ZOOM_STEP = 1.25;
+// Otomatik kayıt son değişiklikten bu kadar sonra yazılır
+const SAVE_DELAY_MS = 600;
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -29,12 +36,19 @@ const customColor = document.getElementById('customColor');
 const resizeDialog = document.getElementById('resizeDialog');
 const resizeWidth = document.getElementById('resizeWidth');
 const resizeHeight = document.getElementById('resizeHeight');
+const zoomButton = document.getElementById('zoom');
+const revertButton = document.getElementById('revert');
+// Taban ve işaretlerin önbelleği: fare hareketindeki önizlemeler yalnız üst katmanı çizer (uzun görüntülerde akıcılık)
+const scene = document.createElement('canvas');
+const sceneCtx = scene.getContext('2d');
 
 const state = {
     tool: 'rect', color: CaptureSettings.DEFAULTS.editorColor, size: CaptureSettings.DEFAULTS.editorSize,
     base: null, items: [], selected: -1,
     drawing: null, cropRect: null, fillRect: null, hover: null,
-    past: [], future: [], id: null, mode: '', host: ''
+    past: [], future: [], id: null, mode: '', host: '', title: '',
+    // version her değişiklikte artar (otomatik kayıt bununla izlenir); original yakalamanın özgün görüntüsüdür
+    version: 0, original: null, editing: -1, zoom: null
 };
 let textAnchor = null;
 let settings = {};
@@ -71,6 +85,7 @@ function setBase(bitmap) {
     state.base = bitmap;
     canvas.width = bitmap.width;
     canvas.height = bitmap.height;
+    if (state.zoom !== null) canvas.style.width = `${Math.round(canvas.width * state.zoom)}px`;
     const info = document.getElementById('info');
     info.textContent = [CaptureI18n.t(MODE_KEYS[state.mode] || 'captureTitle'), state.host, CaptureGeometry.dimensions(canvas.width, canvas.height)].filter(Boolean).join(' · ');
 }
@@ -80,6 +95,7 @@ function snapshot() {
     state.past.push({ items: structuredClone(state.items), base: state.base });
     if (state.past.length > HISTORY_LIMIT) state.past.shift();
     state.future = [];
+    state.version++;
     updateHistoryButtons();
 }
 
@@ -93,12 +109,14 @@ function restoreEntry(entry) {
 
 function undo() {
     if (state.past.length === 0) return;
+    state.version++;
     state.future.push({ items: structuredClone(state.items), base: state.base });
     restoreEntry(state.past.pop());
 }
 
 function redo() {
     if (state.future.length === 0) return;
+    state.version++;
     state.past.push({ items: structuredClone(state.items), base: state.base });
     restoreEntry(state.future.pop());
 }
@@ -108,15 +126,33 @@ function updateHistoryButtons() {
     document.getElementById('redo').disabled = state.future.length === 0;
 }
 
-// Görüntünün kendisi ve öğeler; seçim çerçevesi ve tutamaçlar dışarıda bırakılır
-function drawScene(target, items) {
+// Görüntünün kendisi ve öğeler; seçim çerçevesi ve tutamaçlar dışarıda bırakılır. skip: düzenlenmekte olan metin.
+function drawScene(target, items, skip = -1) {
     target.drawImage(state.base, 0, 0);
-    for (const item of items) CaptureTools.paintItem(target, item);
+    items.forEach((item, i) => {
+        if (i !== skip) CaptureTools.paintItem(target, item);
+    });
 }
 
+// Tam çizim: önbellek yeniden kurulur. Öğe ya da taban değişince çağrılır.
 function render(preview) {
+    if (scene.width !== canvas.width || scene.height !== canvas.height) {
+        scene.width = canvas.width;
+        scene.height = canvas.height;
+    } else {
+        sceneCtx.clearRect(0, 0, scene.width, scene.height);
+    }
+    drawScene(sceneCtx, state.items, state.editing);
+    renderOverlay(preview);
+    revertButton.hidden = !state.original || (state.items.length === 0 && state.base === state.original);
+    updateZoomLabel();
+    if (state.version !== savedVersion) scheduleSave();
+}
+
+// Üst katman: önbellekteki sahne + önizleme, seçim, kırpma/doldurma alanı, iyileştirme izi ve fırça imleci
+function renderOverlay(preview) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawScene(ctx, state.items);
+    ctx.drawImage(scene, 0, 0);
     if (preview) CaptureTools.paintItem(ctx, preview);
     const selected = state.items[state.selected];
     if (selected && !preview) {
@@ -257,32 +293,148 @@ function applyToSelection(change) {
     render();
 }
 
-function openTextInput(point) {
-    textAnchor = point;
+// Metin girişi: yeni metin için tıklanan noktada, var olan metin (index) için onun yerinde, renginde ve boyutunda açılır.
+// Düzenlenen metin tuvalden gizlenir; giriş onun yerini alır.
+function openTextInput(point, index = -1) {
+    const item = state.items[index];
+    state.editing = item ? index : -1;
+    textAnchor = item ? { x: item.x1, y: item.y1 } : point;
     const scale = canvas.getBoundingClientRect().width / canvas.width;
-    const px = CaptureTools.fontFor(canvas.width, state.size);
-    textInput.value = '';
+    const px = item ? item.px : CaptureTools.fontFor(canvas.width, state.size);
+    const color = item ? item.color : state.color;
+    textInput.value = item ? item.text : '';
     Object.assign(textInput.style, {
-        left: `${point.x * scale}px`,
-        top: `${point.y * scale}px`,
+        left: `${textAnchor.x * scale}px`,
+        top: `${textAnchor.y * scale}px`,
         fontSize: `${px * scale}px`,
-        color: state.color,
-        borderColor: state.color
+        color,
+        borderColor: color
     });
     textInput.hidden = false;
+    fitTextInput();
     textInput.focus();
+    if (item) render();
 }
 
-// Enter ve blur aynı işlemi çağırabilir; görünürlük denetimi metnin iki kez eklenmesini önler
+// Giriş, içeriği kadar geniş ve satır sayısı kadar yüksek olur
+function fitTextInput() {
+    textInput.style.width = '0px';
+    textInput.style.height = '0px';
+    textInput.style.width = `${Math.max(120, textInput.scrollWidth + 12)}px`;
+    textInput.style.height = `${textInput.scrollHeight}px`;
+}
+
+// Enter ve blur aynı işlemi çağırabilir; görünürlük denetimi metnin iki kez eklenmesini önler.
+// Var olan metin boşaltılırsa silinir.
 function closeTextInput(commit) {
     if (textInput.hidden) return;
     const text = textInput.value.trim();
+    const index = state.editing;
+    const item = state.items[index];
     textInput.hidden = true;
+    state.editing = -1;
+    if (item) {
+        if (commit && text !== item.text) {
+            snapshot();
+            if (text) Object.assign(item, { text }, CaptureTools.measureText(ctx, text, item.px));
+            else state.items.splice(index, 1);
+        }
+        return render();
+    }
     if (!commit || !text) return;
     const px = CaptureTools.fontFor(canvas.width, state.size);
     const { w, h } = CaptureTools.measureText(ctx, text, px);
     snapshot();
     state.items.push({ type: 'text', color: state.color, size: state.size, x1: textAnchor.x, y1: textAnchor.y, text, px, w, h });
+    render();
+}
+
+// Yakınlaştırma: null = görüntüyü sahneye sığdır; sayı = görüntü pikseli başına CSS pikseli.
+// anchor verilirse (tekerlek) imlecin altındaki nokta yerinde kalır.
+function currentScale() {
+    return canvas.getBoundingClientRect().width / canvas.width;
+}
+
+function applyZoom(zoom, anchor) {
+    closeTextInput(true);
+    const before = canvas.getBoundingClientRect();
+    state.zoom = zoom === null ? null : Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoom));
+    stage.classList.toggle('actual', state.zoom !== null);
+    canvas.style.width = state.zoom === null ? '' : `${Math.round(canvas.width * state.zoom)}px`;
+    updateZoomLabel();
+    if (anchor && before.width) {
+        const fx = (anchor.clientX - before.left) / before.width;
+        const fy = (anchor.clientY - before.top) / before.height;
+        const after = canvas.getBoundingClientRect();
+        stage.scrollLeft += after.left + fx * after.width - anchor.clientX;
+        window.scrollBy(0, after.top + fy * after.height - anchor.clientY);
+    }
+}
+
+function zoomBy(factor, anchor) {
+    applyZoom((state.zoom === null ? currentScale() : state.zoom) * factor, anchor);
+}
+
+function updateZoomLabel() {
+    if (!canvas.width) return;
+    zoomButton.textContent = `${Math.round(currentScale() * 100)}%`;
+    zoomButton.setAttribute('aria-pressed', String(state.zoom !== null));
+}
+
+// Otomatik kayıt: işaretler ve (değiştiyse) taban görüntü IndexedDB'ye yazılır; özgün görüntü hep korunur.
+// Hiç düzenleme kalmadıysa (ör. Orijinale dön) kayıt silinir.
+let saveTimer = null;
+let saving = null;
+let savedVersion = 0;
+// Aynı taban görüntü için PNG bir kez üretilir (uzun görüntüde pahalıdır)
+const baseBlobs = new WeakMap();
+
+function baseBlob(bitmap) {
+    if (!baseBlobs.has(bitmap)) {
+        const out = new OffscreenCanvas(bitmap.width, bitmap.height);
+        out.getContext('2d').drawImage(bitmap, 0, 0);
+        baseBlobs.set(bitmap, out.convertToBlob({ type: 'image/png' }));
+    }
+    return baseBlobs.get(bitmap);
+}
+
+function scheduleSave() {
+    if (!state.id) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveEdits, SAVE_DELAY_MS);
+}
+
+async function saveEdits() {
+    clearTimeout(saveTimer);
+    saveTimer = null;
+    const version = state.version;
+    const items = structuredClone(state.items);
+    const base = state.base;
+    saving = (async () => {
+        if (items.length === 0 && base === state.original) await CaptureStore.clearEdits(state.id);
+        else {
+            await CaptureStore.saveEdits(state.id, { items, base: base === state.original ? null : await baseBlob(base) },
+                await CaptureStore.makeThumb(scene));
+        }
+        savedVersion = version;
+    })();
+    try {
+        await saving;
+    } catch (error) {
+        setStatus(CaptureI18n.t('saveFailed', { error: error.message }));
+    } finally {
+        saving = null;
+    }
+}
+
+// Orijinale dön: işaretler ve taban değişiklikleri kaldırılır; geri alınabilir
+function revertToOriginal() {
+    if (!state.original || !confirm(CaptureI18n.t('revertConfirm'))) return;
+    closeTextInput(false);
+    snapshot();
+    state.items = [];
+    state.selected = -1;
+    setBase(state.original);
     render();
 }
 
@@ -394,9 +546,10 @@ function onPointerDown(event) {
         return render();
     }
     if (state.tool === 'text') {
-        // Açık bir metin varsa önce eklenir, sonra yeni konumda giriş açılır
+        // Açık bir metin varsa önce eklenir; var olan metnin üstüne tıklanırsa o düzenlenir, yoksa yeni giriş açılır
         closeTextInput(true);
-        return openTextInput(point);
+        const index = CaptureGeometry.hitItem(state.items, point, tolerance);
+        return openTextInput(point, state.items[index] && state.items[index].type === 'text' ? index : -1);
     }
     if (state.tool === 'number') {
         snapshot();
@@ -418,7 +571,7 @@ function onPointerDown(event) {
     }
     if (state.tool === 'pen') {
         state.drawing = { mode: 'pen', item: { type: 'pen', color: state.color, size: state.size, points: [point] } };
-        return render(state.drawing.item);
+        return renderOverlay(state.drawing.item);
     }
     if (state.tool === 'heal') {
         const preview = document.createElement('canvas');
@@ -429,7 +582,7 @@ function onPointerDown(event) {
             mask: new Uint8Array(canvas.width * canvas.height), preview
         };
         stampHeal(state.drawing, point, point);
-        return render();
+        return renderOverlay();
     }
     if (SHAPE_TOOLS.includes(state.tool)) {
         state.drawing = {
@@ -444,7 +597,7 @@ function onPointerMove(event) {
     const point = toImagePoint(event);
     if (state.tool === 'heal') state.hover = point;
     if (!drawing) {
-        if (state.tool === 'heal') render();
+        if (state.tool === 'heal') renderOverlay();
         return;
     }
     if (drawing.mode === 'create') {
@@ -456,22 +609,22 @@ function onPointerMove(event) {
             y = drawing.item.y1 + Math.sign(y - drawing.item.y1 || 1) * d;
         }
         Object.assign(drawing.item, { x2: x, y2: y });
-        return render(drawing.item);
+        return renderOverlay(drawing.item);
     }
     if (drawing.mode === 'pen') {
         const last = drawing.item.points.at(-1);
         if (Math.hypot(point.x - last.x, point.y - last.y) >= PEN_STEP) drawing.item.points.push(point);
-        return render(drawing.item);
+        return renderOverlay(drawing.item);
     }
     if (drawing.mode === 'heal') {
         stampHeal(drawing, drawing.last, point);
         drawing.last = point;
-        return render();
+        return renderOverlay();
     }
     if (drawing.mode === 'fill') {
         const rect = CaptureGeometry.normalizeRect(drawing.start.x, drawing.start.y, point.x, point.y);
         state.fillRect = CaptureGeometry.clampRect(rect, canvas.width, canvas.height);
-        return render();
+        return renderOverlay();
     }
     if (drawing.mode === 'move') {
         if (!drawing.snapshotted) {
@@ -495,7 +648,7 @@ function onPointerMove(event) {
     if (drawing.mode === 'crop') {
         const rect = CaptureGeometry.normalizeRect(drawing.start.x, drawing.start.y, point.x, point.y);
         state.cropRect = CaptureGeometry.clampRect(rect, canvas.width, canvas.height);
-        render();
+        renderOverlay();
     }
 }
 
@@ -616,7 +769,11 @@ async function copy() {
 // İndirme kimliği geçmiş kaydına yazılır; ayarlardaki "Klasörde göster" dosyayı bununla bulur
 async function download() {
     const format = FORMATS[document.getElementById('format').value];
-    const name = CaptureGeometry.fileName(settings.nameTemplate, state.mode || 'yakalama', new Date(), format.ext);
+    if (format.ext === 'webp' && (canvas.width > WEBP_MAX || canvas.height > WEBP_MAX)) {
+        return setStatus(CaptureI18n.t('webpTooLarge', { px: WEBP_MAX }));
+    }
+    const name = CaptureGeometry.fileName(settings.nameTemplate, state.mode || 'capture', new Date(), format.ext,
+        { site: state.host, title: state.title });
     const url = URL.createObjectURL(await toBlob(format));
     try {
         const downloadId = await chrome.downloads.download({ url, filename: name, conflictAction: 'uniquify' });
@@ -643,11 +800,13 @@ canvas.addEventListener('pointercancel', () => {
 });
 canvas.addEventListener('pointerleave', () => {
     state.hover = null;
-    if (!state.drawing) render();
+    if (!state.drawing) renderOverlay();
 });
 
+textInput.addEventListener('input', fitTextInput);
+// Enter onaylar, Shift+Enter yeni satır açar
 textInput.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();
         closeTextInput(true);
     } else if (event.key === 'Escape') {
@@ -663,7 +822,13 @@ window.addEventListener('keydown', (event) => {
     const mod = event.ctrlKey || event.metaKey;
     const key = event.key.toLowerCase();
     const arrows = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
-    if (mod && key === 'z' && !event.shiftKey) {
+    if (mod && key === 'c') {
+        // Sayfada seçili yazı yoksa görüntü kopyalanır
+        if (!String(window.getSelection())) {
+            event.preventDefault();
+            copy();
+        }
+    } else if (mod && key === 'z' && !event.shiftKey) {
         event.preventDefault();
         undo();
     } else if (mod && ((key === 'z' && event.shiftKey) || key === 'y')) {
@@ -676,6 +841,14 @@ window.addEventListener('keydown', (event) => {
         setTool(TOOL_KEYS[key]);
     } else if (!mod && key === 'i') {
         pickColor();
+    } else if (!mod && (key === '+' || key === '=')) {
+        zoomBy(ZOOM_STEP);
+    } else if (!mod && key === '-') {
+        zoomBy(1 / ZOOM_STEP);
+    } else if (!mod && key === '0') {
+        applyZoom(null);
+    } else if (!mod && key === '1') {
+        applyZoom(1);
     } else if (event.key === 'Delete' || event.key === 'Backspace') {
         event.preventDefault();
         deleteSelected();
@@ -719,10 +892,30 @@ resizeDialog.addEventListener('close', () => {
     const width = Number(resizeWidth.value);
     if (resizeDialog.returnValue === 'apply' && width >= 16 && width <= canvas.width && width !== canvas.width) resizeTo(width);
 });
-document.getElementById('zoom').addEventListener('click', (event) => {
-    const actual = !stage.classList.contains('actual');
-    stage.classList.toggle('actual', actual);
-    event.currentTarget.setAttribute('aria-pressed', String(actual));
+zoomButton.addEventListener('click', () => applyZoom(state.zoom === null ? 1 : null));
+revertButton.addEventListener('click', revertToOriginal);
+// Ctrl+tekerlek imlecin altındaki noktayı sabit tutarak yakınlaştırır
+stage.addEventListener('wheel', (event) => {
+    if (!event.ctrlKey && !event.metaKey) return;
+    event.preventDefault();
+    zoomBy(event.deltaY < 0 ? ZOOM_STEP : 1 / ZOOM_STEP, event);
+}, { passive: false });
+window.addEventListener('resize', updateZoomLabel);
+// Seç aracında metne çift tıklamak onu düzenler
+canvas.addEventListener('dblclick', (event) => {
+    if (state.tool !== 'select') return;
+    const index = CaptureGeometry.hitItem(state.items, toImagePoint(event), hitTolerance());
+    if (state.items[index] && state.items[index].type === 'text') openTextInput(null, index);
+});
+// Sekme gizlenince bekleyen kayıt hemen yazılır; kapanırken kayıt sürüyorsa uyarılır
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && saveTimer) saveEdits();
+});
+window.addEventListener('beforeunload', (event) => {
+    if (!saveTimer && !saving) return;
+    if (saveTimer) saveEdits();
+    event.preventDefault();
+    event.returnValue = '';
 });
 
 async function init() {
@@ -744,15 +937,19 @@ async function init() {
     state.id = id;
     const blob = await CaptureStore.get(id);
     if (!blob) return setStatus(CaptureI18n.t('notFound'));
-    setBase(await createImageBitmap(blob));
     const meta = (await CaptureStore.list()).find((row) => row.id === id);
     state.mode = meta ? meta.mode : '';
     const sourceUrl = meta && meta.url ? meta.url : '';
     state.host = CaptureGeometry.siteName(sourceUrl);
+    state.title = meta && meta.title ? meta.title : '';
     document.title = `CaptureHub | ${CaptureI18n.t(MODE_KEYS[state.mode] || 'captureTitle')}`;
-    setBase(state.base);
-    document.getElementById('info').title = meta && meta.title ? `${meta.title}\n${sourceUrl}` : sourceUrl;
-    if (meta && meta.truncated) setStatus(CaptureI18n.t('truncated'));
+    // Kaydedilmiş düzenleme varsa kaldığı yerden açılır; özgün görüntü ayrıca tutulur (Orijinale dön)
+    state.original = await createImageBitmap(blob);
+    const edits = await CaptureStore.getEdits(id);
+    setBase(edits && edits.base ? await createImageBitmap(edits.base) : state.original);
+    state.items = edits && edits.items ? edits.items : [];
+    document.getElementById('info').title = state.title ? `${state.title}\n${sourceUrl}` : sourceUrl;
+    if (meta && meta.truncated) setStatus(CaptureI18n.t('truncated', { px: state.original.height }));
     setTool(state.tool);
     updateHistoryButtons();
 }

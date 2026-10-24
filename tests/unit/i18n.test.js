@@ -38,7 +38,7 @@ test('_locales: 15 klasör, her biri manifest, komut ve sağ tık menüsü başl
     assert.deepEqual(dirs, [...I18N.languages].sort());
     for (const dir of dirs) {
         const messages = JSON.parse(fs.readFileSync(path.join(EXT, '_locales', dir, 'messages.json'), 'utf8'));
-        for (const key of ['extName', 'extDescription', 'actionTitle', 'cmdVisible', 'cmdFull', 'cmdRegion', 'cmdElement', 'menuHistory', 'menuSettings']) {
+        for (const key of ['extName', 'extDescription', 'actionTitle', 'cmdVisible', 'cmdFull', 'cmdRegion', 'cmdElement', 'menuHistory', 'menuSettings', 'errRestricted', 'errTabChanged', 'captureFailed']) {
             assert.ok(messages[key] && messages[key].message.trim(), `${dir}: ${key} eksik`);
         }
         assert.ok(messages.extDescription.message.length <= 132, `${dir}: extDescription çok uzun`);

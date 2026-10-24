@@ -11,7 +11,7 @@ folder is loaded as it is. npm is used only for tests, packaging, and the image 
 | Service worker | `extension/scripts/background.js` | Capture modes, full page scrolling and stitching, region and element cropping, opening the editor (with the source page's address and title), delay countdown, toolbar icon menu (`handleMenuClick`), shortcuts |
 | Selector | `extension/scripts/select.js` | Overlay injected into the page: drag to select a region or click an element; sends the result in a `region-selected` message |
 | Geometry | `extension/scripts/geometry.js` (`CaptureGeometry`) | Rectangles, scaling, scroll slices, fixed element rule, hit testing and handles of editor items, file names, site names, size labels |
-| Store | `extension/scripts/db.js` (`CaptureStore`) | IndexedDB: metadata and images in separate stores, history limit (`trim`), `update` (download id), delete |
+| Store | `extension/scripts/db.js` (`CaptureStore`) | IndexedDB version 2: `meta`, `blobs` (original image), `thumbs` (JPEG thumbnail), `edits` (marks and changed base image); history limit (`trim`), `update` (download id), delete across all stores |
 | Settings model | `extension/shared/settings.js` (`CaptureSettings`) | The single list of defaults, allowed values, creating and validating the settings backup |
 | Theme | `extension/shared/theme.js` (`CaptureTheme`) | Light, dark, or system; applied in `<head>` from a cached value so pages open in the right theme, kept in sync with `storage.onChanged` |
 | Popup | `extension/popup/` | Capture modes, delay, recent captures, theme toggle |
@@ -56,7 +56,13 @@ flowchart LR
 - Operations that change the base image (crop, spot healing, content-aware fill, rotate, resize) take a snapshot
   first, so undo restores the image too. They never touch the marks drawn on top, except that rotate and resize
   transform them with the image (`rotateItem`, `scaleItem`).
-- The fill engine works on the mask's bounding box only, and refuses masks larger than 2 million pixels.
+- The fill engine works on the mask's bounding box only, and refuses masks larger than 2 million pixels. It measures
+  the ring around the mask (`isTextured`): flat and gradient surroundings use diffusion, textured ones use exemplar
+  patch copying (`synthesize`), seeded so the result is deterministic.
+- The editor keeps the image and marks in a cached canvas. `render()` rebuilds it after a change; pointer previews use
+  `renderOverlay()`, which only draws on top of the cache. Edits are saved 600 ms after the last change.
+- Elements and regions taller than the viewport are sent in page coordinates; `finishRegion` captures that range with
+  `captureFullPage(tab, range)` and crops it. Full page and range captures pre-scroll once for lazy images.
 - Functions that run in the page (`measurePage`, `applyFixedVisibility`, `scrollPageTo`, `restorePage`,
   `setSelectMode`) are serialized and injected, so they cannot use variables from the service worker. Shared logic
   comes from `CaptureGeometry`, and `geometry.js` is injected first.

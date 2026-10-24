@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "Configurações"
+  },
+  "errRestricted": {
+    "message": "Não é possível capturar esta página."
+  },
+  "errTabChanged": {
+    "message": "A aba ativa mudou; captura cancelada."
+  },
+  "captureFailed": {
+    "message": "Não foi possível iniciar a captura."
   }
 }

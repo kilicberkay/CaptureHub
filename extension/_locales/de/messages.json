@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "Einstellungen"
+  },
+  "errRestricted": {
+    "message": "Auf dieser Seite ist keine Aufnahme möglich."
+  },
+  "errTabChanged": {
+    "message": "Der aktive Tab hat sich geändert, Aufnahme abgebrochen."
+  },
+  "captureFailed": {
+    "message": "Aufnahme fehlgeschlagen."
   }
 }

@@ -98,9 +98,12 @@ page it came from, so you can find it again.
 - **Visible area**: what is on screen right now.
 - **Full page**: scrolls the page and stitches the pieces together. Fixed and sticky headers appear only at the top
   and footers only at the bottom, instead of repeating on every screen. Pages that scroll inside a single container
-  (many web apps) are captured too. Very long pages are cut at 16,000 pixels, and the editor tells you when that happens.
-- **Region**: drag a rectangle; its size is shown while you drag. Esc cancels.
-- **Element**: move the mouse over the page and click the highlighted element to capture exactly its box.
+  (many web apps) are captured too. Lazy-loaded images are loaded before the capture. Very long pages are cut at 32,000 pixels (less for very wide
+  images), and the editor tells you when that happens.
+- **Region**: drag a rectangle; its size is shown while you drag. Hold the pointer at the top or bottom edge to scroll
+  and make the region taller than the screen. Esc cancels.
+- **Element**: move the mouse over the page and click the highlighted element to capture exactly its box. ↑ selects the
+  parent element, ↓ goes back, Enter captures. Elements taller than the screen are captured in full.
 
 An optional **delay** (3, 5, or 10 seconds, counted down on the toolbar icon) gives you time to open a menu or a
 tooltip before a visible area or full page capture.
@@ -122,27 +125,31 @@ tooltip before a visible area or full page capture.
 | Content-aware fill | `F` | Drag a rectangle; its content is replaced from its surroundings |
 | Crop | `C` | Drag an area, then **Apply crop** |
 
-- **Spot healing and content-aware fill** rebuild the area from the pixels around it. They are made for screenshots:
-  flat backgrounds, gradients, and interface surfaces come out clean. On photographic texture the result is smooth
-  rather than textured. Each brush stroke is filled when you release it, so cover the whole spot in one stroke.
+- **Spot healing and content-aware fill** rebuild the area from its surroundings. On flat backgrounds, gradients, and
+  interface surfaces the area is filled smoothly; on photos and patterns, matching patches are copied from around it
+  so the texture continues. Each brush stroke is filled when you release it, so cover the whole spot in one stroke.
 - **Colors**: seven presets, a custom color picker, and an **eyedropper** (`I`) that picks a color from anywhere on
   the screen. **Sizes**: XS, S, M, L, XL (also the brush size). Both apply to the selected mark too, and the last
   choice is remembered.
 - **Rotate 90°** and **resize** (the aspect ratio is kept) are in the top bar. Marks rotate and scale with the image.
 - **Undo and redo** every change, including crop (`Ctrl+Z`, `Ctrl+Shift+Z`).
-- **1:1** shows the image at its real size.
-- **Copy** puts a PNG on the clipboard. **Download** (`Ctrl+S`) saves PNG, JPEG, or WebP with your file name template.
+- **Text** can be edited later: double-click it, or click it with the Text tool. Shift+Enter starts a new line.
+- **Zoom** from 25% to 400%: Ctrl+wheel, + and −, 0 to fit, 1 for 100%. The zoom button shows the scale.
+- **Copy** (`Ctrl+C`) puts a PNG on the clipboard. **Download** (`Ctrl+S`) saves PNG, JPEG, or WebP with your file
+  name template.
+- **Edits are saved automatically.** Open a capture from the history and it comes back as you left it;
+  **Revert to original** removes the edits. The original capture is always kept.
 
 ### History
 
-The last 10, 30, or 100 captures (your choice) are kept on your device. The settings page lists them with the page
-title, site, mode, size, and time; you can search them, open one in the editor again, show the downloaded file in
+The last 10, 30, or 100 captures (your choice) are kept on your device. The settings page lists them with a thumbnail,
+the page title, site, mode, size, and time; you can search them, open one in the editor again, show the downloaded file in
 its folder, or delete them. The toolbar popup shows the most recent ones.
 
 ### Settings
 
 - **General**: theme (light, dark, or follow the system), interface language, default format and JPEG/WebP quality,
-  file name template (`{date}`, `{mode}`), delay, history size, settings backup (export to and import from a JSON
+  file name template (`{date}`, `{mode}`, `{site}`, `{title}`), delay, history size, settings backup (export to and import from a JSON
   file), and reset to defaults.
 - **History**: see above.
 - **Shortcuts**: the shortcuts Chrome has assigned right now, and a button to change them.

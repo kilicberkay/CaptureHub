@@ -1,11 +1,16 @@
 // Seçici: bölge modunda sürükleyerek alan, öğe modunda tıklayarak bir öğe seçer.
 // Katman, yakalamadan önce kaldırılır; ekran görüntüsünde karartma görünmez. Esc iptal eder.
+// Seçim sayfa koordinatında gönderilir: görünümden uzun öğe ya da kenarda kaydırılarak büyütülen bölge,
+// servis çalışanında kaydırılıp birleştirilerek tamamıyla yakalanır.
 (() => {
     // Önceki seçim (ör. Esc'siz bırakılmış bölge katmanı) açıksa kaldırılır; yoksa yeni mod hiç başlamaz ve
     // sayfada eski mod kalırdı (öğe seçimi tıklamaya yanıt vermezdi)
     if (window.__capturehubSelecting) window.__capturehubSelecting();
     const elementMode = window.__capturehubMode === 'element';
     const listeners = [];
+    // Bölge sürüklenirken imleç kenara bu kadar yaklaşınca sayfa kayar (CSS pikseli); hız kenara yakınlıkla artar
+    const EDGE = 40;
+    const MAX_SCROLL_STEP = 24;
 
     const overlay = document.createElement('div');
     overlay.setAttribute('data-capturehub', 'select');
@@ -38,32 +43,39 @@
         listeners.push(() => target.removeEventListener(type, handler, options));
     }
 
+    let autoScroll = 0;
     function cleanup() {
+        cancelAnimationFrame(autoScroll);
         for (const remove of listeners) remove();
         overlay.remove();
         delete window.__capturehubSelecting;
     }
     window.__capturehubSelecting = cleanup;
 
+    // Kutu görünüm koordinatında çizilir; etiket sayfadaki gerçek boyutu gösterir. Öğe modunda ↑↓ ipucu eklenir.
     function showRect(rect) {
         Object.assign(box.style, { display: 'block', left: `${rect.x}px`, top: `${rect.y}px`, width: `${rect.width}px`, height: `${rect.height}px` });
-        label.textContent = `${Math.round(rect.width)} × ${Math.round(rect.height)}`;
+        label.textContent = `${Math.round(rect.width)} × ${Math.round(rect.height)}${elementMode ? ' · ↑↓' : ''}`;
     }
 
-    // Katman kalktıktan sonra, bir kare boyandıktan sonra yakalama istenir; yoksa karartma görüntüye girebilir
-    // DOMRect mesajla gönderilmeden önce düz nesneye çevrilir
-    function finish({ x, y, width, height }) {
-        const rect = { x, y, width, height };
+    // Katman kalktıktan sonra, bir kare boyandıktan sonra yakalama istenir; yoksa karartma görüntüye girebilir.
+    // pageRect sayfa koordinatındadır (DOMRect değil, düz nesne).
+    function finish(pageRect) {
         cleanup();
-        if (rect.width < 4 || rect.height < 4) return;
+        if (pageRect.width < 4 || pageRect.height < 4) return;
         requestAnimationFrame(() => setTimeout(() => {
             chrome.runtime.sendMessage({
                 action: 'region-selected',
                 mode: elementMode ? 'element' : 'region',
-                rect,
+                rect: pageRect,
+                scroll: { x: window.scrollX, y: window.scrollY },
                 viewport: { width: window.innerWidth, height: window.innerHeight }
             }).catch(() => {});
         }, 100));
+    }
+
+    function toPage(rect) {
+        return { x: rect.x + window.scrollX, y: rect.y + window.scrollY, width: rect.width, height: rect.height };
     }
 
     listen(window, 'keydown', (event) => {
@@ -72,9 +84,27 @@
 
     if (elementMode) {
         let hovered = null;
+        // ↑ ile çıkılan alt öğeler; ↓ geri iner. Fare hareket edince sıfırlanır.
+        let below = [];
+        const show = () => hovered && showRect(hovered.getBoundingClientRect());
         listen(window, 'pointermove', (event) => {
             hovered = document.elementFromPoint(event.clientX, event.clientY);
-            if (hovered) showRect(hovered.getBoundingClientRect());
+            below = [];
+            show();
+        }, true);
+        listen(window, 'keydown', (event) => {
+            if (!hovered || !['ArrowUp', 'ArrowDown', 'Enter'].includes(event.key)) return;
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.key === 'ArrowUp' && hovered.parentElement && hovered !== document.body) {
+                below.push(hovered);
+                hovered = hovered.parentElement;
+            } else if (event.key === 'ArrowDown' && below.length) {
+                hovered = below.pop();
+            } else if (event.key === 'Enter') {
+                return finish(toPage(hovered.getBoundingClientRect()));
+            }
+            show();
         }, true);
         // Seçim sırasında sayfanın kendi tıklama işleri (bağlantı, düğme) çalışmasın
         for (const type of ['pointerdown', 'mousedown', 'pointerup', 'mouseup']) {
@@ -83,29 +113,52 @@
                 event.stopPropagation();
             }, true);
         }
-        // Tıklanan nokta yeniden okunur: fare hiç hareket etmeden tıklanırsa pointermove gelmemiş olabilir
+        // ↑↓ ile öğe değiştirildiyse vurgulanan öğe alınır; yoksa tıklanan nokta yeniden okunur (fare hiç hareket
+        // etmeden tıklanırsa pointermove gelmemiş olabilir)
         listen(window, 'click', (event) => {
             event.preventDefault();
             event.stopPropagation();
-            const target = document.elementFromPoint(event.clientX, event.clientY) || hovered;
-            if (target) finish(target.getBoundingClientRect());
+            const target = (below.length && hovered) || document.elementFromPoint(event.clientX, event.clientY) || hovered;
+            if (target) finish(toPage(target.getBoundingClientRect()));
             else cleanup();
         }, true);
     } else {
+        // Başlangıç sayfa koordinatında tutulur: sayfa kayınca seçim de büyür
         let start = null;
+        let pointer = null;
+        const current = () => CaptureGeometry.normalizeRect(start.x, start.y, pointer.x + window.scrollX, pointer.y + window.scrollY);
+        const showCurrent = () => {
+            const rect = current();
+            showRect({ ...rect, x: rect.x - window.scrollX, y: rect.y - window.scrollY });
+        };
+        // İmleç üst ya da alt kenardayken sayfa her karede biraz kayar
+        const tick = () => {
+            if (!start) return;
+            const step = pointer.y < EDGE ? -Math.ceil(((EDGE - pointer.y) / EDGE) * MAX_SCROLL_STEP)
+                : pointer.y > window.innerHeight - EDGE ? Math.ceil(((pointer.y - window.innerHeight + EDGE) / EDGE) * MAX_SCROLL_STEP) : 0;
+            if (step) {
+                window.scrollBy({ top: step, behavior: 'instant' });
+                showCurrent();
+            }
+            autoScroll = requestAnimationFrame(tick);
+        };
         listen(overlay, 'pointerdown', (event) => {
-            start = { x: event.clientX, y: event.clientY };
+            start = { x: event.clientX + window.scrollX, y: event.clientY + window.scrollY };
+            pointer = { x: event.clientX, y: event.clientY };
             overlay.setPointerCapture(event.pointerId);
             box.style.display = 'block';
             overlay.style.background = 'transparent';
+            autoScroll = requestAnimationFrame(tick);
         });
         listen(overlay, 'pointermove', (event) => {
             if (!start) return;
-            showRect(CaptureGeometry.normalizeRect(start.x, start.y, event.clientX, event.clientY));
+            pointer = { x: event.clientX, y: event.clientY };
+            showCurrent();
         });
         listen(overlay, 'pointerup', (event) => {
             if (!start) return;
-            const rect = CaptureGeometry.normalizeRect(start.x, start.y, event.clientX, event.clientY);
+            pointer = { x: event.clientX, y: event.clientY };
+            const rect = current();
             start = null;
             finish(rect);
         });

@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "Réglages"
+  },
+  "errRestricted": {
+    "message": "Cette page ne peut pas être capturée."
+  },
+  "errTabChanged": {
+    "message": "L'onglet actif a changé, capture annulée."
+  },
+  "captureFailed": {
+    "message": "La capture a échoué."
   }
 }

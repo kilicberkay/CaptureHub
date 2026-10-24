@@ -4,6 +4,7 @@ var CaptureTools = (() => {
     const SIZE_FACTOR = { xs: 0.4, s: 0.6, m: 1, l: 1.6, xl: 2.4 };
     const FONT = 'Geist, ui-sans-serif, system-ui, sans-serif';
     const DARK_INK = '#18181b';
+    const LINE_HEIGHT = 1.25;
 
     // WCAG göreli parlaklığı (0 siyah, 1 beyaz); renk #rrggbb biçimindedir
     function luminance(hex) {
@@ -38,9 +39,12 @@ var CaptureTools = (() => {
     }
 
     // Metin öğesinin kutusu: tıklama ve seçim için ölçülür, öğede saklanır
+    // Çok satırlı metinde genişlik en uzun satır, yükseklik satır sayısı × satır yüksekliği (1,25)
     function measureText(ctx, text, size) {
         ctx.font = `600 ${size}px ${FONT}`;
-        return { w: Math.ceil(ctx.measureText(text).width), h: Math.ceil(size * 1.25) };
+        const lines = text.split('\n');
+        const w = Math.max(...lines.map((line) => ctx.measureText(line).width));
+        return { w: Math.ceil(w), h: Math.ceil(size * LINE_HEIGHT * lines.length) };
     }
 
     function drawArrow(ctx, { x1, y1, x2, y2 }, stroke) {
@@ -117,9 +121,11 @@ var CaptureTools = (() => {
             ctx.lineWidth = Math.max(2, item.px / 6);
             // Karşıt renkli kenarlık: metin açık ya da koyu her zeminde okunur
             ctx.strokeStyle = luminance(item.color) < 0.1 ? '#ffffff' : DARK_INK;
-            ctx.strokeText(item.text, item.x1, item.y1);
             ctx.fillStyle = item.color;
-            ctx.fillText(item.text, item.x1, item.y1);
+            // Önce tüm kenarlıklar, sonra dolgular: alt satırın kenarlığı üst satırın harflerini örtmesin
+            const lines = item.text.split('\n');
+            lines.forEach((line, i) => ctx.strokeText(line, item.x1, item.y1 + i * item.px * LINE_HEIGHT));
+            lines.forEach((line, i) => ctx.fillText(line, item.x1, item.y1 + i * item.px * LINE_HEIGHT));
         }
         ctx.restore();
     }

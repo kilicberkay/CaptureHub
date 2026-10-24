@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "Ajustes"
+  },
+  "errRestricted": {
+    "message": "Esta página no se puede capturar."
+  },
+  "errTabChanged": {
+    "message": "La pestaña activa cambió; captura cancelada."
+  },
+  "captureFailed": {
+    "message": "No se pudo iniciar la captura."
   }
 }

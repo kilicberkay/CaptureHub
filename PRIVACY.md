@@ -14,6 +14,9 @@ designed so that your captures stay on your device.
 - **Stores settings locally.** Your preferences (theme, language, export format, file name template, delay,
   history limit, last annotation color and size) are kept in `chrome.storage.local` in your browser profile. A
   settings backup is a file you save and open yourself; it contains only these preferences, never captures.
+- **Keeps your edits and thumbnails locally.** Marks you add in the editor, the edited image when you crop, heal,
+  rotate or resize, and a small thumbnail of each capture are stored in the same local IndexedDB storage, so a capture
+  opens where you left it. The original capture is kept unchanged. All of it is deleted with the capture.
 - **Stores the source page with each capture, locally.** Each capture records its mode (visible area, full page,
   region or element), its size, the time it was taken, and the address and title of the page it was taken from, so
   you can tell captures apart in the history. This information stays in the same local storage as the capture and is

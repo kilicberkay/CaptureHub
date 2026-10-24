@@ -30,7 +30,8 @@
             <button id="resize" type="button" class="chip icon" data-i18n-label="resize" aria-label="Resize">
                 <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 9V3h6M17 11v6h-6M3 3l6 6M17 17l-6-6"/></svg>
             </button>
-            <button id="zoom" type="button" class="chip" aria-pressed="false" data-i18n-title="zoomActual">1:1</button>
+            <button id="revert" type="button" class="chip" data-i18n="revertOriginal" hidden>Revert to original</button>
+            <button id="zoom" type="button" class="chip zoom" aria-pressed="false" data-i18n-title="zoomHint">100%</button>
             <button id="undo" type="button" class="chip" data-i18n="undo">Undo</button>
             <button id="redo" type="button" class="chip" data-i18n="redo">Redo</button>
             <button id="copy" type="button" class="chip" data-i18n="copy">Copy</button>
@@ -114,7 +115,7 @@
     <main id="stage" class="stage" data-active-tool="rect">
         <div id="frame" class="frame">
             <canvas id="canvas" class="card" role="img" data-i18n-label="canvasLabel" aria-label="Captured screenshot"></canvas>
-            <input id="textInput" class="text-input" type="text" data-i18n-label="textInputLabel" aria-label="Text" hidden>
+            <textarea id="textInput" class="text-input" rows="1" wrap="off" spellcheck="false" data-i18n-label="textInputLabel" aria-label="Text" hidden></textarea>
         </div>
     </main>
 

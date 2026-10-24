@@ -5,9 +5,13 @@ importScripts('../shared/settings.js', 'geometry.js', 'db.js');
 const CAPTURE_INTERVAL_MS = 550;
 // Kaydırma sonrası sayfanın yeniden çizilmesi için bekleme
 const RENDER_WAIT_MS = 250;
-// ponytail: tuval yüksekliği tavanla sınırlı. Sınır: aşan kısım yakalanmaz, kayıt truncated olarak işaretlenir ve
-// düzenleyici uyarı gösterir. Yükseltme: parçalı (çok görüntülü) kayıt eklenince.
-const MAX_CANVAS_HEIGHT = 16000;
+// Tembel görseller için ön kaydırmada her konumda bekleme ve görsellerin yüklenmesi için en uzun bekleme
+const PRELOAD_STEP_MS = 120;
+const PRELOAD_TIMEOUT_MS = 1500;
+// Hata nedeni simgenin ipucunda bu kadar kalır
+const ERROR_TITLE_MS = 8000;
+// ponytail: tuval yüksekliği CaptureGeometry.maxCanvasHeight ile sınırlı (dar sayfada 32000 px). Sınır: aşan kısım
+// yakalanmaz, kayıt truncated olarak işaretlenir ve düzenleyici uyarı gösterir. Yükseltme: parçalı (çok görüntülü) kayıt.
 const BADGE_COLOR = '#c2185b';
 const RESTRICTED_URL = /^(chrome|chrome-extension|edge|about|devtools|view-source):/;
 
@@ -71,7 +75,7 @@ function measurePage() {
         }, window.innerWidth, windowHeight);
         return {
             scrollY: container.scrollTop, viewportHeight: clip.height, pageHeight: container.scrollHeight,
-            clip, viewportWidth: window.innerWidth
+            clip, viewportWidth: window.innerWidth, inContainer: true
         };
     }
     // Kırpma genişliği clientWidth: sayfanın dikey kaydırma çubuğu her dilimde tekrar edip görüntüye girmesin
@@ -122,13 +126,39 @@ function restorePage(scrollY) {
     }
 }
 
-async function captureFullPage(tab) {
+// Sayfada çalışır: tamamlanmamış görsellerin yüklenmesini (ya da hata vermesini) en fazla timeout kadar bekler
+function waitForImages(timeout) {
+    const pending = Array.from(document.images).filter((img) => !img.complete);
+    const loaded = pending.map((img) => new Promise((resolve) => {
+        img.addEventListener('load', resolve, { once: true });
+        img.addEventListener('error', resolve, { once: true });
+    }));
+    return Promise.race([Promise.all(loaded), new Promise((resolve) => setTimeout(resolve, timeout))]).then(() => pending.length);
+}
+
+// Tembel (loading="lazy") görseller görünüme girmeden yüklenmez: dilimlerden önce sayfa hızla kaydırılır
+async function preloadImages(target, offsets) {
+    for (const y of offsets) {
+        await chrome.scripting.executeScript({ target, func: scrollPageTo, args: [y] });
+        await sleep(PRELOAD_STEP_MS);
+    }
+    await chrome.scripting.executeScript({ target, func: waitForImages, args: [PRELOAD_TIMEOUT_MS] });
+}
+
+// Tüm sayfayı ya da (range verilirse) sayfa koordinatında { top, height } aralığını kaydırarak yakalar.
+// Görünümden uzun öğe ve bölge bu yolla tamamıyla alınır.
+async function captureFullPage(tab, range = null) {
     const target = { tabId: tab.id };
     await chrome.scripting.executeScript({ target, files: ['scripts/geometry.js'] });
     const [{ result: page }] = await chrome.scripting.executeScript({ target, func: measurePage });
-    const offsets = CaptureGeometry.planSlices(page.pageHeight, page.viewportHeight);
+    const top = range ? range.top : 0;
+    const height = range ? range.height : page.pageHeight;
+    const offsets = range
+        ? CaptureGeometry.planRange(top, height, page.viewportHeight, page.pageHeight)
+        : CaptureGeometry.planSlices(page.pageHeight, page.viewportHeight);
     const slices = [];
     try {
+        if (offsets.length > 1) await preloadImages(target, offsets);
         for (let i = 0; i < offsets.length; i++) {
             await chrome.scripting.executeScript({ target, func: applyFixedVisibility, args: [i, offsets.length] });
             const [{ result: actualY }] = await chrome.scripting.executeScript({ target, func: scrollPageTo, args: [offsets[i]] });
@@ -140,24 +170,29 @@ async function captureFullPage(tab) {
         await chrome.scripting.executeScript({ target, func: restorePage, args: [page.scrollY] });
         setBadge('');
     }
-    return stitch(slices, page);
+    return stitch(slices, page, top, Math.min(height, page.pageHeight - top));
 }
 
-// Dilimleri, her birinin kaydırma konumuna göre tek bir tuvalde birleştirir
-async function stitch(slices, page) {
+// Dilimleri, her birinin kaydırma konumuna göre tek bir tuvalde birleştirir; tuval aralığın başından başlar
+async function stitch(slices, page, top, height) {
     const first = await createImageBitmap(slices[0].blob);
     const scale = first.width / page.viewportWidth;
     first.close();
     const crop = CaptureGeometry.scaleRect(page.clip, scale);
-    const fullHeight = Math.round(page.pageHeight * scale);
-    const canvas = new OffscreenCanvas(crop.width, Math.min(fullHeight, MAX_CANVAS_HEIGHT));
+    const fullHeight = Math.round(height * scale);
+    const maxHeight = CaptureGeometry.maxCanvasHeight(crop.width);
+    const canvas = new OffscreenCanvas(crop.width, Math.min(fullHeight, maxHeight));
     const ctx = canvas.getContext('2d');
     for (const slice of slices) {
         const bitmap = await createImageBitmap(slice.blob);
-        ctx.drawImage(bitmap, crop.x, crop.y, crop.width, crop.height, 0, Math.round(slice.y * scale), crop.width, crop.height);
+        ctx.drawImage(bitmap, crop.x, crop.y, crop.width, crop.height, 0, Math.round((slice.y - top) * scale), crop.width, crop.height);
         bitmap.close();
     }
-    return { blob: await canvas.convertToBlob({ type: 'image/png' }), truncated: fullHeight > MAX_CANVAS_HEIGHT };
+    return { canvas, scale, inContainer: Boolean(page.inContainer), truncated: fullHeight > maxHeight };
+}
+
+async function canvasBlob(canvas) {
+    return canvas.convertToBlob({ type: 'image/png' });
 }
 
 function setSelectMode(mode) {
@@ -170,17 +205,41 @@ async function startSelection(tab, mode) {
     await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['scripts/geometry.js', 'scripts/select.js'] });
 }
 
-// Seçilen alanı görünen alandan kırpar. Seçim CSS pikselindedir; görüntü cihaz pikseli olduğu için ölçek uygulanır.
+// Kaynak görüntüden CSS pikselindeki dikdörtgeni kırpar (görüntü cihaz pikseli olduğu için ölçek uygulanır)
+async function cropTo(source, rect, scale) {
+    const crop = CaptureGeometry.clampRect(CaptureGeometry.scaleRect(rect, scale), source.width, source.height);
+    const canvas = new OffscreenCanvas(Math.max(1, crop.width), Math.max(1, crop.height));
+    canvas.getContext('2d').drawImage(source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
+    return canvas.convertToBlob({ type: 'image/png' });
+}
+
+// Seçim sayfa koordinatındadır (rect) ve seçim anındaki kaydırma (scroll) ile gelir. Görünüme sığıyorsa görünen alandan
+// kırpılır; sığmıyorsa (uzun öğe, kenarda kaydırılarak büyütülen bölge) o aralık kaydırılıp birleştirilerek alınır.
 // ponytail: yakalama, seçimin yapıldığı sekmenin aktif olduğu varsayımıyla alınır. Sınır: seçim sırasında sekme
-// değiştirilirse başka sekmenin görüntüsü kırpılır. Yükseltme: sekme kimliğiyle yakalama (debugger API) gerekirse.
-async function finishRegion(sender, { mode, rect, viewport }) {
-    const bitmap = await createImageBitmap(await captureVisible(sender.tab.windowId));
-    const scale = bitmap.width / viewport.width;
-    const crop = CaptureGeometry.clampRect(CaptureGeometry.scaleRect(rect, scale), bitmap.width, bitmap.height);
-    const canvas = new OffscreenCanvas(crop.width, crop.height);
-    canvas.getContext('2d').drawImage(bitmap, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
-    bitmap.close();
-    const id = await openEditor(await canvas.convertToBlob({ type: 'image/png' }), mode, false, sender.tab);
+// değiştirilirse başka sekmenin görüntüsü kırpılır. Kaydırılabilir kapsayıcı içindeki uzun öğe görünen kısmıyla alınır.
+// Yükseltme: sekme kimliğiyle yakalama (debugger API) ve kapsayıcı içinde aralık yakalama gerekirse.
+async function finishRegion(sender, { mode, rect, scroll, viewport }) {
+    const inView = { x: rect.x - scroll.x, y: rect.y - scroll.y, width: rect.width, height: rect.height };
+    const fits = inView.y >= 0 && inView.y + inView.height <= viewport.height + 1;
+    let blob;
+    let truncated = false;
+    if (fits) {
+        const bitmap = await createImageBitmap(await captureVisible(sender.tab.windowId));
+        blob = await cropTo(bitmap, inView, bitmap.width / viewport.width);
+        bitmap.close();
+    } else {
+        const strip = await captureFullPage(sender.tab, { top: rect.y, height: rect.height });
+        // Kapsayıcı içindeki sayfalarda aralık yakalanamaz; görünen kısım kırpılır
+        if (strip.inContainer) {
+            const bitmap = await createImageBitmap(await captureVisible(sender.tab.windowId));
+            blob = await cropTo(bitmap, inView, bitmap.width / viewport.width);
+            bitmap.close();
+        } else {
+            blob = await cropTo(strip.canvas, { x: inView.x, y: 0, width: rect.width, height: strip.canvas.height / strip.scale }, strip.scale);
+            truncated = strip.truncated;
+        }
+    }
+    const id = await openEditor(blob, mode, truncated, sender.tab);
     return { status: 'opened', id };
 }
 
@@ -212,16 +271,25 @@ async function runCapture(mode) {
     const { delay } = await chrome.storage.local.get({ delay: CaptureSettings.DEFAULTS.delay });
     if (delay > 0) await countdown(delay);
     if ((await activeTab()).id !== tab.id) throw new Error('errTabChanged');
-    const result = mode === 'full'
-        ? await captureFullPage(tab)
-        : { blob: await captureVisible(tab.windowId), truncated: false };
-    return { status: 'opened', id: await openEditor(result.blob, mode, result.truncated, tab) };
+    if (mode === 'full') {
+        const result = await captureFullPage(tab);
+        return { status: 'opened', id: await openEditor(await canvasBlob(result.canvas), mode, result.truncated, tab) };
+    }
+    return { status: 'opened', id: await openEditor(await captureVisible(tab.windowId), mode, false, tab) };
 }
 
+// Kısayol ve sağ tık menüsünden başlayan yakalamada popup yoktur: neden rozetle birlikte simgenin ipucuna yazılır
+let errorTitleTimer = null;
 function reportFailure(error) {
     console.error('CaptureHub:', error);
+    const reason = chrome.i18n.getMessage(error.message) || chrome.i18n.getMessage('captureFailed');
     setBadge('!');
-    setTimeout(() => setBadge(''), 3000);
+    chrome.action.setTitle({ title: `CaptureHub: ${reason}` });
+    clearTimeout(errorTitleTimer);
+    errorTitleTimer = setTimeout(() => {
+        setBadge('');
+        chrome.action.setTitle({ title: chrome.i18n.getMessage('actionTitle') });
+    }, ERROR_TITLE_MS);
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

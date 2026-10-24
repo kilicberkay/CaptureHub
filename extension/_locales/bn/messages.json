@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "সেটিংস"
+  },
+  "errRestricted": {
+    "message": "এই পেজের ক্যাপচার নেওয়া যাবে না।"
+  },
+  "errTabChanged": {
+    "message": "সক্রিয় ট্যাব বদলেছে, ক্যাপচার বাতিল।"
+  },
+  "captureFailed": {
+    "message": "ক্যাপচার শুরু করা যায়নি।"
   }
 }

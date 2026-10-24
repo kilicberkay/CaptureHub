@@ -25,5 +25,14 @@
   },
   "menuSettings": {
     "message": "الإعدادات"
+  },
+  "errRestricted": {
+    "message": "لا يمكن التقاط هذه الصفحة."
+  },
+  "errTabChanged": {
+    "message": "تغيّرت علامة التبويب النشطة، أُلغي الالتقاط."
+  },
+  "captureFailed": {
+    "message": "تعذّر بدء الالتقاط."
   }
 }

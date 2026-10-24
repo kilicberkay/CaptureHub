@@ -53,3 +53,42 @@ test('tüm görüntü maskeliyse dokunulmaz; sınırı aşan alan reddedilir', (
     const big = { data: new Uint8ClampedArray(4), width: H.MAX_PIXELS + 1, height: 1 };
     assert.throws(() => H.inpaint(big, new Uint8Array(H.MAX_PIXELS + 1).fill(1)), /healTooLarge/);
 });
+
+// Dikey çizgili desen (6 piksel aralıklı) ve gürültülü doku: ortadaki delik doğru deseni geri getirmeli
+const stripes = (x) => (Math.floor(x / 3) % 2 ? [240, 240, 240, 255] : [20, 20, 20, 255]);
+
+function meanError(img, truth, mask) {
+    let sum = 0;
+    let n = 0;
+    for (let i = 0; i < mask.length; i++) {
+        if (!mask[i]) continue;
+        for (let c = 0; c < 3; c++) sum += Math.abs(img.data[i * 4 + c] - truth.data[i * 4 + c]);
+        n += 3;
+    }
+    return sum / n;
+}
+
+test('doku seçimi: çizgili ve gürültülü çevre dokulu; düz zemin ve degrade değil', () => {
+    const mask = rectMask(96, 64, 38, 22, 20, 20);
+    assert.equal(H.isTextured(image(96, 64, stripes), mask), true);
+    assert.equal(H.isTextured(image(96, 64, (x, y) => [(x * 37 + y * 91) % 256, (x * 53) % 256, (y * 29) % 256, 255]), mask), true);
+    assert.equal(H.isTextured(image(96, 64, () => [200, 210, 220, 255]), mask), false);
+    assert.equal(H.isTextured(image(96, 64, (x) => [x * 2, 100, 255 - x * 2, 255]), mask), false);
+});
+
+test('dokulu delik: örnek tabanlı doldurma deseni sürdürür, yayılmadan çok daha az hata verir; sonuç belirlenimci', () => {
+    const truth = image(96, 64, stripes);
+    const mask = rectMask(96, 64, 38, 22, 20, 20);
+    const holed = () => image(96, 64, (x, y) => (x >= 38 && x < 58 && y >= 22 && y < 42 ? [255, 0, 0, 255] : stripes(x)));
+    const texture = holed();
+    H.inpaint(texture, mask, 'texture');
+    const diffuse = holed();
+    H.inpaint(diffuse, mask, 'diffuse');
+    const textureError = meanError(texture, truth, mask);
+    const diffuseError = meanError(diffuse, truth, mask);
+    assert.ok(textureError < 15, `doku hatası ${textureError.toFixed(1)}`);
+    assert.ok(textureError * 4 < diffuseError, `doku ${textureError.toFixed(1)} / yayılma ${diffuseError.toFixed(1)}`);
+    const again = holed();
+    H.inpaint(again, mask, 'auto');
+    assert.deepEqual(again.data, texture.data, 'auto dokuyu seçer ve aynı sonucu verir');
+});

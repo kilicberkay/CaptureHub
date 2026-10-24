@@ -147,6 +147,107 @@ describe('CaptureHub uçtan uca', { skip: SKIP, timeout: 300000 }, () => {
         await page.eval('window.scrollTo(0, 0)');
     });
 
+    it('öğe: görünümden uzun öğe kaydırılıp birleştirilerek tam boyda yakalanır', async () => {
+        await env.focus(page);
+        await page.eval('window.scrollTo(0, 0)');
+        await wait(200);
+        await pressAltShift(env, page, 'E');
+        await env.cdp.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 450, y: 600 }, page.sid);
+        await click(env, page, { x: 450, y: 600 });
+        await page.waitFor('document.querySelector("[data-capturehub]") === null', 5000);
+        await wait(4000);
+        const meta = await latest();
+        assert.equal(meta.mode, 'element');
+        assert.deepEqual([meta.width, meta.height], [100, 1500]);
+        const editor = await openEditor(meta.id);
+        assert.deepEqual(await pixelAt(editor, 50, 1490), [68, 85, 102], 'öğenin alt ucu da görüntüde');
+        await editor.close();
+        assert.equal(await page.eval('window.scrollY'), 0, 'sayfa eski konumuna döner');
+    });
+
+    it('öğe: ↑ üst öğeye çıkar, Enter onu yakalar', async () => {
+        await env.focus(page);
+        await page.eval('window.scrollTo(0, 1100)');
+        await wait(200);
+        await pressAltShift(env, page, 'E');
+        await env.cdp.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 150, y: 150 }, page.sid);
+        await wait(100);
+        assert.match(await page.eval('document.querySelector("[data-capturehub] span").textContent'), /^200 × 100 · ↑↓$/);
+        await pressKey(env, page, { key: 'ArrowUp', code: 'ArrowUp', vk: 38 });
+        assert.match(await page.eval('document.querySelector("[data-capturehub] span").textContent'), /× 3000/, 'body vurgulanır');
+        await pressKey(env, page, { key: 'ArrowDown', code: 'ArrowDown', vk: 40 });
+        assert.match(await page.eval('document.querySelector("[data-capturehub] span").textContent'), /^200 × 100/, '↓ geri iner');
+        await pressKey(env, page, { key: 'ArrowUp', code: 'ArrowUp', vk: 38 });
+        await pressKey(env, page, { key: 'Enter', code: 'Enter', vk: 13 });
+        await page.waitFor('document.querySelector("[data-capturehub]") === null', 5000);
+        await wait(8000);
+        const meta = await latest();
+        assert.equal(meta.height, 3000, 'üst öğe (body) tam boyda');
+        await page.eval('window.scrollTo(0, 0)');
+    });
+
+    it('bölge: alt kenarda tutulunca sayfa kayar ve seçim görünümü aşar', async () => {
+        await env.focus(page);
+        await page.eval('window.scrollTo(0, 0)');
+        await wait(200);
+        const vh = await page.eval('window.innerHeight');
+        await pressAltShift(env, page, 'R');
+        const mouse = (type, point, buttons) => env.cdp.send('Input.dispatchMouseEvent', { type, ...point, button: 'left', buttons, clickCount: 1 }, page.sid);
+        await mouse('mousePressed', { x: 100, y: 100 }, 1);
+        await mouse('mouseMoved', { x: 300, y: vh - 4 }, 1);
+        await wait(1200);
+        assert.ok(await page.eval('window.scrollY') > 100, 'sayfa kaydı');
+        await mouse('mouseReleased', { x: 300, y: vh - 4 }, 0);
+        await page.waitFor('document.querySelector("[data-capturehub]") === null', 5000);
+        await wait(6000);
+        const meta = await latest();
+        assert.equal(meta.mode, 'region');
+        assert.equal(meta.width, 200);
+        assert.ok(meta.height > vh, `yükseklik ${meta.height} > ${vh}`);
+        await page.eval('window.scrollTo(0, 0)');
+    });
+
+    it('tam sayfa: tembel yüklenen görsel boş kalmaz', async () => {
+        const lazy = await env.openPage('lazy.html');
+        await env.focus(lazy);
+        await pressAltShift(env, lazy, 'R');
+        await pressEscape(env, lazy);
+        await env.swEval('runCapture("full")');
+        const meta = await latest();
+        const editor = await openEditor(meta.id);
+        assert.deepEqual(await pixelAt(editor, 300, 2600), [0, 170, 85], 'görsel yüklenmiş');
+        await editor.close();
+        await lazy.close();
+    });
+
+    it('tam sayfa: 20000 px sayfa kesilmez; WebP sınırı açık iletiyle bildirilir', async () => {
+        const long = await env.openPage('long.html');
+        await env.focus(long);
+        await pressAltShift(env, long, 'R');
+        await pressEscape(env, long);
+        await env.swEval('runCapture("full")');
+        const meta = await latest();
+        assert.equal(meta.height, 20000);
+        assert.equal(meta.truncated, false);
+        const editor = await openEditor(meta.id);
+        assert.deepEqual(await pixelAt(editor, 300, 19950), [170, 0, 0], 'en alttaki bant');
+        await editor.eval(`document.getElementById('format').value = 'webp'`);
+        await editor.eval('document.getElementById("download").click()');
+        await editor.waitFor('document.getElementById("status").textContent.includes("WebP")', 5000);
+        await editor.close();
+        await long.close();
+    });
+
+    it('hata: kısıtlı sayfada neden simgenin ipucuna yazılır', async () => {
+        const restricted = await env.openPage('tall.html');
+        await restricted.goto('chrome://version');
+        await env.focus(restricted);
+        await env.swEval('runCapture("visible").catch(reportFailure)');
+        assert.equal(await env.swEval('chrome.action.getTitle({})'), 'CaptureHub: This page cannot be captured.');
+        assert.equal(await env.swEval('chrome.action.getBadgeText({})'), '!');
+        await restricted.close();
+    });
+
     it('kaynak: kayıt sayfa adresini ve başlığını saklar', async () => {
         await env.focus(page);
         await env.swEval('runCapture("visible")');
@@ -339,6 +440,96 @@ describe('CaptureHub uçtan uca', { skip: SKIP, timeout: 300000 }, () => {
         assert.deepEqual(JSON.parse(await editor.eval('JSON.stringify([state.items[0].x1, state.items[0].r])')), [50, 6]);
         assert.equal(await editor.eval('document.getElementById("eyedropper").hidden'), !(await editor.eval('"EyeDropper" in window')));
         await editor.close();
+    });
+
+    it('düzenleyici: düzenlemeler otomatik kaydedilir, yeniden açınca gelir; Orijinale dön temizler', async () => {
+        await env.focus(page);
+        await env.swEval('runCapture("visible")');
+        const { id } = await latest();
+        let editor = await openEditor(id);
+        assert.equal(await editor.eval('document.getElementById("revert").hidden'), true);
+        const toCss = await canvasHelpers(editor);
+        await editor.eval('document.querySelector("[data-tool=rect]").click()');
+        await drag(env, editor, toCss(200, 200), toCss(400, 320));
+        await editor.waitFor('document.getElementById("revert").hidden === false', 3000);
+        await wait(1200);
+        await editor.close();
+        editor = await openEditor(id);
+        assert.equal(await editor.eval('state.items.length'), 1, 'işaret geri geldi');
+        await editor.eval('window.confirm = () => true; document.getElementById("revert").click()');
+        assert.equal(await editor.eval('state.items.length'), 0);
+        await wait(1200);
+        await editor.close();
+        editor = await openEditor(id);
+        assert.equal(await editor.eval('state.items.length'), 0, 'orijinal kaldı');
+        assert.equal(await editor.eval('document.getElementById("revert").hidden'), true);
+        await editor.close();
+    });
+
+    it('düzenleyici: metin çok satırlı yazılır, çift tıklamayla düzenlenir, boşaltılınca silinir', async () => {
+        await env.focus(page);
+        await env.swEval('runCapture("visible")');
+        const editor = await openEditor((await latest()).id);
+        const toCss = await canvasHelpers(editor);
+        await editor.eval('document.querySelector("[data-tool=text]").click()');
+        await click(env, editor, toCss(300, 200));
+        await typeText(env, editor, 'Bir\nİki');
+        await pressKey(env, editor, { key: 'Enter', code: 'Enter', vk: 13 });
+        const item = JSON.parse(await editor.eval('JSON.stringify(state.items[0])'));
+        assert.equal(item.text, 'Bir\nİki');
+        assert.ok(item.h >= item.px * 2.4, `iki satır yüksekliği: ${item.h}`);
+        await editor.eval('document.querySelector("[data-tool=select]").click()');
+        const dbl = toCss(310, 210);
+        for (const clickCount of [1, 2]) {
+            await env.cdp.send('Input.dispatchMouseEvent', { type: 'mousePressed', ...dbl, button: 'left', buttons: 1, clickCount }, editor.sid);
+            await env.cdp.send('Input.dispatchMouseEvent', { type: 'mouseReleased', ...dbl, button: 'left', buttons: 0, clickCount }, editor.sid);
+        }
+        await editor.waitFor('!textInput.hidden && textInput.value === "Bir\\nİki"', 3000);
+        await editor.eval('textInput.value = "Yeni"');
+        await pressKey(env, editor, { key: 'Enter', code: 'Enter', vk: 13 });
+        assert.deepEqual(JSON.parse(await editor.eval('JSON.stringify(state.items.map((i) => i.text))')), ['Yeni']);
+        await editor.eval('openTextInput(null, 0); textInput.value = ""');
+        await pressKey(env, editor, { key: 'Enter', code: 'Enter', vk: 13 });
+        assert.equal(await editor.eval('state.items.length'), 0, 'boş metin silinir');
+        await editor.close();
+    });
+
+    it('düzenleyici: Ctrl+tekerlek yakınlaştırır, 0 sığdırır, 1 %100 yapar; Ctrl+C kopyalar', async () => {
+        await env.focus(page);
+        await env.swEval('runCapture("visible")');
+        const editor = await openEditor((await latest()).id);
+        const fit = await editor.eval('canvas.getBoundingClientRect().width');
+        const center = await canvasHelpers(editor).then((toCss) => toCss(400, 300));
+        await env.cdp.send('Input.dispatchMouseEvent', { type: 'mouseWheel', ...center, deltaX: 0, deltaY: -100, modifiers: 2 }, editor.sid);
+        await wait(200);
+        assert.ok(await editor.eval('canvas.getBoundingClientRect().width') > fit, 'büyüdü');
+        assert.match(await editor.eval('document.getElementById("zoom").textContent'), /^\d+%$/);
+        await pressKey(env, editor, { key: '0', code: 'Digit0', vk: 48 });
+        assert.equal(await editor.eval('canvas.getBoundingClientRect().width'), fit, 'sığdır');
+        await pressKey(env, editor, { key: '1', code: 'Digit1', vk: 49 });
+        assert.equal(await editor.eval('document.getElementById("zoom").textContent'), '100%');
+        await pressKey(env, editor, { key: 'c', code: 'KeyC', vk: 67, modifiers: 2 });
+        await editor.waitFor('document.getElementById("status").textContent.length > 0', 3000);
+        assert.match(await editor.eval('document.getElementById("status").textContent'), /Copied|copy/i);
+        await editor.close();
+    });
+
+    it('geçmiş: ayarlarda ve popup\'ta küçük resim; {site} dosya adına girer', async () => {
+        await env.focus(page);
+        await env.swEval('runCapture("visible")');
+        const options = await env.openExtensionPage('options/options.html#history');
+        await options.waitFor('document.querySelector(".history-thumb") && document.querySelector(".history-thumb").naturalWidth > 0', 5000);
+        await options.close();
+        const popup = await env.openExtensionPage('popup/popup.html');
+        await popup.waitFor('document.querySelector(".thumb") && document.querySelector(".thumb").naturalWidth > 0', 5000);
+        await popup.close();
+        await env.swEval("chrome.storage.local.set({ nameTemplate: '{site}-{mode}', format: 'png' })");
+        await env.cdp.send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: env.downloadDir });
+        const editor = await openEditor((await latest()).id);
+        await editor.eval('document.getElementById("download").click()');
+        await editor.waitFor('document.getElementById("status").textContent.includes("127.0.0.1-visible.png")', 5000);
+        await editor.close();
+        await env.swEval("chrome.storage.local.remove(['nameTemplate', 'format'])");
     });
 
     it('düzenleyici: İndir, indirme kimliğini geçmiş kaydına yazar; ayarlarda Klasörde göster görünür', async () => {

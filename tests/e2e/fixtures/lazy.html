@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lazy fixture</title>
+    <style>
+        html, body { margin: 0; background: #ffffff; }
+        .spacer { height: 2500px; }
+        img { display: block; margin-left: 100px; }
+    </style>
+</head>
+<body>
+    <!-- Sayfa sonundaki tembel görsel geç yanıt verir; tam sayfa yakalaması onu boş bırakmamalı -->
+    <div class="spacer"></div>
+    <img src="lazy.svg?delay=600" loading="lazy" width="400" height="200" alt="">
+    <div style="height: 300px"></div>
+</body>
+</html>

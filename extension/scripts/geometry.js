@@ -33,6 +33,21 @@ var CaptureGeometry = (() => {
         return offsets;
     }
 
+    // Sayfanın [top, top + height) aralığını kaplayan kaydırma ofsetleri (görünümden uzun öğe ve bölge için).
+    // Son ofset sayfa sonunu aşmaz; aralık sayfadan taşarsa kırpılır.
+    function planRange(top, height, viewport, pageHeight) {
+        const last = Math.max(0, Math.min(top + height, pageHeight) - viewport);
+        const offsets = [];
+        for (let y = Math.max(0, Math.min(top, last)); y < last; y += viewport) offsets.push(y);
+        offsets.push(last);
+        return offsets;
+    }
+
+    // Tuvalin en fazla yüksekliği: Chrome'un kenar sınırı (32767) ve bellek için yaklaşık 200 milyon piksel alan
+    function maxCanvasHeight(width) {
+        return Math.min(32000, Math.floor(200000000 / Math.max(1, width)));
+    }
+
     // Sabit (fixed/sticky) öğe, ekranın üst üçte birindeyse yalnız ilk dilimde, alt üçte birindeyse yalnız son dilimde
     // görünür. Ortadaki sabit öğeler (yüzen düğmeler) her dilimde gizlenir; aksi halde her dilimde tekrar ederler.
     function fixedShown(index, count, centerY, viewportHeight) {
@@ -142,15 +157,19 @@ var CaptureGeometry = (() => {
         return items.reduce((max, item) => (item.type === 'number' ? Math.max(max, item.n) : max), 0) + 1;
     }
 
-    // Dosya adı şablonu: {date} (yerel saat, 2026-10-24_14-30-05) ve {mode} yerine geçer; {tarih} ve {mod} da kabul
-    // edilir. Dosya adına uymayan karakterler tire olur. Şablon boşsa varsayılan kullanılır.
-    function fileName(template, mode, date, extension) {
+    // Dosya adı şablonu: {date} (yerel saat, 2026-10-24_14-30-05), {mode}, {site} (alan adı) ve {title} (sayfa başlığı,
+    // en fazla 60 karakter) yerine geçer; {tarih} ve {mod} da kabul edilir. Dosya adına uymayan karakterler tire olur,
+    // boş kalan parçalar ve fazla tireler temizlenir. Şablon boşsa varsayılan kullanılır.
+    function fileName(template, mode, date, extension, source = {}) {
         const pad = (n) => String(n).padStart(2, '0');
         const stamp = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}_`
             + `${pad(date.getHours())}-${pad(date.getMinutes())}-${pad(date.getSeconds())}`;
-        const source = template && template.trim() ? template : 'capturehub-{date}-{mode}';
-        const base = source.replace(/\{(date|tarih)\}/g, stamp).replace(/\{(mode|mod)\}/g, mode);
-        return `${base.replace(/[\\/:*?"<>|]/g, '-').trim()}.${extension}`;
+        const pattern = template && template.trim() ? template : 'capturehub-{date}-{mode}';
+        const base = pattern.replace(/\{(date|tarih)\}/g, stamp).replace(/\{(mode|mod)\}/g, mode)
+            .replace(/\{site\}/g, source.site || '').replace(/\{title\}/g, (source.title || '').trim().slice(0, 60));
+        const clean = base.replace(/[\\/:*?"<>|\u0000-\u001f]/g, '-').replace(/\s+/g, ' ')
+            .replace(/-{2,}/g, '-').replace(/^[\s.-]+|[\s.-]+$/g, '');
+        return `${clean || 'capturehub'}.${extension}`;
     }
 
     // Geçmişte gösterilecek site adı. Yalnız http(s) adresleri; diğerleri (ve bozuk adres) boş döner,
@@ -170,7 +189,7 @@ var CaptureGeometry = (() => {
     }
 
     return {
-        normalizeRect, clampRect, scaleRect, planSlices, fixedShown,
+        normalizeRect, clampRect, scaleRect, planSlices, planRange, maxCanvasHeight, fixedShown,
         itemBounds, hitItem, handlesOf, translateItem, moveHandle, rotateItem, scaleItem, nextNumber, fileName, siteName, dimensions
     };
 })();
