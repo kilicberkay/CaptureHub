@@ -3,7 +3,7 @@
     "message": "CaptureHub"
   },
   "extDescription": {
-    "message": "Capturez la zone visible, la page entière, une zone ou un élément, puis annotez avec flèches, cadres et flou."
+    "message": "Capturez la zone visible, la page entière, une zone ou un élément, puis annotez avec flèches, cadres et pixelisation."
   },
   "actionTitle": {
     "message": "CaptureHub : faire une capture"

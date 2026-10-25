@@ -3,7 +3,7 @@
 **Name:** CaptureHub
 
 **Summary (132 characters max):**
-Capturez la zone visible, la page entière, une zone ou un élément, puis annotez avec flèches, cadres et flou.
+Capturez la zone visible, la page entière, une zone ou un élément, puis annotez avec flèches, cadres et pixelisation.
 
 ## Description
 

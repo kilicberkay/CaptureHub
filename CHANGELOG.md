@@ -3,6 +3,13 @@
 All notable changes to CaptureHub are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.2] - 2026-10-25
+
+Store listing only; the extension code is unchanged.
+
+### Changed
+- The short description now names the editor's tool as pixelation in each language, as the editor shows it.
+
 ## [1.2.1] - 2026-10-25
 
 Store listing only; the extension code is unchanged.

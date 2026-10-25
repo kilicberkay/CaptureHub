@@ -3,7 +3,7 @@
     "message": "CaptureHub"
   },
   "extDescription": {
-    "message": "Capture the visible area, a full page, a region or an element, then annotate with arrows, boxes and blur."
+    "message": "Capture the visible area, a full page, a region or an element, then annotate with arrows, boxes and pixelation."
   },
   "actionTitle": {
     "message": "CaptureHub: take a screenshot"

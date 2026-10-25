@@ -3,7 +3,7 @@
 **Name:** CaptureHub
 
 **Summary (132 characters max):**
-Capture a área visível, a página inteira, uma região ou um elemento e anote com setas, caixas e desfoque.
+Capture a área visível, a página inteira, uma região ou um elemento e anote com setas, caixas e pixelização.
 
 ## Description
 

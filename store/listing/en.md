@@ -3,7 +3,7 @@
 **Name:** CaptureHub
 
 **Summary (132 characters max):**
-Capture the visible area, a full page, a region or an element, then annotate with arrows, boxes and blur.
+Capture the visible area, a full page, a region or an element, then annotate with arrows, boxes and pixelation.
 
 **Category:** Productivity
 

@@ -3,7 +3,7 @@
 **Name:** CaptureHub
 
 **Summary (132 characters max):**
-截取可见区域、整页、选定区域或元素，然后用箭头、方框和模糊进行标注。
+截取可见区域、整页、选定区域或元素，然后用箭头、方框和马赛克进行标注。
 
 ## Description
 

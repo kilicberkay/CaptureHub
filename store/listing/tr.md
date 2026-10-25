@@ -18,7 +18,7 @@ CaptureHub, web sayfalarının ekran görüntüsünü dört yakalama moduyla al�
 Öne çıkanlar
 
 - Dört yakalama modu: görünür alan, tam sayfa, bölge ve öğe. Ekrandan uzun bölgeler ve öğeler eksiksiz yakalanır. Tam sayfa yakalama sayfayı kaydırır ve parçaları tek bir görüntüde birleştirir. Sabit başlık ve alt bilgi alanları görüntüde yalnızca bir kez, en üstte ve en altta yer alır.
-- Kutu, elips, ok, kalem, metin, pikselleştirme, fosforlu kalem, numaralı işaret ve kırpma araçlarını içeren işaretleme düzenleyicisi. Yedi hazır renk, özel renk ve damlalık; çizgi, metin ve fırça için beş boyut (XS–XL). İşaretler seçilip taşınabilir; her değişiklik geri alınabilir ve yinelenebilir.
+- Kutu, elips, ok, kalem, metin, bulanıklaştırma, fosforlu kalem, numaralı işaret ve kırpma araçlarını içeren işaretleme düzenleyicisi. Yedi hazır renk, özel renk ve damlalık; çizgi, metin ve fırça için beş boyut (XS–XL). İşaretler seçilip taşınabilir; her değişiklik geri alınabilir ve yinelenebilir.
 - Leke iyileştirme fırçası ve içeriğe duyarlı doldurma, ekran görüntüsündeki yazıları, simgeleri ve diğer istenmeyen ayrıntıları kaldırır. Görüntü ayrıca döndürülebilir ve yeniden boyutlandırılabilir.
 - Panoya kopyalama veya PNG, JPEG ya da WebP olarak kaydetme.
 - Her yakalama modu için klavye kısayolu: Alt+Shift+V (görünür alan), Alt+Shift+F (tam sayfa), Alt+Shift+R (bölge) ve Alt+Shift+E (öğe). Araç çubuğu simgesinin sağ tık menüsü yakalama modlarına, geçmişe ve ayarlara erişim sağlar.

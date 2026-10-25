@@ -3,7 +3,7 @@
     "message": "CaptureHub"
   },
   "extDescription": {
-    "message": "表示領域、ページ全体、範囲、要素をキャプチャし、矢印・枠・ぼかしで注釈を付けられます。"
+    "message": "表示領域、ページ全体、範囲、要素をキャプチャし、矢印・枠・モザイクで注釈を付けられます。"
   },
   "actionTitle": {
     "message": "CaptureHub: スクリーンショットを撮る"

@@ -3,7 +3,7 @@
 **Name:** CaptureHub
 
 **Summary (132 characters max):**
-Tangkap area terlihat, seluruh halaman, area tertentu, atau elemen, lalu beri anotasi dengan panah, kotak, dan blur.
+Tangkap area terlihat, seluruh halaman, area tertentu, atau elemen, lalu beri anotasi dengan panah, kotak, dan pikselasi.
 
 ## Description
 

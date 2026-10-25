@@ -3,7 +3,7 @@
     "message": "CaptureHub"
   },
   "extDescription": {
-    "message": "截取可见区域、整页、选定区域或元素，然后用箭头、方框和模糊进行标注。"
+    "message": "截取可见区域、整页、选定区域或元素，然后用箭头、方框和马赛克进行标注。"
   },
   "actionTitle": {
     "message": "CaptureHub：截图"
