@@ -1,70 +1,231 @@
+/* Düzen FillHub ayar sayfasıyla aynı kalıptan: ortalanmış kabuk, yarı saydam kenar çubuğu kartı, üst düğmeler,
+   bölüm başlığı + alt başlık ve bölüm kartları. Ölçüler FillHub'ın Tailwind sınıflarıyla eşleşir. */
 body {
     min-height: 100dvh;
     overflow-x: hidden;
 }
 
-.layout {
+.shell {
     display: grid;
-    grid-template-columns: 200px minmax(0, 1fr);
+    grid-template-columns: 208px minmax(0, 1fr);
     gap: 20px;
-    max-width: 960px;
+    align-items: start;
+    max-width: 1024px;
     margin: 0 auto;
     padding: 20px 16px 40px;
 }
 
 .side {
-    align-self: start;
     position: sticky;
     top: 20px;
-    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 40px);
+    overflow: hidden;
+    border: 1px solid rgb(228 228 231 / 0.8);
+    border-radius: 16px;
+    background: rgb(255 255 255 / 0.7);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(24px);
+}
+
+.dark .side {
+    border-color: rgb(255 255 255 / 0.07);
+    background: rgb(24 24 27 / 0.4);
 }
 
 .brand {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 0 6px 12px;
+    height: 48px;
+    padding: 0 12px;
     border-bottom: 1px solid var(--line);
-    margin-bottom: 8px;
+}
+
+.brand img { border-radius: 8px; }
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.brand-name {
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.brand-tag {
+    margin-top: 4px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
 }
 
 .nav {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    padding: 8px 8px 0;
 }
 
 .nav-link {
-    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
     border-radius: 8px;
-    color: var(--muted);
+    color: #52525b;
+    line-height: 20px;
     text-decoration: none;
     font-size: 13px;
     font-weight: 500;
+    transition: color 0.15s, background-color 0.15s;
 }
 
-.nav-link:hover { background: rgb(127 127 140 / 0.1); color: var(--ink); }
+.nav-link svg {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+}
+
+.nav-link .heart { color: #e11d48; }
+.nav-link:hover { background: #f4f4f5; color: #18181b; }
 .nav-link.active { background: var(--brand-50); color: var(--brand-700); }
+.dark .nav-link { color: #d4d4d8; }
+.dark .nav-link .heart { color: #fb7185; }
+.dark .nav-link:hover { background: rgb(255 255 255 / 0.06); color: #ffffff; }
 .dark .nav-link.active { background: rgb(247 74 135 / 0.1); color: var(--brand-400); }
+
+.side-foot {
+    margin: 0;
+    padding: 16px 16px 14px;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.topbar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-bottom: 12px;
+}
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid rgb(228 228 231 / 0.8);
+    border-radius: 8px;
+    background: transparent;
+    color: #52525b;
+    cursor: pointer;
+    transition: color 0.15s, background-color 0.15s;
+}
+
+.icon-btn svg { width: 16px; height: 16px; }
+.icon-btn:hover { background: #f4f4f5; color: #18181b; }
+.icon-heart { border-color: rgb(254 205 211 / 0.8); color: #f43f5e; }
+.icon-heart:hover { background: #fff1f2; color: #f43f5e; }
+.dark .icon-btn { border-color: rgb(255 255 255 / 0.1); color: #d4d4d8; }
+.dark .icon-btn:hover { background: rgb(255 255 255 / 0.06); color: #ffffff; }
+.dark .icon-heart { color: #fb7185; }
+.dark .icon-heart:hover { color: #fb7185; }
+
+/* Koyu temada güneş (açığa geç), açık temada ay (koyuya geç) görünür */
+.icon-sun { display: none; color: #fbbf24; }
+.dark .icon-sun { display: block; }
+.dark .icon-moon { display: none; }
 
 .content {
     display: flex;
     flex-direction: column;
-    gap: 14px;
     min-width: 0;
 }
 
 .panel {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 22px;
+    gap: 12px;
 }
 
-.panel-title {
+.section-head {
+    margin-bottom: 4px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+}
+
+.section-title {
     margin: 0;
-    font-size: 18px;
+    color: var(--ink);
+    font-size: 14px;
     font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.section-sub {
+    margin: 2px 0 0;
+    color: var(--soft);
+    font-size: 12px;
+}
+
+/* Bölüm kartı: FillHub'daki rounded-xl, ince kenarlık ve hafif saydam zemin */
+.box {
+    padding: 12px;
+    border: 1px solid rgb(228 228 231 / 0.8);
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: var(--shadow-card);
+    transition: border-color 0.3s;
+}
+
+.box:hover { border-color: #d4d4d8; }
+
+.dark .box {
+    border-color: rgb(255 255 255 / 0.07);
+    background: rgb(24 24 27 / 0.6);
+}
+
+.dark .box:hover { border-color: rgb(255 255 255 / 0.12); }
+
+.box.fields {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.box > .chip,
+.box > .btn-brand { align-self: flex-start; }
+
+.box-head {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f4f4f5;
+}
+
+.dark .box-head { border-bottom-color: rgb(39 39 42 / 0.8); }
+
+.box-title {
+    margin: 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.box-sub {
+    margin: 2px 0 0;
+    color: var(--soft);
+    font-size: 12px;
 }
 
 .field {
@@ -75,19 +236,37 @@ body {
     font-weight: 500;
 }
 
+/* Metin alanı ve açılır liste: FillHub'daki h-8, rounded-lg, zinc-500 kenarlık, özel ok */
 .field input[type="text"],
 .field select,
 .search {
     box-sizing: border-box;
     width: 100%;
-    padding: 7px 10px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: var(--surface);
-    color: var(--ink);
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #71717a;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #27272a;
     font: inherit;
     font-size: 13px;
-    max-width: 360px;
+}
+
+.field select {
+    padding-right: 32px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2371717a'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.dark .field input[type="text"],
+.dark .field select,
+.dark .search {
+    background-color: rgb(255 255 255 / 0.04);
+    color: #f4f4f5;
 }
 
 .range-row {
@@ -121,10 +300,6 @@ body {
 }
 
 .status:empty { display: none; }
-
-/* Panel sütun düzeninde tek düğmeler tam genişliğe yayılmaz */
-.panel > .chip,
-.panel > .btn-brand { align-self: flex-start; }
 
 .history {
     display: flex;
@@ -189,24 +364,7 @@ body {
     gap: 8px;
 }
 
-.block {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-top: 16px;
-    border-top: 1px solid var(--line);
-}
 
-.block-title {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.search {
-    width: 100%;
-    box-sizing: border-box;
-}
 
 .shortcut-list {
     display: grid;
@@ -298,11 +456,6 @@ kbd {
     gap: 12px;
 }
 
-.fact {
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-}
 
 .fact-title {
     margin: 0 0 4px;
@@ -313,7 +466,7 @@ kbd {
 @media (max-width: 720px) {
     .support-facts { grid-template-columns: 1fr; }
 
-    .layout {
+    .shell {
         grid-template-columns: 1fr;
     }
 

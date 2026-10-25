@@ -4,7 +4,7 @@
 
 <p align="center">
   <b>Capture, annotate and share screenshots, right in Chrome.</b><br>
-  Visible area, full page, region, or a single element. An editor for arrows, text, numbers and blur. No data collection.
+  Visible area, full page, region, or a single element. An editor for arrows, text, numbers and pixelation. No data collection.
 </p>
 
 <p align="center">

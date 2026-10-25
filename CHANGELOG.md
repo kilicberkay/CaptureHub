@@ -3,6 +3,12 @@
 All notable changes to CaptureHub are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.5] - 2026-10-25
+
+### Changed
+- The settings page uses the same layout as FillHub: a rounded sidebar card with the version and open-source label, a theme button and a heart in the top bar, and section cards with a short subtitle.
+- Text fields, search fields and dropdowns share one style in settings, popup and editor: brand focus ring, and dark option lists in the dark theme.
+
 ## [1.2.4] - 2026-10-25
 
 ### Fixed

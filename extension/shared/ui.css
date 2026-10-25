@@ -172,7 +172,7 @@ select {
 input[type="text"]:hover,
 input[type="search"]:hover,
 textarea:not(.text-input):hover,
-select:hover { border-color: #a1a1aa; }
+select:hover { border-color: #52525b; }
 
 input[type="text"]:focus,
 input[type="search"]:focus,
@@ -194,7 +194,7 @@ select:focus {
 .dark input[type="text"]:hover,
 .dark input[type="search"]:hover,
 .dark textarea:not(.text-input):hover,
-.dark select:hover { border-color: #52525b; }
+.dark select:hover { border-color: #a1a1aa; }
 
 select option { background-color: #ffffff; color: #18181b; }
 .dark select option { background-color: #18181b; color: #f4f4f5; }

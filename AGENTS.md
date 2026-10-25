@@ -7,7 +7,7 @@ metin, bulanıklaştırma, numara, vurgu, kırpma, geri al/yinele; hazır + öze
 ayar yedeği ve sıfırlama, açık/koyu/sistem tema.
 Çalışma zamanında bağımlılık yok; `extension/` olduğu gibi yüklenir. npm yalnızca testler ve paketleme için.
 Görsel tema FillHub ile aynıdır (`extension/shared/ui.css`: tokenlar, Geist, `chip`/`chip-active`/`meta`/`eyebrow`).
-15 dil: `extension/shared/i18n.js` (her dilde aynı 137 anahtar) ve `extension/_locales/` (manifest, komut, menü metinleri).
+15 dil: `extension/shared/i18n.js` (her dilde aynı 139 anahtar) ve `extension/_locales/` (manifest, komut, menü metinleri).
 
 ## Dosya Yapısı
 - `extension/manifest.json`: MV3; izinler `activeTab`, `contextMenus`, `downloads`, `scripting`, `storage`; host izni yok;

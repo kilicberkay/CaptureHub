@@ -258,9 +258,19 @@ function showSection() {
     $('aboutLinks').replaceChildren(...links);
     $('aboutLinks').hidden = links.length === 0;
 
-    // Tema başka bir sayfadan (popup) değişirse seçim kutusu da güncellenir
-    CaptureTheme.onChange((preference) => {
+    $('versionLabel').textContent = `v${chrome.runtime.getManifest().version}`;
+
+    // Üst düğme açık ve koyu tema arasında geçer (FillHub'daki gibi); sistem tercihi seçim kutusundan seçilir
+    $('themeToggle').addEventListener('click', async () => {
+        const next = CaptureTheme.isDark() ? 'light' : 'dark';
+        await CaptureTheme.set(next);
+        flashStatus();
+    });
+
+    // Tema başka bir sayfadan (popup) değişirse seçim kutusu ve düğme etiketi de güncellenir
+    CaptureTheme.onChange((preference, dark) => {
         $('theme').value = preference;
+        $('themeToggle').setAttribute('aria-label', CaptureI18n.t(dark ? 'switchToLight' : 'switchToDark'));
     });
     window.addEventListener('hashchange', showSection);
     showSection();
