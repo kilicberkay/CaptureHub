@@ -3,6 +3,11 @@
 All notable changes to CaptureHub are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.4] - 2026-10-25
+
+### Fixed
+- Urdu interface: the "full page" wording uses the masculine form, and History is named تاریخچہ in the settings page and in the menu.
+
 ## [1.2.3] - 2026-10-25
 
 Store listing only; the extension code is unchanged.
