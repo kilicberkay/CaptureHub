@@ -3,6 +3,13 @@
 All notable changes to CaptureHub are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.3] - 2026-10-25
+
+Store listing only; the extension code is unchanged.
+
+### Changed
+- Urdu and Hindi short descriptions use the grammar and terms of the interface.
+
 ## [1.2.2] - 2026-10-25
 
 Store listing only; the extension code is unchanged.
