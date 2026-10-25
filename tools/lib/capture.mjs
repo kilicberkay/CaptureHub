@@ -29,14 +29,17 @@ export const FAKE_CURSOR = `(() => {
     window.__demoCursor = (show) => { el.style.display = show ? 'block' : 'none'; };
 })()`;
 
-// Tek kullanımlık sayfada HTML çizer ve PNG kaydeder; transparent ile arka plan saydam olur
-export async function renderHtml(cdp, html, file, { width, height, transparent = false }) {
+// Tek kullanımlık sayfada HTML çizer ve PNG kaydeder; transparent ile arka plan saydam olur.
+// lang ve dir verilirse belgeye yazılır: yazı tipi seçimi (CJK, Arapça, Devanagari) ve yazı yönü buna bağlıdır.
+export async function renderHtml(cdp, html, file, { width, height, transparent = false, lang, dir }) {
     const page = await PageSession.open(cdp, 'about:blank');
     try {
         await cdp.send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false }, page.sid);
         if (transparent) await cdp.send('Emulation.setDefaultBackgroundColorOverride', { color: { r: 0, g: 0, b: 0, a: 0 } }, page.sid);
         const { frameTree } = await cdp.send('Page.getFrameTree', {}, page.sid);
         await cdp.send('Page.setDocumentContent', { frameId: frameTree.frame.id, html }, page.sid);
+        if (lang) await page.eval(`document.documentElement.lang = ${JSON.stringify(lang)}`);
+        if (dir) await page.eval(`document.documentElement.dir = ${JSON.stringify(dir)}`);
         await page.waitFor('document.fonts.status === "loaded" && [...document.images].every((i) => i.complete)', 10000);
         await wait(150);
         const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false }, page.sid);

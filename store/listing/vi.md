@@ -7,16 +7,16 @@ Chụp vùng hiển thị, toàn bộ trang, một vùng hoặc một phần t�
 
 ## Description
 
-CaptureHub chụp ảnh màn hình trang web theo bốn cách và cung cấp trình chỉnh sửa để chú thích trước khi bạn sao chép hoặc lưu.
+CaptureHub chụp ảnh màn hình trang web ở bốn chế độ chụp và có trình chỉnh sửa chú thích để đánh dấu ảnh chụp trước khi bạn sao chép hoặc lưu.
 
 Điểm nổi bật
 
-- Chụp vùng hiển thị, toàn bộ trang, vùng chọn và phần tử; phần tử và vùng cao hơn màn hình được chụp đầy đủ. Chụp toàn trang sẽ cuộn trang và ghép các phần lại, giữ tiêu đề và chân trang cố định đúng vị trí.
-- Trình chỉnh sửa với khung, hình elip, mũi tên, bút, chữ, làm mờ pixel, bút đánh dấu, dấu số và cắt ảnh. Bảy màu có sẵn, màu tùy chọn và công cụ lấy màu; năm kích cỡ (từ XS đến XL). Chọn và di chuyển bất kỳ dấu nào, hoàn tác và làm lại mọi thay đổi.
-- Cọ sửa điểm và tô theo nội dung xóa chữ, biểu tượng hoặc con trỏ khỏi ảnh chụp. Xoay và đổi kích thước.
+- Bốn chế độ chụp: vùng hiển thị, toàn trang, vùng chọn và phần tử. Vùng chọn và phần tử cao hơn màn hình được chụp đầy đủ. Chế độ chụp toàn trang cuộn trang và ghép các phần thành một ảnh duy nhất. Thanh đầu trang và chân trang cố định chỉ xuất hiện một lần, ở đầu và cuối ảnh.
+- Trình chỉnh sửa chú thích với các công cụ khung, hình elip, mũi tên, bút, chữ, làm mờ pixel, bút tô sáng, dấu đánh số và cắt ảnh. Bảy màu có sẵn, màu tùy chọn và công cụ lấy màu; năm kích thước (từ XS đến XL) cho nét vẽ, chữ và cọ. Có thể chọn và di chuyển các chú thích, đồng thời hoàn tác và làm lại mọi thay đổi.
+- Cọ chấm sửa vết và công cụ tô theo nội dung xóa chữ, biểu tượng và các chi tiết không mong muốn khác khỏi ảnh chụp. Ảnh cũng có thể được xoay và đổi kích thước.
 - Sao chép vào bảng nhớ tạm hoặc lưu dưới dạng PNG, JPEG hoặc WebP.
-- Phím tắt cho từng chế độ (Alt+Shift+V, F, R, E) và menu chuột phải trên biểu tượng thanh công cụ.
-- Độ trễ tùy chọn trước khi chụp, để bạn mở menu và chú giải trước.
-- Lịch sử cục bộ các ảnh chụp gần đây kèm tiêu đề trang và trang web; tìm kiếm, mở lại ảnh chụp hoặc hiển thị tệp đã tải trong thư mục của nó.
-- Sao lưu cài đặt (xuất và nhập), đặt lại, 15 ngôn ngữ giao diện, và chủ đề sáng, tối hoặc theo hệ thống.
-- Không cần tài khoản, không phân tích dữ liệu, không tải gì lên.
+- Phím tắt cho từng chế độ chụp: Alt+Shift+V (vùng hiển thị), Alt+Shift+F (toàn trang), Alt+Shift+R (vùng chọn) và Alt+Shift+E (phần tử). Menu chuột phải trên biểu tượng thanh công cụ cho phép truy cập các chế độ chụp, lịch sử và cài đặt.
+- Độ trễ tùy chọn trước khi chụp vùng hiển thị và toàn trang, để có thể mở menu và chú giải công cụ trước.
+- Lịch sử các ảnh chụp gần đây, được lưu trên thiết bị của bạn, kèm tiêu đề trang và trang web của từng ảnh chụp. Bạn có thể tìm kiếm trong lịch sử, mở lại ảnh chụp trong trình chỉnh sửa hoặc hiển thị tệp đã tải xuống trong thư mục chứa tệp.
+- Sao lưu cài đặt (xuất và nhập), khôi phục cài đặt mặc định, 15 ngôn ngữ giao diện và chủ đề sáng, tối hoặc theo hệ thống.
+- Không cần tài khoản. CaptureHub không thu thập dữ liệu, không dùng công cụ phân tích và không gửi yêu cầu mạng. Ảnh chụp, lịch sử và cài đặt chỉ được lưu trên thiết bị của bạn; không có gì được tải lên.

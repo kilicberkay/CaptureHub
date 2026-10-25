@@ -35,8 +35,8 @@ Görsel tema FillHub ile aynıdır (`extension/shared/ui.css`: tokenlar, Geist, 
   listesi (`chrome.commands.getAll`), hakkında.
 - `extension/shared/i18n.js` (`CaptureI18n`): çeviri tablosu. Sayfalarda `data-i18n`, `data-i18n-title`, `data-i18n-label`.
 - `tools/`: `check-syntax.js`, `run-tests.js`, `build.js` (zip), `changelog-section.js`, `lib/browser.mjs` (CDP istemcisi),
-  `lib/capture.mjs` (görsel yardımcıları), `make-readme-shots.mjs` + `make-store-assets.mjs` (`npm run images`, yalnız
-  Chromium), `make-demo.mjs` (`npm run demo`, Chromium + ffmpeg). Görseller `tests/e2e/fixtures/demo.html` (uydurma
+  `lib/capture.mjs` (görsel yardımcıları), `make-readme-shots.mjs` + `make-store-assets.mjs` (`npm run images`; Chromium ve dillerin yazı
+  tipleri gerekir; 15 dil için tanıtım kutuları ve ekran görüntüleri üretir), `make-demo.mjs` (`npm run demo`, Chromium + ffmpeg). Görseller `tests/e2e/fixtures/demo.html` (uydurma
   "Northwind" raporu) üzerinden üretilir; fikstür sunucusu `fonts/` yolunu uzantının yazı tiplerinden verir.
 - `tests/unit/`: `node --test` birim testleri (geometri, düzenleyici geometrisi ve araçları, ayar yedeği, çeviri paritesi,
   manifest/HTML yol ve komut denetimi, ağ çağrısı yasağı).

@@ -7,16 +7,16 @@ Sichtbaren Bereich, ganze Seite, Bereich oder Element aufnehmen und dann mit Pfe
 
 ## Description
 
-CaptureHub macht Screenshots von Webseiten auf vier Arten und bietet einen Editor, mit dem Sie sie markieren können, bevor Sie sie kopieren oder speichern.
+CaptureHub erstellt Screenshots von Webseiten in vier Aufnahmemodi und enthält einen Anmerkungseditor, mit dem Sie die Screenshots vor dem Kopieren oder Speichern markieren können.
 
 Highlights
 
-- Aufnahme von sichtbarem Bereich, ganzer Seite, Bereich und Element; Elemente und Bereiche, die höher als der Bildschirm sind, werden vollständig aufgenommen. Bei der Aufnahme der ganzen Seite wird gescrollt und werden die Teile zusammengefügt; feste Kopf- und Fußzeilen bleiben an ihrem Platz.
-- Editor mit Rahmen, Ellipsen, Pfeilen, Stift, Text, Verpixelung, Textmarker, nummerierten Markierungen und Zuschneiden. Sieben voreingestellte Farben, eine eigene Farbe und eine Pipette, fünf Größen (XS bis XL). Jede Markierung lässt sich auswählen und verschieben; jede Änderung lässt sich rückgängig machen und wiederherstellen.
-- Bereichsreparatur-Pinsel und inhaltsbasiertes Füllen entfernen Text, Symbole oder den Mauszeiger aus einem Screenshot. Drehen und Größe ändern.
+- Vier Aufnahmemodi: sichtbarer Bereich, ganze Seite, ausgewählter Bereich und Element. Ausgewählte Bereiche und Elemente, die höher als der Bildschirm sind, werden vollständig aufgenommen. Bei der Aufnahme der ganzen Seite wird die Seite gescrollt, und die Teile werden zu einem Bild zusammengefügt. Fixierte Kopf- und Fußzeilen erscheinen nur einmal, am oberen und unteren Rand des Bildes.
+- Anmerkungseditor mit den Werkzeugen Rahmen, Ellipse, Pfeil, Stift, Text, Verpixelung, Textmarker, nummerierte Markierung und Zuschneiden. Sieben voreingestellte Farben, eine eigene Farbe und eine Pipette; fünf Größen (XS bis XL) für Linien, Text und Pinsel. Anmerkungen lassen sich auswählen und verschieben, und jede Änderung lässt sich rückgängig machen und wiederherstellen.
+- Der Bereichsreparatur-Pinsel und das inhaltsbasierte Füllen entfernen Text, Symbole und andere unerwünschte Details aus einem Screenshot. Das Bild lässt sich außerdem drehen und in der Größe ändern.
 - In die Zwischenablage kopieren oder als PNG, JPEG oder WebP speichern.
-- Tastenkürzel für jeden Modus (Alt+Shift+V, F, R, E) und ein Rechtsklick-Menü am Symbol in der Symbolleiste.
-- Optionale Verzögerung vor der Aufnahme, damit Menüs und Tooltips zuerst geöffnet werden können.
-- Lokaler Verlauf Ihrer letzten Aufnahmen mit Seitentitel und Website; durchsuchen, erneut öffnen oder die heruntergeladene Datei im Ordner anzeigen.
-- Einstellungen sichern (exportieren und importieren), zurücksetzen, 15 Oberflächensprachen sowie helles, dunkles oder Systemdesign.
-- Keine Konten, keine Analysen, und es wird nichts hochgeladen.
+- Tastenkürzel für jeden Aufnahmemodus: Alt+Shift+V (sichtbarer Bereich), Alt+Shift+F (ganze Seite), Alt+Shift+R (ausgewählter Bereich) und Alt+Shift+E (Element). Das Rechtsklick-Menü des Symbols in der Symbolleiste bietet Zugriff auf die Aufnahmemodi, den Verlauf und die Einstellungen.
+- Optionale Verzögerung vor Aufnahmen des sichtbaren Bereichs und der ganzen Seite, damit Menüs und Tooltips vorher geöffnet werden können.
+- Verlauf Ihrer letzten Aufnahmen, auf Ihrem Gerät gespeichert, mit Seitentitel und Website jeder Aufnahme. Sie können den Verlauf durchsuchen, eine Aufnahme erneut im Editor öffnen oder eine heruntergeladene Datei in ihrem Ordner anzeigen.
+- Sicherung der Einstellungen (Export und Import), Zurücksetzen auf die Standardeinstellungen, 15 Oberflächensprachen sowie helles, dunkles oder systemabhängiges Design.
+- Kein Konto erforderlich. CaptureHub erhebt keine Daten, verwendet keine Analysedienste und sendet keine Netzwerkanfragen. Aufnahmen, Verlauf und Einstellungen werden nur auf Ihrem Gerät gespeichert; es wird nichts hochgeladen.

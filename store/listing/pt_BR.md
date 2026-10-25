@@ -7,16 +7,16 @@ Capture a área visível, a página inteira, uma região ou um elemento e anote 
 
 ## Description
 
-CaptureHub faz capturas de tela de páginas da web de quatro formas e oferece um editor para anotá-las antes de copiar ou salvar.
+O CaptureHub faz capturas de tela de páginas da web em quatro modos de captura e inclui um editor de anotações para marcá-las antes de copiar ou salvar.
 
 Destaques
 
-- Captura da área visível, da página inteira, de uma região ou de um elemento; elementos e regiões mais altos que a tela são capturados por completo. A captura da página inteira rola a página e une as partes, mantendo cabeçalhos e rodapés fixos no lugar.
-- Editor com caixas, elipses, setas, caneta, texto, pixelização, marca-texto, marcadores numerados e recorte. Sete cores predefinidas, uma cor personalizada e um conta-gotas, cinco tamanhos (de XS a XL). Selecione e mova qualquer marcação e desfaça ou refaça cada alteração.
-- Pincel de correção pontual e preenchimento com base no conteúdo removem texto, ícones ou o cursor de uma captura. Girar e redimensionar.
+- Quatro modos de captura: área visível, página inteira, região e elemento. Regiões e elementos mais altos que a tela são capturados por completo. A captura da página inteira rola a página e une as partes em uma única imagem. Cabeçalhos e rodapés fixos aparecem apenas uma vez, no topo e na base da imagem.
+- Editor de anotações com as ferramentas caixa, elipse, seta, caneta, texto, pixelização, marca-texto, marcador numerado e corte. Sete cores predefinidas, uma cor personalizada e um conta-gotas; cinco tamanhos (de XS a XL) para linhas, texto e pincéis. As anotações podem ser selecionadas e movidas, e cada alteração pode ser desfeita e refeita.
+- O pincel de recuperação para manchas e o preenchimento sensível ao conteúdo removem texto, ícones e outros detalhes indesejados de uma captura. A imagem também pode ser girada e redimensionada.
 - Copie para a área de transferência ou salve como PNG, JPEG ou WebP.
-- Atalhos para cada modo (Alt+Shift+V, F, R, E) e menu de clique com o botão direito no ícone da barra de ferramentas.
-- Atraso opcional antes da captura, para abrir antes os menus e as dicas.
-- Histórico local das suas capturas recentes, com o título da página e o site; pesquise, abra uma captura novamente ou mostre o arquivo baixado na pasta.
-- Backup das configurações (exportar e importar), redefinição, 15 idiomas da interface e tema claro, escuro ou do sistema.
-- Sem contas, sem análises e nada é enviado.
+- Atalhos de teclado para cada modo de captura: Alt+Shift+V (área visível), Alt+Shift+F (página inteira), Alt+Shift+R (região) e Alt+Shift+E (elemento). O menu de clique com o botão direito no ícone da barra de ferramentas dá acesso aos modos de captura, ao histórico e às configurações.
+- Atraso opcional antes das capturas da área visível e da página inteira, para que menus e dicas de ferramenta possam ser abertos antes.
+- Histórico das suas capturas recentes, armazenado no seu dispositivo, com o título da página e o site de cada captura. Você pode pesquisar no histórico, abrir uma captura novamente no editor ou mostrar um arquivo baixado na pasta dele.
+- Backup das configurações (exportar e importar), redefinição para as configurações padrão, 15 idiomas da interface e tema claro, escuro ou do sistema.
+- Nenhuma conta é necessária. O CaptureHub não coleta dados, não usa análises e não faz solicitações de rede. Capturas, histórico e configurações ficam armazenados apenas no seu dispositivo; nada é enviado.

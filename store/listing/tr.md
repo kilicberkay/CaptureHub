@@ -13,23 +13,19 @@ Görünür alanı, tam sayfayı, bir bölgeyi veya öğeyi yakalayın; ok, kutu 
 
 ## Açıklama
 
-CaptureHub web sayfalarının ekran görüntüsünü dört farklı yolla alır ve kopyalamadan ya da kaydetmeden önce
-işaretlemenizi sağlayan bir düzenleyici sunar.
+CaptureHub, web sayfalarının ekran görüntüsünü dört yakalama moduyla alır ve kopyalamadan veya kaydetmeden önce ekran görüntülerini işaretlemeniz için bir işaretleme düzenleyicisi sunar.
 
 Öne çıkanlar
 
-- Görünür alan, tam sayfa, bölge ve öğe yakalama; ekrandan uzun öğe ve bölgeler de tamamıyla alınır. Tam sayfa yakalama sayfayı kaydırır ve parçaları birleştirir;
-  sabit başlık ve alt bar yerinde kalır.
-- Kutu, elips, ok, kalem, metin, piksel bulanıklaştırma, fosforlu kalem, numara ve kırpma araçları. Yedi hazır renk,
-  özel renk ve damlalık, beş boyut (XS–XL). Her işareti seçip taşıyabilir, her değişikliği geri alabilir ve yineleyebilirsiniz.
-- Leke iyileştirme fırçası ve içeriğe duyarlı doldurma ile ekran görüntüsünden yazı, simge ya da imleci silin. Döndürme ve boyutlandırma.
-- Panoya kopyalama ya da PNG, JPEG veya WebP olarak kaydetme.
-- Her mod için kısayol (Alt+Shift+V, F, R, E) ve araç çubuğu simgesinde sağ tık menüsü.
-- İsteğe bağlı gecikme; böylece yakalamadan önce menü ve ipuçlarını açabilirsiniz.
-- Son yakalamaların sayfa başlığı ve siteyle birlikte cihazınızda tutulan geçmişi; arayın, yeniden açın ya da
-  indirilen dosyayı klasöründe gösterin.
-- Ayar yedeği (dışa ve içe aktarma), sıfırlama, 15 arayüz dili ve açık, koyu ya da sistem teması.
-- Hesap yok, analitik yok, hiçbir veri yüklenmez.
+- Dört yakalama modu: görünür alan, tam sayfa, bölge ve öğe. Ekrandan uzun bölgeler ve öğeler eksiksiz yakalanır. Tam sayfa yakalama sayfayı kaydırır ve parçaları tek bir görüntüde birleştirir. Sabit başlık ve alt bilgi alanları görüntüde yalnızca bir kez, en üstte ve en altta yer alır.
+- Kutu, elips, ok, kalem, metin, pikselleştirme, fosforlu kalem, numaralı işaret ve kırpma araçlarını içeren işaretleme düzenleyicisi. Yedi hazır renk, özel renk ve damlalık; çizgi, metin ve fırça için beş boyut (XS–XL). İşaretler seçilip taşınabilir; her değişiklik geri alınabilir ve yinelenebilir.
+- Leke iyileştirme fırçası ve içeriğe duyarlı doldurma, ekran görüntüsündeki yazıları, simgeleri ve diğer istenmeyen ayrıntıları kaldırır. Görüntü ayrıca döndürülebilir ve yeniden boyutlandırılabilir.
+- Panoya kopyalama veya PNG, JPEG ya da WebP olarak kaydetme.
+- Her yakalama modu için klavye kısayolu: Alt+Shift+V (görünür alan), Alt+Shift+F (tam sayfa), Alt+Shift+R (bölge) ve Alt+Shift+E (öğe). Araç çubuğu simgesinin sağ tık menüsü yakalama modlarına, geçmişe ve ayarlara erişim sağlar.
+- Görünür alan ve tam sayfa yakalamalarından önce isteğe bağlı gecikme; böylece menüler ve araç ipuçları önceden açılabilir.
+- Son yakalamaların geçmişi, her yakalamanın sayfa başlığı ve sitesiyle birlikte cihazınızda saklanır. Geçmişte arama yapabilir, bir yakalamayı düzenleyicide yeniden açabilir veya indirilen dosyayı klasöründe gösterebilirsiniz.
+- Ayar yedeği (dışa ve içe aktarma), varsayılan ayarlara sıfırlama, 15 arayüz dili ve açık, koyu ya da sistem teması.
+- Hesap gerekmez. CaptureHub veri toplamaz, analitik kullanmaz ve ağ isteği yapmaz. Yakalamalar, geçmiş ve ayarlar yalnızca cihazınızda saklanır; hiçbir şey yüklenmez.
 
 ## İzin gerekçeleri
 

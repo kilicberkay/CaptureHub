@@ -6,13 +6,14 @@ This folder holds what goes into the Chrome Web Store listing. It is not part of
 |---|---|
 | Listing text, 15 languages (English is the default); file names match `extension/_locales/` | `listing/<locale>.md` |
 | Store icon, 128×128 (96 px artwork with a 16 px transparent border) | `assets/store-icon-128.png` |
-| Small promo tile, 440×280 | `assets/promo-small-440x280.png` |
-| Marquee promo tile, 1400×560 | `assets/promo-marquee-1400x560.png` |
-| GitHub social preview, 1280×640 | `assets/social-preview-1280x640.png` |
-| Screenshots, 1280×800 | `assets/screenshots/en/`, `assets/screenshots/tr/` |
+| Small promo tile, 440×280, one per language | `assets/promo/<locale>/promo-small-440x280.png` |
+| Marquee promo tile, 1400×560, one per language | `assets/promo/<locale>/promo-marquee-1400x560.png` |
+| GitHub social preview, 1280×640 (English, set in the repository settings) | `assets/social-preview-1280x640.png` |
+| Screenshots, 1280×800, five per language | `assets/screenshots/<locale>/` |
 
-The images are made from the real extension with `npm run images` (`tools/make-store-assets.mjs`); it needs
-Chromium only. The privacy policy is `PRIVACY.md` at the repository root.
+`<locale>` is one of the folders in `extension/_locales/`. The images are made from the real extension with
+`npm run images` (`tools/make-store-assets.mjs`); it needs Chromium, and the machine needs fonts for every script
+the languages use (CJK, Arabic, Devanagari, Bengali). The privacy policy is `PRIVACY.md` at the repository root.
 
 ## Publishing
 
