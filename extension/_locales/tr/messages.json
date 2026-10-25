@@ -3,7 +3,7 @@
     "message": "CaptureHub"
   },
   "extDescription": {
-    "message": "Görünür alan, tam sayfa veya bölge yakalayın; ok, kutu, metin ve bulanıklaştırma ile işaretleyin."
+    "message": "Görünür alanı, tam sayfayı, bir bölgeyi veya öğeyi yakalayın; ok, kutu ve bulanıklaştırma ile işaretleyin."
   },
   "actionTitle": {
     "message": "CaptureHub: ekran görüntüsü al"

@@ -3,7 +3,7 @@
     "message": "CaptureHub"
   },
   "extDescription": {
-    "message": "Sichtbaren Bereich, ganze Seite oder Bereich aufnehmen und mit Pfeilen, Rahmen, Text und Verpixelung markieren."
+    "message": "Sichtbaren Bereich, ganze Seite, Bereich oder Element aufnehmen und dann mit Pfeilen, Rahmen und Verpixelung markieren."
   },
   "actionTitle": {
     "message": "CaptureHub: Screenshot aufnehmen"

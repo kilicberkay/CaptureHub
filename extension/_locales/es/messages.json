@@ -3,7 +3,7 @@
     "message": "CaptureHub"
   },
   "extDescription": {
-    "message": "Captura el área visible, la página completa o una región y anótala con flechas, recuadros, texto y pixelado."
+    "message": "Captura el área visible, la página completa, una región o un elemento, y anótala con flechas, recuadros y pixelado."
   },
   "actionTitle": {
     "message": "CaptureHub: hacer una captura"

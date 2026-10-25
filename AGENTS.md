@@ -54,7 +54,7 @@ Görsel tema FillHub ile aynıdır (`extension/shared/ui.css`: tokenlar, Geist, 
 4. `npm run build` → `python3 -m zipfile -t dist/capturehub-<sürüm>.zip`.
 5. Elle: `chrome://extensions` → Paketlenmemiş yükle → `extension/`.
 
-Durum (1.2.0): `npm test` bu makinede tam geçiyor (46 birim, 35 e2e; e2e yaklaşık 1,5 dk). Chromium: Playwright `chromium-1194`
+Durum (1.2.1): `npm test` bu makinede tam geçiyor (46 birim, 35 e2e; e2e yaklaşık 1,5 dk). Chromium: Playwright `chromium-1194`
 (`~/.cache/ms-playwright`); Arch'ta çalışması için `nss nspr at-spi2-core libcups libxkbcommon libxcomposite libxdamage
 libxfixes libxrandr mesa cairo pango alsa-lib` gerekir. E2E'de simge sağ tık menüsü görsel olarak açılamaz
 (`handleMenuClick` doğrudan çağrılır); `downloads.show` dosya yöneticisini açtığı için tıklanmaz.

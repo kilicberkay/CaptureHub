@@ -3,6 +3,13 @@
 All notable changes to CaptureHub are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.1] - 2026-10-25
+
+Store listing only; the extension code is unchanged.
+
+### Changed
+- The short description in the 15 interface languages now matches the Chrome Web Store listing.
+
 ## [1.2.0] - 2026-10-24
 
 Improvements to existing features; no new tools.

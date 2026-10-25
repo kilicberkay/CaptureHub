@@ -7,7 +7,7 @@ Görünür alanı, tam sayfayı, bir bölgeyi veya öğeyi yakalayın; ok, kutu 
 
 **Kategori:** Üretkenlik
 
-**Dil:** Türkçe (yerel ad ve özet 14 dilde daha)
+**Dil:** Türkçe (yerel özet ve açıklama 14 dilde daha, her dil için ayrı dosya)
 
 **Tek amaç:** Geçerli web sayfasının ekran görüntüsünü alıp üzerinde işaretleme yapmak.
 

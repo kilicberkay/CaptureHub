@@ -4,7 +4,7 @@ This folder holds what goes into the Chrome Web Store listing. It is not part of
 
 | What | File |
 |---|---|
-| Listing text (English is the default language) | `listing/en.md`, `listing/tr.md` |
+| Listing text, 15 languages (English is the default); file names match `extension/_locales/` | `listing/<locale>.md` |
 | Store icon, 128×128 (96 px artwork with a 16 px transparent border) | `assets/store-icon-128.png` |
 | Small promo tile, 440×280 | `assets/promo-small-440x280.png` |
 | Marquee promo tile, 1400×560 | `assets/promo-marquee-1400x560.png` |
@@ -19,7 +19,8 @@ Chromium only. The privacy policy is `PRIVACY.md` at the repository root.
 1. Build the package: `npm run build` → `dist/capturehub-<version>.zip`.
 2. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole), create a new item
    and upload the zip.
-3. Fill in the listing from `listing/en.md`, and add the Turkish listing from `listing/tr.md`.
+3. Fill in the listing from `listing/en.md`, then add the summary and description of each other language from
+   `listing/<locale>.md`.
 4. In **Privacy practices**, state that no data is collected or sold and no remote code is used. Copy the permission
    justifications from the listing file.
 5. Submit. The package uses only `activeTab`, `contextMenus`, `downloads`, `scripting`, and `storage`, and does not

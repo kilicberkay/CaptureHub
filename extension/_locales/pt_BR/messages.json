@@ -3,7 +3,7 @@
     "message": "CaptureHub"
   },
   "extDescription": {
-    "message": "Capture a área visível, a página inteira ou uma região e anote com setas, caixas, texto e pixelização."
+    "message": "Capture a área visível, a página inteira, uma região ou um elemento e anote com setas, caixas e desfoque."
   },
   "actionTitle": {
     "message": "CaptureHub: tirar uma captura de tela"

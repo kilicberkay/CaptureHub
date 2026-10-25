@@ -7,7 +7,7 @@ Capture the visible area, a full page, a region or an element, then annotate wit
 
 **Category:** Productivity
 
-**Language:** English (default); localized name and short description in 14 more languages
+**Language:** English (default); localized summary and description in 14 more languages, one file each (`<locale>.md`)
 
 **Single purpose:** Take screenshots of the current web page and annotate them.
 
