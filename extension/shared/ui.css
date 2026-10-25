@@ -160,3 +160,41 @@ html body {
         linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
 }
+
+/* Form denetimleri: FillHub ile aynı davranış. Odakta marka halkası; koyu temada açılır liste gri zemin almaz. */
+input[type="text"],
+input[type="search"],
+textarea:not(.text-input),
+select {
+    transition: border-color 150ms, box-shadow 150ms;
+}
+
+input[type="text"]:hover,
+input[type="search"]:hover,
+textarea:not(.text-input):hover,
+select:hover { border-color: #a1a1aa; }
+
+input[type="text"]:focus,
+input[type="search"]:focus,
+textarea:not(.text-input):focus,
+select:focus {
+    outline: none;
+    border-color: var(--brand-600);
+    box-shadow: 0 0 0 2px var(--brand-600);
+}
+
+.dark input[type="text"]:focus,
+.dark input[type="search"]:focus,
+.dark textarea:not(.text-input):focus,
+.dark select:focus {
+    border-color: var(--brand-400);
+    box-shadow: 0 0 0 2px var(--brand-400);
+}
+
+.dark input[type="text"]:hover,
+.dark input[type="search"]:hover,
+.dark textarea:not(.text-input):hover,
+.dark select:hover { border-color: #52525b; }
+
+select option { background-color: #ffffff; color: #18181b; }
+.dark select option { background-color: #18181b; color: #f4f4f5; }
