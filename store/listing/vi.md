@@ -20,3 +20,23 @@ CaptureHub chụp ảnh màn hình trang web ở bốn chế độ chụp và c�
 - Lịch sử các ảnh chụp gần đây, được lưu trên thiết bị của bạn, kèm tiêu đề trang và trang web của từng ảnh chụp. Bạn có thể tìm kiếm trong lịch sử, mở lại ảnh chụp trong trình chỉnh sửa hoặc hiển thị tệp đã tải xuống trong thư mục chứa tệp.
 - Sao lưu cài đặt (xuất và nhập), khôi phục cài đặt mặc định, 15 ngôn ngữ giao diện và chủ đề sáng, tối hoặc theo hệ thống.
 - Không cần tài khoản. CaptureHub không thu thập dữ liệu, không dùng công cụ phân tích và không gửi yêu cầu mạng. Ảnh chụp, lịch sử và cài đặt chỉ được lưu trên thiết bị của bạn; không có gì được tải lên.
+
+Cách sử dụng
+
+1. Mở trang bạn muốn chụp.
+2. Nhấn Alt+Shift+V cho vùng hiển thị, Alt+Shift+F cho toàn trang, Alt+Shift+R cho vùng chọn hoặc Alt+Shift+E cho phần tử. Cửa sổ bật lên trên thanh công cụ và menu chuột phải trên biểu tượng thanh công cụ đều cung cấp bốn chế độ này, cùng với Lịch sử và Cài đặt.
+3. Chú thích ảnh chụp trong trình chỉnh sửa, sau đó sao chép hoặc lưu dưới dạng PNG, JPEG hoặc WebP.
+
+Trên macOS, phím tắt là Option+Shift+…; thay đổi tại chrome://extensions/shortcuts.
+
+Quyền riêng tư
+
+CaptureHub không thu thập dữ liệu, không dùng công cụ phân tích và không gửi yêu cầu mạng. Ảnh chụp, lịch sử và cài đặt ở lại trên thiết bị của bạn. Chính sách quyền riêng tư: https://github.com/kilicberkay/CaptureHub/blob/main/PRIVACY.md
+
+Mã nguồn mở
+
+CaptureHub miễn phí và là mã nguồn mở theo giấy phép MIT. Mã nguồn, báo cáo sự cố và đóng góp: https://github.com/kilicberkay/CaptureHub
+
+Hỗ trợ
+
+CaptureHub miễn phí. Nếu CaptureHub hữu ích cho công việc của bạn, bạn có thể hỗ trợ việc phát triển qua GitHub Sponsors: https://github.com/sponsors/kilicberkay

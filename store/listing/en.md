@@ -27,6 +27,26 @@ Highlights
 - Settings backup (export and import), reset to default settings, 15 interface languages, and a light, dark or system theme.
 - No account is required. CaptureHub collects no data, uses no analytics and makes no network requests. Captures, history and settings are stored only on your device; nothing is uploaded.
 
+How to use
+
+1. Open the page you want to capture.
+2. Press Alt+Shift+V for the visible area, Alt+Shift+F for the full page, Alt+Shift+R for a region or Alt+Shift+E for an element. The toolbar popup and the right-click menu on the toolbar icon offer the same four modes, plus History and Settings.
+3. Mark the capture up in the editor, then copy it or save it as PNG, JPEG or WebP.
+
+On macOS the shortcuts are Option+Shift+…; change them at chrome://extensions/shortcuts.
+
+Privacy
+
+CaptureHub collects no data, uses no analytics and makes no network requests. Captures, history and settings stay on your device. Privacy policy: https://github.com/kilicberkay/CaptureHub/blob/main/PRIVACY.md
+
+Open source
+
+CaptureHub is free and open source under the MIT license. Source code, issues and contributions: https://github.com/kilicberkay/CaptureHub
+
+Support
+
+CaptureHub is free. If CaptureHub is useful in your work, you can support its development on GitHub Sponsors: https://github.com/sponsors/kilicberkay
+
 ## Permission justifications
 
 - **activeTab:** Used when you click the toolbar icon, press a shortcut or choose a capture mode, so CaptureHub can
@@ -37,6 +57,24 @@ Highlights
 - **contextMenus:** Adds the capture modes, History and Settings to the toolbar icon's right-click menu.
 - **downloads:** Saves edited captures through the browser's download manager and shows a downloaded capture in its
   folder when you ask from the history.
+
+## Screenshots
+
+Captions (in order):
+
+1. Editor with a box, an arrow, text, numbered markers, a highlighted row and a pixelated e-mail address.
+2. Region selection in progress, with the page dimmed and the selection size shown.
+3. Element selection highlighting a chart card.
+4. General settings: theme, language, format, quality, file name, delay, history size, backup and reset.
+5. History listing captures with page title, site, open, show in folder and delete.
+
+## Assets
+
+- Icon: `store/assets/store-icon-128.png`
+- Small promo tile: `store/assets/promo/<locale>/promo-small-440x280.png`
+- Marquee: `store/assets/promo/<locale>/promo-marquee-1400x560.png`
+- GitHub social preview: `store/assets/social-preview-1280x640.png`
+- Screenshots (1280×800): `store/assets/screenshots/<locale>/`
 
 ## Privacy
 

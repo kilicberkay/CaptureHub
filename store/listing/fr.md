@@ -20,3 +20,23 @@ Points forts
 - Historique de vos captures récentes, enregistré sur votre appareil, avec le titre de la page et le site de chaque capture. Vous pouvez effectuer une recherche dans l'historique, rouvrir une capture dans l'éditeur ou afficher un fichier téléchargé dans son dossier.
 - Sauvegarde des paramètres (export et import), rétablissement des paramètres par défaut, 15 langues d'interface et thème clair, sombre ou du système.
 - Aucun compte n'est nécessaire. CaptureHub ne collecte aucune donnée, n'utilise aucun outil d'analyse et n'effectue aucune requête réseau. Les captures, l'historique et les paramètres sont stockés uniquement sur votre appareil ; rien n'est envoyé.
+
+Mode d'emploi
+
+1. Ouvrez la page à capturer.
+2. Appuyez sur Alt+Shift+V pour la zone visible, Alt+Shift+F pour la page entière, Alt+Shift+R pour une zone sélectionnée ou Alt+Shift+E pour un élément. La fenêtre de la barre d'outils et le menu contextuel de l'icône de la barre d'outils proposent les mêmes quatre modes, ainsi que l'historique et les paramètres.
+3. Annotez la capture dans l'éditeur, puis copiez-la ou enregistrez-la au format PNG, JPEG ou WebP.
+
+Sous macOS, les raccourcis sont Option+Shift+… ; ils se modifient sur chrome://extensions/shortcuts.
+
+Confidentialité
+
+CaptureHub ne collecte aucune donnée, n'utilise aucun outil d'analyse et n'effectue aucune requête réseau. Les captures, l'historique et les paramètres restent sur votre appareil. Politique de confidentialité : https://github.com/kilicberkay/CaptureHub/blob/main/PRIVACY.md
+
+Open source
+
+CaptureHub est gratuit et open source sous licence MIT. Code source, tickets et contributions : https://github.com/kilicberkay/CaptureHub
+
+Soutien
+
+CaptureHub est gratuit. Si CaptureHub vous est utile dans votre travail, vous pouvez soutenir son développement via GitHub Sponsors : https://github.com/sponsors/kilicberkay

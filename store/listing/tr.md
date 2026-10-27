@@ -27,6 +27,26 @@ CaptureHub, web sayfalarının ekran görüntüsünü dört yakalama moduyla al�
 - Ayar yedeği (dışa ve içe aktarma), varsayılan ayarlara sıfırlama, 15 arayüz dili ve açık, koyu ya da sistem teması.
 - Hesap gerekmez. CaptureHub veri toplamaz, analitik kullanmaz ve ağ isteği yapmaz. Yakalamalar, geçmiş ve ayarlar yalnızca cihazınızda saklanır; hiçbir şey yüklenmez.
 
+Nasıl kullanılır
+
+1. Yakalamak istediğiniz sayfayı açın.
+2. Görünür alan için Alt+Shift+V, tam sayfa için Alt+Shift+F, bölge için Alt+Shift+R veya öğe için Alt+Shift+E tuşlarına basın. Araç çubuğu penceresi ve araç çubuğu simgesinin sağ tık menüsü aynı dört modu, ayrıca Geçmiş ve Ayarlar'ı sunar.
+3. Yakalamayı düzenleyicide işaretleyin, ardından kopyalayın veya PNG, JPEG ya da WebP olarak kaydedin.
+
+macOS'te kısayollar Option+Shift+… şeklindedir; chrome://extensions/shortcuts adresinden değiştirebilirsiniz.
+
+Gizlilik
+
+CaptureHub hiçbir veri toplamaz, analitik kullanmaz ve ağ isteği yapmaz. Yakalamalar, geçmiş ve ayarlar cihazınızda kalır. Gizlilik politikası: https://github.com/kilicberkay/CaptureHub/blob/main/PRIVACY.md
+
+Açık kaynak
+
+CaptureHub, MIT lisansıyla ücretsiz ve açık kaynaktır. Kaynak kodu, sorunlar ve katkılar: https://github.com/kilicberkay/CaptureHub
+
+Destek
+
+CaptureHub ücretsizdir. İşinizde yararlı oluyorsa geliştirilmesini GitHub Sponsors üzerinden destekleyebilirsiniz: https://github.com/sponsors/kilicberkay
+
 ## İzin gerekçeleri
 
 - **activeTab:** Araç çubuğu simgesine tıkladığınızda, bir kısayol kullandığınızda ya da bir yakalama modu seçtiğinizde
@@ -36,6 +56,24 @@ CaptureHub, web sayfalarının ekran görüntüsünü dört yakalama moduyla al�
 - **contextMenus:** Yakalama modlarını, Geçmiş'i ve Ayarlar'ı araç çubuğu simgesinin sağ tık menüsüne ekler.
 - **downloads:** Düzenlenen yakalamaları tarayıcının indirme yöneticisiyle kaydeder ve geçmişten istendiğinde indirilen
   dosyayı klasöründe gösterir.
+
+## Ekran görüntüleri
+
+Açıklamalar (sırayla):
+
+1. Kutu, ok, metin, numaralı işaretler, vurgulanmış satır ve bulanıklaştırılmış e-posta adresiyle düzenleyici.
+2. Sayfa karartılmış ve seçim boyutu gösterilirken süren bölge seçimi.
+3. Bir grafik kartını vurgulayan öğe seçimi.
+4. Genel ayarlar: tema, dil, biçim, kalite, dosya adı, gecikme, geçmiş boyutu, yedekleme ve sıfırlama.
+5. Yakalamaları sayfa başlığı, site, aç, klasörde göster ve sil ile listeleyen geçmiş.
+
+## Varlıklar
+
+- Simge: `store/assets/store-icon-128.png`
+- Küçük tanıtım görseli: `store/assets/promo/<locale>/promo-small-440x280.png`
+- Marquee: `store/assets/promo/<locale>/promo-marquee-1400x560.png`
+- GitHub sosyal önizlemesi: `store/assets/social-preview-1280x640.png`
+- Ekran görüntüleri (1280×800): `store/assets/screenshots/<locale>/`
 
 ## Gizlilik
 

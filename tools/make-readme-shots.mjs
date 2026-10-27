@@ -13,6 +13,23 @@ const LANGS = [
     { uiLang: 'tr', dir: join(IMAGES, 'tr'), label: 'Bülten zirvesi' },
 ];
 
+// Seçici katmanı açılana kadar kısayolu yineler; komut bazen sekme odakta değilken düşüyor
+async function startSelector(env, page, letter, mode) {
+    for (let i = 0; i < 3; i++) {
+        await env.focus(page);
+        await pressAltShift(env, page, letter);
+        const open = await page.eval('Boolean(document.querySelector(\'[data-capturehub="select"]\'))');
+        if (open) return;
+        await wait(300);
+    }
+    throw new Error(`seçici açılmadı: ${mode}`);
+}
+
+async function stopSelector(env, page) {
+    await pressEscape(env, page);
+    await page.waitFor('!document.querySelector(\'[data-capturehub="select"]\')', 3000);
+}
+
 async function shoot(env, path, file, { width, height, dark, prepare }) {
     const page = await env.openExtensionPage(path);
     try {
@@ -33,6 +50,7 @@ async function main() {
     const env = await startEnv();
     try {
         const demo = await env.openPage('demo.html');
+        await demo.cdp.send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 800, deviceScaleFactor: 1, mobile: false }, demo.sid);
         await demo.waitFor('document.fonts.status === "loaded"', 10000);
         await demo.eval(HIDE_SCROLLBARS);
         // Komut kısayolu activeTab iznini verir
@@ -63,6 +81,30 @@ async function main() {
                 const dir = join(lang.dir, theme);
                 mkdirSync(dir, { recursive: true });
                 const dark = theme === 'dark';
+                // Bölge ve öğe seçimi: mağaza görsellerindeki 02/03 karelerinin README sürümü
+                const chart = targets.chart;
+                const mouse = (type, x, y, buttons) => env.cdp.send('Input.dispatchMouseEvent',
+                    { type, x, y, button: 'left', buttons, clickCount: 1 }, demo.sid);
+                await env.focus(demo);
+                await startSelector(env, demo, 'E', 'element');
+                await mouse('mouseMoved', chart.x + chart.w - 8, chart.y + 8, 0);
+                await wait(300);
+                await demo.screenshot(join(dir, 'element.png'), { width: 1280, height: 800 });
+                await frameImage(env.cdp, join(dir, 'element.png'), { width: 1280, height: 800, dark });
+                await stopSelector(env, demo);
+                await wait(300);
+
+                await startSelector(env, demo, 'R', 'region');
+                const end = { x: chart.x + chart.w + 10, y: chart.y + chart.h + 10 };
+                await mouse('mousePressed', chart.x - 10, chart.y - 10, 1);
+                await mouse('mouseMoved', end.x - 100, end.y - 60, 1);
+                await mouse('mouseMoved', end.x, end.y, 1);
+                await wait(300);
+                await demo.screenshot(join(dir, 'region.png'), { width: 1280, height: 800 });
+                await frameImage(env.cdp, join(dir, 'region.png'), { width: 1280, height: 800, dark });
+                await stopSelector(env, demo);
+                await mouse('mouseReleased', end.x, end.y, 0);
+                await wait(300);
                 await shoot(env, 'popup/popup.html', join(dir, 'popup.png'), { width: 340, dark });
                 await shoot(env, `editor/editor.html?id=${id}`, join(dir, 'editor.png'), {
                     width: 1280, height: 860, dark,

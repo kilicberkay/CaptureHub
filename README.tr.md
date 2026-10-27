@@ -8,6 +8,7 @@
 </p>
 
 <p align="center">
+  <a href="https://chromewebstore.google.com/detail/capturehub/bnphimglccgfinadjbhkbjababninnfb"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-y%C3%BCkle-4285F4?logo=googlechrome&logoColor=white" alt="CaptureHub Chrome Web Store'da"></a>
   <a href="https://github.com/kilicberkay/CaptureHub/releases/latest"><img src="https://img.shields.io/github/v/release/kilicberkay/CaptureHub" alt="Son sürüm"></a>
   <a href="https://github.com/kilicberkay/CaptureHub/actions/workflows/ci.yml"><img src="https://github.com/kilicberkay/CaptureHub/actions/workflows/ci.yml/badge.svg" alt="CI durumu"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT lisansı"></a>
@@ -65,6 +66,22 @@ birlikte yerel geçmişte tutulur; aradığınızı kolayca bulursunuz.
         <img src="docs/images/tr/light/editor.png" alt="Kutu, ok ve metin, numaralı işaretler, vurgulanmış satır ve bulanıklaştırılmış e-posta adresiyle düzenleyici" width="100%">
       </picture><br>
       <sub>Düzenleyici</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/images/tr/dark/region.png">
+        <img src="docs/images/tr/light/region.png" alt="Sayfa karartılmış ve seçim boyutu gösterilirken süren bölge seçimi" width="100%">
+      </picture><br>
+      <sub>Bölge yakalama</sub>
+    </td>
+    <td align="center" width="50%">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/images/tr/dark/element.png">
+        <img src="docs/images/tr/light/element.png" alt="Bir grafik kartını vurgulayan öğe seçimi" width="100%">
+      </picture><br>
+      <sub>Öğe yakalama</sub>
     </td>
   </tr>
   <tr>
@@ -162,14 +179,18 @@ English, Türkçe, Deutsch, Español, Français, हिन्दी, Bahasa Indo
 
 ## Kurulum
 
-### Sürüm paketinden (önerilen)
+### Chrome Web Store (önerilen)
+
+**[CaptureHub'ı Chrome'a ekleyin](https://chromewebstore.google.com/detail/capturehub/bnphimglccgfinadjbhkbjababninnfb)**
+
+Mağaza güncellemeleri Google incelemesinden geçtiği için mağazadaki sürüm [son sürümün](https://github.com/kilicberkay/CaptureHub/releases/latest) gerisinde kalabilir. En yeni paket her zaman sürüm sayfasındadır.
+
+### Sürüm paketinden
 
 1. [Son sürümden](https://github.com/kilicberkay/CaptureHub/releases/latest) `capturehub-<sürüm>.zip` dosyasını indirip açın.
 2. `chrome://extensions` sayfasını açın ve **Geliştirici modu**nu etkinleştirin.
 3. **Paketlenmemiş öğe yükle**'ye tıklayın ve açtığınız klasörü (içinde `manifest.json` olan) seçin.
 4. CaptureHub'ı araç çubuğuna sabitleyin ve herhangi bir sayfada `Alt+Shift+R`'ye basın.
-
-CaptureHub henüz Chrome Web Store'da değil. Sürüm sayfasında her zaman en yeni paket ve SHA-256 sağlama toplamı bulunur.
 
 ### Kaynaktan
 

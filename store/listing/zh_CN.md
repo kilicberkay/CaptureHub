@@ -20,3 +20,23 @@ CaptureHub 提供四种截图模式来截取网页，并配有标注编辑器，
 - 最近截图的历史记录保存在您的设备上，并包含每张截图的页面标题和网站。您可以搜索历史记录、在编辑器中重新打开截图，或在文件夹中显示已下载的文件。
 - 设置备份（导出和导入）、恢复默认设置、15 种界面语言，以及浅色、深色或跟随系统的主题。
 - 无需账户。CaptureHub 不收集任何数据，不使用分析统计，也不发出任何网络请求。截图、历史记录和设置仅保存在您的设备上，不会上传任何内容。
+
+使用方法
+
+1. 打开要截图的页面。
+2. 按 Alt+Shift+V 截取可见区域，按 Alt+Shift+F 截取整页，按 Alt+Shift+R 截取选定区域，或按 Alt+Shift+E 截取元素。工具栏弹出窗口和工具栏图标的右键菜单同样提供这四种模式，以及历史记录和设置。
+3. 在编辑器中标注截图，然后复制或保存为 PNG、JPEG 或 WebP。
+
+在 macOS 上，快捷键为 Option+Shift+…；可在 chrome://extensions/shortcuts 中更改。
+
+隐私
+
+CaptureHub 不收集任何数据，不使用分析统计，也不发出任何网络请求。截图、历史记录和设置保留在您的设备上。隐私政策：https://github.com/kilicberkay/CaptureHub/blob/main/PRIVACY.md
+
+开源
+
+CaptureHub 免费，并以 MIT 许可证开源。源代码、问题反馈与贡献：https://github.com/kilicberkay/CaptureHub
+
+支持
+
+CaptureHub 免费使用。如果 CaptureHub 对您的工作有帮助，您可以通过 GitHub Sponsors 支持其开发：https://github.com/sponsors/kilicberkay
