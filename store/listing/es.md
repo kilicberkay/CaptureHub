@@ -20,3 +20,23 @@ Destacados
 - Historial de tus capturas recientes, guardado en tu dispositivo, con el título de la página y el sitio de cada captura. Puedes buscar en el historial, volver a abrir una captura en el editor o mostrar un archivo descargado en su carpeta.
 - Copia de seguridad de los ajustes (exportar e importar), restablecimiento de los ajustes predeterminados, 15 idiomas de interfaz y tema claro, oscuro o del sistema.
 - No se necesita ninguna cuenta. CaptureHub no recopila datos, no usa analíticas y no realiza solicitudes de red. Las capturas, el historial y los ajustes se guardan solo en tu dispositivo; no se sube nada.
+
+Cómo usarlo
+
+1. Abra la página que quiere capturar.
+2. Pulse Alt+Shift+V para el área visible, Alt+Shift+F para la página completa, Alt+Shift+R para una región o Alt+Shift+E para un elemento. La ventana de la barra de herramientas y el menú contextual del icono de la barra de herramientas ofrecen los mismos cuatro modos, además del historial y los ajustes.
+3. Anote la captura en el editor y luego cópiela o guárdela en PNG, JPEG o WebP.
+
+En macOS los atajos son Option+Shift+…; se pueden cambiar en chrome://extensions/shortcuts.
+
+Privacidad
+
+CaptureHub no recopila datos, no usa analíticas y no realiza solicitudes de red. Las capturas, el historial y los ajustes se quedan en su dispositivo. Política de privacidad: https://github.com/kilicberkay/CaptureHub/blob/main/PRIVACY.md
+
+Código abierto
+
+CaptureHub es gratuito y de código abierto bajo la licencia MIT. Código fuente, incidencias y contribuciones: https://github.com/kilicberkay/CaptureHub
+
+Apoyo
+
+CaptureHub es gratuito. Si CaptureHub le resulta útil en su trabajo, puede apoyar su desarrollo a través de GitHub Sponsors: https://github.com/sponsors/kilicberkay

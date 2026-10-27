@@ -8,6 +8,7 @@
 </p>
 
 <p align="center">
+  <a href="https://chromewebstore.google.com/detail/capturehub/bnphimglccgfinadjbhkbjababninnfb"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-install-4285F4?logo=googlechrome&logoColor=white" alt="Get CaptureHub on the Chrome Web Store"></a>
   <a href="https://github.com/kilicberkay/CaptureHub/releases/latest"><img src="https://img.shields.io/github/v/release/kilicberkay/CaptureHub" alt="Latest release"></a>
   <a href="https://github.com/kilicberkay/CaptureHub/actions/workflows/ci.yml"><img src="https://github.com/kilicberkay/CaptureHub/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT license"></a>
@@ -65,6 +66,22 @@ page it came from, so you can find it again.
         <img src="docs/images/light/editor.png" alt="Editor with a box, an arrow and text, numbered markers, a highlighted row, and a pixelated e-mail address" width="100%">
       </picture><br>
       <sub>Editor</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/images/dark/region.png">
+        <img src="docs/images/light/region.png" alt="Region selection with the page dimmed and the selected size shown" width="100%">
+      </picture><br>
+      <sub>Region capture</sub>
+    </td>
+    <td align="center" width="50%">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/images/dark/element.png">
+        <img src="docs/images/light/element.png" alt="Element selection highlighting a chart card" width="100%">
+      </picture><br>
+      <sub>Element capture</sub>
     </td>
   </tr>
   <tr>
@@ -165,15 +182,19 @@ are laid out right to left.
 
 ## Install
 
-### From a release (recommended)
+### Chrome Web Store (recommended)
+
+**[Add CaptureHub to Chrome](https://chromewebstore.google.com/detail/capturehub/bnphimglccgfinadjbhkbjababninnfb)**
+
+Store updates go through Google's review, so the store version can be behind the [latest release](https://github.com/kilicberkay/CaptureHub/releases/latest). The release page always has the newest package.
+
+### From a release
 
 1. Download `capturehub-<version>.zip` from the [latest release](https://github.com/kilicberkay/CaptureHub/releases/latest)
    and unpack it.
 2. Open `chrome://extensions` and turn on **Developer mode**.
 3. Click **Load unpacked** and select the unpacked folder (the one that contains `manifest.json`).
 4. Pin CaptureHub to the toolbar and press `Alt+Shift+R` on any page.
-
-CaptureHub is not on the Chrome Web Store yet. The release page always has the newest package and its SHA-256 checksum.
 
 ### From source
 

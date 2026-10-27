@@ -20,3 +20,23 @@ Sorotan
 - Riwayat tangkapan terbaru Anda, disimpan di perangkat Anda, beserta judul halaman dan situs setiap tangkapan. Anda dapat mencari di riwayat, membuka kembali tangkapan di editor, atau menampilkan berkas unduhan di foldernya.
 - Cadangan pengaturan (ekspor dan impor), pengaturan ulang ke pengaturan bawaan, 15 bahasa antarmuka, serta tema terang, gelap, atau mengikuti sistem.
 - Tidak memerlukan akun. CaptureHub tidak mengumpulkan data, tidak menggunakan analitik, dan tidak membuat permintaan jaringan. Tangkapan, riwayat, dan pengaturan hanya disimpan di perangkat Anda; tidak ada yang diunggah.
+
+Cara menggunakan
+
+1. Buka halaman yang ingin ditangkap.
+2. Tekan Alt+Shift+V untuk area terlihat, Alt+Shift+F untuk seluruh halaman, Alt+Shift+R untuk area tertentu, atau Alt+Shift+E untuk elemen. Popup bilah alat dan menu klik kanan pada ikon bilah alat menawarkan empat mode yang sama, ditambah Riwayat dan Pengaturan.
+3. Beri anotasi pada tangkapan di editor, lalu salin atau simpan sebagai PNG, JPEG, atau WebP.
+
+Di macOS, pintasannya Option+Shift+…; ubah di chrome://extensions/shortcuts.
+
+Privasi
+
+CaptureHub tidak mengumpulkan data, tidak menggunakan analitik, dan tidak membuat permintaan jaringan. Tangkapan, riwayat, dan pengaturan tetap di perangkat Anda. Kebijakan privasi: https://github.com/kilicberkay/CaptureHub/blob/main/PRIVACY.md
+
+Sumber terbuka
+
+CaptureHub gratis dan bersumber terbuka di bawah lisensi MIT. Kode sumber, laporan masalah, dan kontribusi: https://github.com/kilicberkay/CaptureHub
+
+Dukungan
+
+CaptureHub gratis. Jika CaptureHub bermanfaat bagi pekerjaan Anda, Anda dapat mendukung pengembangannya melalui GitHub Sponsors: https://github.com/sponsors/kilicberkay
