@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shell fixture</title>
+    <style>
+        /* Uygulama kabuğu (ChatGPT benzeri): pencere kaymaz; dar kenar çubuğu listesi ve geniş ana alan ayrı kayar */
+        html, body { margin: 0; height: 100%; overflow: hidden; }
+        body { display: flex; }
+        #side { width: 240px; display: flex; flex-direction: column; }
+        #side-list { flex: 1; overflow: auto; background: #404000; }
+        #side-list div { height: 3000px; }
+        #side-foot { height: 60px; background: #006060; }
+        #main { flex: 1; overflow: auto; }
+        #content div { height: 500px; }
+        #content div:nth-child(1) { background: #ff0000; }
+        #content div:nth-child(2) { background: #00ff00; }
+        #content div:nth-child(3) { background: #0000ff; }
+        #content div:nth-child(4) { background: #ffff00; }
+        #content div:nth-child(5) { background: #00ffff; }
+        #content div:nth-child(6) { background: #ff00ff; }
+    </style>
+</head>
+<body>
+    <aside id="side"><div id="side-list"><div></div></div><div id="side-foot"></div></aside>
+    <main id="main"><div id="content"><div></div><div></div><div></div><div></div><div></div><div></div></div></main>
+</body>
+</html>

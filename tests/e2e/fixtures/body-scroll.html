@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Body scroll fixture</title>
+    <style>
+        /* Pencere değil body kayar; tam boy sabit sol menü */
+        html { height: 100%; overflow: hidden; }
+        body { margin: 0; height: 100%; overflow: auto; background: #ffffff; }
+        nav { position: fixed; left: 0; top: 0; width: 200px; height: 100%; background: #600000; }
+        #content { margin-left: 200px; }
+        #content div { height: 500px; }
+        #content div:nth-child(1) { background: #ff0000; }
+        #content div:nth-child(2) { background: #00ff00; }
+        #content div:nth-child(3) { background: #0000ff; }
+        #content div:nth-child(4) { background: #ffff00; }
+        #content div:nth-child(5) { background: #00ffff; }
+        #content div:nth-child(6) { background: #ff00ff; }
+    </style>
+</head>
+<body>
+    <nav></nav>
+    <div id="content"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</body>
+</html>

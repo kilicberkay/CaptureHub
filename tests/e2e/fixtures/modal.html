@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modal fixture</title>
+    <style>
+        body { margin: 0; background: #ffffff; }
+        /* showModal() ile üst katmanda açılan dialog; içinde 200x100 kutu */
+        dialog { margin: 0; top: 40px; left: 40px; padding: 0; border: 0; }
+        #dialog-box { width: 200px; height: 100px; background: #008000; }
+        /* Açık shadow root içinde 200x100 kutu; host daha büyük */
+        #host { display: block; width: 400px; height: 300px; background: #cccccc; }
+        /* Tam ekran, içi kayan modal; paneli görünümden uzun, alt ucu farklı renk */
+        #scrim { display: none; position: fixed; inset: 0; overflow-y: auto; background: rgba(0, 0, 0, 0.5); }
+        #panel { width: 300px; height: 1500px; margin: 20px 100px; background: #ffffff; position: relative; }
+        #panel-end { position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: #800080; }
+    </style>
+</head>
+<body>
+    <dialog id="dialog"><div id="dialog-box"></div></dialog>
+    <div id="host"></div>
+    <div id="scrim"><div id="panel"><div id="panel-end"></div></div></div>
+    <script>
+        const root = document.getElementById('host').attachShadow({ mode: 'open' });
+        root.innerHTML = '<div style="width:200px;height:100px;background:#000080"></div>';
+    </script>
+</body>
+</html>

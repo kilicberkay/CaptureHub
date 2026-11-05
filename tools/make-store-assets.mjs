@@ -5,7 +5,7 @@
 import { copyFileSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { startEnv, pressAltShift, pressEscape, ROOT } from '../tests/e2e/harness.mjs';
-import { HIDE_SCROLLBARS, renderHtml, fontFaces, demoTargets, annotateScript, wait } from './lib/capture.mjs';
+import { HIDE_SCROLLBARS, renderHtml, fontFaces, demoTargets, wait } from './lib/capture.mjs';
 
 const OUT = join(ROOT, 'store', 'assets');
 const SHOTS = join(OUT, 'screenshots');
@@ -70,6 +70,49 @@ function renderTile(env, locale, layout, file, width, height) {
         { width, height, lang: locale.replace('_', '-'), dir: RTL.has(locale) ? 'rtl' : 'ltr' });
 }
 
+// showcase.html içinde işaretlenecek yerler (CSS pikseli = görüntü pikseli, yakalama 1:1)
+function showcaseTargets(page) {
+    return page.eval(`JSON.stringify((() => {
+        const r = (el) => { const b = el.getBoundingClientRect(); return { x: b.x, y: b.y, w: b.width, h: b.height }; };
+        return {
+            revenue: r(document.querySelector('.stats .card')), chart: r(document.getElementById('chart')),
+            peak: r(document.getElementById('peak')), sources: r(document.querySelector('.src')),
+            newsletter: r(document.getElementById('newsletter')), email: r(document.querySelector('.email'))
+        };
+    })())`).then(JSON.parse);
+}
+
+// Kutu + 1 (gelir kartı), metin + ok (grafiğin tepesi), vurgu + 2 (bülten satırı), e-posta bulanıklaştırma
+function showcaseAnnotations(t, label) {
+    return `(() => {
+        const t = ${JSON.stringify(t)};
+        const W = canvas.width;
+        const pink = '#f74a87';
+        const amber = '#f59e0b';
+        const item = (o) => state.items.push({ size: 'm', ...o });
+        const r = CaptureTools.radiusFor(W, 'm');
+        const v = t.revenue;
+        item({ type: 'rect', color: pink, x1: v.x - 6, y1: v.y - 6, x2: v.x + v.w + 6, y2: v.y + v.h + 6 });
+        item({ type: 'number', color: pink, x1: v.x + v.w - r - 6, y1: v.y + r + 6, r, n: 1 });
+        // Metin grafiğin boş sol üst bölümünde; ok metnin sonundan tepe noktasına
+        const px = CaptureTools.fontFor(W, 'm');
+        const text = ${JSON.stringify(label)};
+        const size = CaptureTools.measureText(ctx, text, px);
+        const peak = { x: t.peak.x + t.peak.w / 2, y: t.peak.y + t.peak.h / 2 };
+        const tx = Math.max(t.chart.x + 70, peak.x - size.w - 130);
+        const ty = peak.y + 14;
+        item({ type: 'text', color: pink, x1: tx, y1: ty, text, px, ...size });
+        item({ type: 'arrow', color: pink, x1: tx + size.w + 10, y1: ty + size.h / 2, x2: peak.x - 12, y2: peak.y + 2 });
+        const n = t.newsletter;
+        item({ type: 'highlight', color: amber, x1: n.x - 8, y1: n.y + 2, x2: n.x + n.w + 8, y2: n.y + n.h - 2 });
+        const s = t.sources;
+        item({ type: 'number', color: amber, x1: s.x + s.w - r - 10, y1: s.y + r + 10, r, n: 2 });
+        const e = t.email;
+        item({ type: 'blur', color: pink, x1: e.x - 3, y1: e.y - 1, x2: e.x + e.w + 3, y2: e.y + e.h + 1 });
+        render();
+    })()`;
+}
+
 async function screenshots(env, uiLang, dir) {
     mkdirSync(dir, { recursive: true });
     const size = { width: 1280, height: 800 };
@@ -103,21 +146,35 @@ async function screenshots(env, uiLang, dir) {
         await demo.screenshot(join(dir, '03-element.png'), size);
         await pressEscape(env, demo);
 
-        // 01: düzenleyici, örnek işaretlerle (görünür alan yakalaması)
-        await env.focus(demo);
+    } finally {
+        await demo.close();
+    }
+
+    // 01: koyu temalı düzenleyici; gerçekçi bir analiz panelinin görünür alan yakalaması, örnek işaretlerle
+    const page = await env.openPage('showcase.html');
+    try {
+        await page.cdp.send('Emulation.setDeviceMetricsOverride', { ...size, deviceScaleFactor: 1, mobile: false }, page.sid);
+        await page.waitFor('document.fonts.status === "loaded"', 10000);
+        await page.eval(HIDE_SCROLLBARS);
+        await env.focus(page);
+        // Kısayol bu sekmeye activeTab verir; açılan seçici hemen kapatılır
+        await pressAltShift(env, page, 'R');
+        await pressEscape(env, page);
         await env.swEval('runCapture("visible")');
         const { id } = await env.swEval('CaptureStore.list().then((rows) => rows[0])');
-        await env.swEval(`chrome.storage.local.set(${JSON.stringify({ uiLang, theme: 'light' })})`);
+        // Başlıkta 127.0.0.1 yerine örnek alan adı görünsün (.example: gerçek bir siteye ait değil)
+        await env.swEval(`CaptureStore.update(${JSON.stringify(id)}, { url: 'https://app.northwind.example/reports/weekly' })`);
+        await env.swEval(`chrome.storage.local.set(${JSON.stringify({ uiLang, theme: 'dark' })})`);
         const editor = await env.openExtensionPage(`editor/editor.html?id=${id}`);
         await editor.waitFor('canvas.width > 0', 10000);
         await editor.eval(HIDE_SCROLLBARS);
         await wait(800);
-        await editor.eval(annotateScript(await demoTargets(demo), TEXT[uiLang].label));
+        await editor.eval(showcaseAnnotations(await showcaseTargets(page), TEXT[uiLang].label));
         await wait(400);
         await editor.screenshot(join(dir, '01-editor.png'), size);
         await editor.close();
     } finally {
-        await demo.close();
+        await page.close();
     }
 
     for (const [file, path, theme] of [['04-settings.png', 'options/options.html#general', 'dark'], ['05-history.png', 'options/options.html#history', 'light']]) {
